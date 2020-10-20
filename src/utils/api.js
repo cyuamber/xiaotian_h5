@@ -4,7 +4,8 @@ const port9101 = '/port9101';
 
 export default {
     port8085: {
-        dialogUrl: port8085 + '/chatxx.php'
+        dialogUrl: port8085 + '/chatxx.php',
+        getCheckInInformationUrl:  port8085 + '/getCheckInInformationUrl',
     },
     port9101: {
         addUrl: port9101 + '/dangwu?op=add'

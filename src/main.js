@@ -23,9 +23,18 @@ import 'lib-flexible/flexible.js'
 import './filters'
 
 //  引入 vant组件
-import { Icon } from 'vant';
+import { Icon } from 'vant'
+import { Swipe, SwipeItem } from 'vant'
+import { Sticky } from 'vant'
+import { Popup } from 'vant'
+import { Loading } from 'vant'
 
-Vue.use(Icon);
+Vue.use(Loading)
+Vue.use(Popup)
+Vue.use(Sticky)
+Vue.use(Icon)
+Vue.use(Swipe)
+Vue.use(SwipeItem)
 Vue.config.productionTip = false
 
 new Vue({
