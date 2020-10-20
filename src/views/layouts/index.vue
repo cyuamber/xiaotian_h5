@@ -48,6 +48,13 @@ export default {
 </script>
 <style>
   .app-container {
-    padding: 0!important
+    padding: 0!important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #143558;
   }
 </style>

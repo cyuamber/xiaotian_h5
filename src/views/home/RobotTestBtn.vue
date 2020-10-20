@@ -26,7 +26,9 @@
       </van-sticky>
       <div class="bodyDialog divScroll">
         <div class="robotMsg-box">
-            <img src="@/assets/xiaotian.png" width="20%" alt="小天机器人"/>
+            <div class="robot-img">
+              <img src="@/assets/xiaotian.png" alt="小天机器人"/>
+            </div>
             <div class="robotMsg">
               您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~
                 <br/><a class='hot-issue' style='color: #337DFF' @click="hotClick()">如何打卡</a>
@@ -35,11 +37,15 @@
           </div>
         <div v-for="(msg, index) in msgList" :key="index">
           <div v-if="msg.type === 'robot'" class="robotMsg-box">
-            <img src="@/assets/xiaotian.png" width="20%" alt="小天机器人"/>
+            <div class="robot-img">
+              <img src="@/assets/xiaotian.png" alt="小天机器人"/>
+            </div>
             <div class="robotMsg" v-html="msg.msg"></div>
           </div>
           <div class="userMsg-box" v-if="msg.type === 'user' && !msg.addnew">
-            <van-icon class="user-icon" name="friends" color="#ffffff" size="30" />
+            <div class="user-img">
+              <van-icon class="user-icon" name="friends" color="#ffffff" size="30" />
+            </div>
             <div class="userMsg">
               <span>{{ msg.oldform.question }}</span>
             </div>
@@ -58,7 +64,8 @@
         <div class="bodyInput">
           <van-icon class="footer-icon" name="add-o" size="0.8rem" style="margin-right:0.2rem" v-show="!textSwitch" @click="textButtonSwitch()"/>
           <van-icon class="footer-icon" name="volume-o"  size="0.8rem" style="margin-right:0.2rem" v-show="textSwitch" @click="textButtonSwitch()"/>
-          <textarea class="inputArea" placeholder="请在此填写问题" v-model="inputContent" @keydown.enter="pressEnter" />
+          <textarea class="inputArea" placeholder="请在此填写问题" v-model="inputContent" @keydown.enter="pressEnter" v-show="!textSwitch" />
+          <button class="talk"  v-show="textSwitch" ><van-icon name="chat-o" size="15" style="margin-right:5px" />按住说话</button>
           <van-icon class="footer-icon" name="sign" size="0.8rem" />
         </div>
       </div>
@@ -67,6 +74,18 @@
   </div>
 </template>
 <style>
+body {
+  -webkit-touch-callout: none; /*系统默认菜单被禁用*/
+  -webkit-user-select: none; /*webkit浏览器*/
+  -khtml-user-select: none; /*早起浏览器*/
+  -moz-user-select: none; /*火狐浏览器*/
+  -ms-user-select: none; /*IE浏览器*/
+  user-select: none; /*用户是否能够选中文本*/
+}
+input,select{
+  -webkit-user-select:auto;
+  user-select: auto; 
+}
 .ant-drawer-title {
   text-align: left !important;
   color: #fff;
@@ -79,8 +98,6 @@
 </style>
 <style lang="less" scoped>
 .top{
-    // position: fixed;
-    // top:0;
     width: 100%;
     height: 100px;
     background-color: rgba(243, 243, 243, 0.596);
@@ -122,7 +139,6 @@
   height: 100%;
   display: flex;
   flex-flow: column;
-  background-color: #143558;
 }
 .divScroll::-webkit-scrollbar {
   width: 6px;
@@ -188,8 +204,25 @@
   border-style: none;
   box-shadow: none;
 }
-.robotMsg-box img {
-  float: left;
+.talk{
+  display: inline-block;
+  width: 75%;
+  resize: none;
+  line-height: 1rem;
+  vertical-align: bottom;
+  border-radius: 25px;
+  border:1px #d4d1d1 solid;
+  background-color: #fff;
+}
+.robotMsg-box{
+  .robot-img{
+    width: 2rem;
+    height: 2rem;
+    float: left;
+    img{
+      width: 100%;
+    }
+  }
 }
 .robotMsg {
   float: left;
@@ -222,8 +255,10 @@
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-.user-icon {
+.user-img {
   float: right;
+  width: 30px;
+  height: 30px;
 }
 .addupdateMsg {
   text-align: center;
@@ -252,7 +287,7 @@
 <script>
 import { mapState } from 'vuex'
 import { axiosGet, axiosPost } from '../../utils/http.js'
-import { POINTINFO, COMMONQUESTION } from '../../const/constant'
+import { POINTINFO, COMMONQUESTION, GETANSWERRES} from '../../const/constant'
 import Loading from '../../components/Loading'
 import API from '../../utils/api'
 export default {
@@ -448,7 +483,8 @@ export default {
       this.msgList.push(question)
       const robotMsg = {
         idx: this.msgList.length - 1,
-        type: 'robot'
+        type: 'robot',
+        msg: ''
       }
       this.inputContent = ''
       this.LoadingShow = true
@@ -470,8 +506,13 @@ export default {
         .catch(() => {
           this.LoadingShow = false
           // 本地mock,线上测试时，请注释以下这段代码------------------
-          robotMsg.msg =
-            '根据地图指引，在CHBN打卡点处拍照并上传，小天会自动判断是否打卡成功（每个类别有多个打卡点，只要打卡一次上传成功即可）'
+          GETANSWERRES.map(item=>{
+            if(item.type === 'text'){
+              robotMsg.msg = robotMsg.msg + item.value
+            }else{
+              robotMsg.msg = robotMsg.msg + `<br/><img src="`+item.value+`" width=20% alt="小天机器人"/>`
+            }
+          })
           this.$nextTick(() => {
             this.msgList.push(robotMsg)
             setTimeout(function() {

@@ -24,3 +24,14 @@ export const COMMONQUESTION = [
   '大会规则',
   '大会简介'
 ]
+
+export const GETANSWERRES = [
+  {
+    type:"text",
+    value:"根据地图指引，在CHBN打卡点处拍照并上传，小天会自动判断是否打卡成功（每个类别有多个打卡点，只要打卡一次上传成功即可）"
+  },
+  {
+    type:"img",
+    value:"http://img01.jituwang.com/171110/256775-1G11021324561.jpg"
+  },
+]

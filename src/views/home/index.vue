@@ -5,7 +5,8 @@
        <div class="bannar-img">
           <img src="@/assets/xiaotian.png" />
        </div>
-          <p class="bannar-title">
+        <div style="text-align:left">
+           <p class="bannar-title">
             您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天，兼任本次大会的智能导览员～
         </p>
         <p class="bannar-title">
@@ -17,6 +18,7 @@
           3. 集齐CHBN共4个类别的打卡点，获取小天为您准备的大会独家记忆<br/>
           4. 凭本人记忆页面展示给工作人员，即可领取盲盒<br/>
         </p>
+        </div>
       <button @click="hrefRobotTestBtn">开启打卡之旅</button>
     </div>
   </div>
@@ -47,20 +49,22 @@ export default {
 .index-container {
   height: 100vh;
   width: 100%;
+  overflow: auto;
   .warpper {
     background: #fff;
     width: 100%;
     height: 100%;
+    text-align: center;
     .bannar-img{
       text-align: center;
+      width: 5.5rem;
+      height: 5.1rem;
+      margin: 0 auto;
        img {
-        width: 5.5rem;
-        height: 5.1rem;
-        // margin-bottom: 0.25rem;
+        width: 100%;
       }
     }
     background-color: #143558;
-    // background-size: cover;
     .bannar-title, .clock-instructions {
         text-indent: 0.5rem;
         color:#B8BDC7;
@@ -71,10 +75,6 @@ export default {
         text-indent:0;
     }
       button {
-        position: fixed;
-        bottom: 15%;
-        left: 50%;
-        margin-left: -40%;
         background-color: rgb(0, 195, 255);
         color: #ffffff;
         border-radius: 50px;
@@ -82,6 +82,7 @@ export default {
         width: 80%;
         height: 1rem;
         font-size: 14px;
+        margin: 20px auto;
       }
       span {
         margin-left: 16px;
