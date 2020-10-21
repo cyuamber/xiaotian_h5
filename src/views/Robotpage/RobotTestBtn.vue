@@ -233,7 +233,7 @@ import { mapState } from "vuex";
 import { axiosGet, axiosPost } from "../../utils/http.js";
 import { POINTINFO, COMMONQUESTION, GETANSWERRES } from "../../const/constant";
 import Loading from "../../components/Loading";
-import Chatbox from "../../components/Chatbox";
+import Chatbox from "./components/Chatbox";
 import API from "../../utils/api";
 export default {
   name: "RobotTestBtn",
@@ -300,6 +300,7 @@ export default {
       };
       this.msgList.push(robotMsg);
     },
+    // TODO:这个地方需要抽离成一个公共的vuex action，在各个组件调用时，直接调取此方法
     quickClick() {
       const e = window.event;
       const userMsg = {

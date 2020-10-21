@@ -43,9 +43,7 @@ export default {
   props: {
     msgList: "",
   },
-  mounted() {
-    console.log(this.msgList);
-  },
+
   data() {
     return {
       showPic: false,
