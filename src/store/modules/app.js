@@ -1,9 +1,17 @@
 const state = {
-  userName: ''
+  userName: '',
+  maskShow: false,
+  talkText: ''
 }
 const mutations = {
   SET_USER_NAME(state, name) {
     state.userName = name
+  },
+  setMaskShow(state, maskShow) {
+    state.maskShow = maskShow
+  },
+  setTalkText(state, talkText) {
+    state.talkText = talkText
   }
 }
 const actions = {

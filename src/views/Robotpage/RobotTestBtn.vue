@@ -69,7 +69,7 @@
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
           />
-          <button class="talk" v-show="textSwitch">
+          <button class="talk" v-show="textSwitch" @touchstart="talkStart" @touchend="talkEndClear">
             <van-icon
               name="chat-o"
               size="15"
@@ -82,6 +82,7 @@
     </div>
 
     <Loading v-if="LoadingShow" />
+    <Recorder/>
   </div>
 </template>
 
@@ -234,12 +235,14 @@ import { axiosGet, axiosPost } from "../../utils/http.js";
 import { POINTINFO, COMMONQUESTION, GETANSWERRES } from "../../const/constant";
 import Loading from "../../components/Loading";
 import Chatbox from "./components/Chatbox";
+import Recorder from './components/Recorder'
 import API from "../../utils/api";
 export default {
   name: "RobotTestBtn",
   components: {
     Loading,
     Chatbox,
+    Recorder
   },
 
   data() {
@@ -281,6 +284,7 @@ export default {
       pointInfo: [],
       LoadingShow: false,
       textSwitch: false,
+      timeOutEvent: 0
     };
   },
   methods: {
@@ -372,6 +376,27 @@ export default {
       } else {
         this.textSwitch = true;
       }
+    },
+    talkEndClear(e) {
+      e.stopPropagation()
+      clearTimeout(this.timeOutEvent)
+      if (this.timeOutEvent !== 0) {
+        console.log('你这是点击，不是长按')
+      } else {
+        this.$store.commit('setMaskShow', false)
+        console.log('这是一个长按------')
+      }
+      return false
+    },
+    talkStart(e) {
+      e.stopPropagation()
+      this.timeOutEvent = setTimeout(() => {
+        this.timeOutEvent = 0
+        // 真正长按后应该执行的内容
+        this.$store.commit('setMaskShow', true)
+        console.log('长按事件触发')
+      }, 500)
+      return false
     },
     getInformation(item) {
       this.toppPointmodelShow = true;

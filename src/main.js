@@ -23,7 +23,7 @@ import "lib-flexible/flexible.js";
 import "./filters";
 
 //  引入 vant组件
-import { Icon, Swipe, SwipeItem, Sticky, Popup, Loading, Image } from "vant";
+import { Icon, Swipe, SwipeItem, Sticky, Popup, Loading, Overlay, Image } from "vant";
 
 Vue.use(Loading);
 Vue.use(Popup);
@@ -31,6 +31,7 @@ Vue.use(Sticky);
 Vue.use(Icon);
 Vue.use(Swipe);
 Vue.use(SwipeItem);
+Vue.use(Overlay)
 Vue.use(Image);
 Vue.config.productionTip = false;
 
