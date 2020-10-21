@@ -11,43 +11,22 @@
 
 <script>
 export default {
-  name: 'AppLayout',
+  name: "AppLayout",
   data() {
-    return {
-      tabbars: [
-        {
-          title: '首页',
-          to: {
-            name: 'Home'
-          },
-          icon: 'home-o'
-        },
-        {
-          title: '关于我',
-          to: {
-            name: 'About'
-          },
-          icon: 'user-o'
-        }
-      ]
-    }
+    return {};
   },
-  methods: {
-    handleChange(v) {
-      console.log('tab value:', v)
-    }
-  }
-}
+  methods: {},
+};
 </script>
 <style>
-  .app-container {
-    padding: 0!important;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: #143558;
-  }
+.app-container {
+  padding: 0 !important;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #143558;
+}
 </style>

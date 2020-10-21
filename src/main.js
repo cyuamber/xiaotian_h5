@@ -23,11 +23,7 @@ import "lib-flexible/flexible.js";
 import "./filters";
 
 //  引入 vant组件
-import { Icon } from "vant";
-import { Swipe, SwipeItem } from "vant";
-import { Sticky } from "vant";
-import { Popup } from "vant";
-import { Loading, Image } from "vant";
+import { Icon, Swipe, SwipeItem, Sticky, Popup, Loading, Image } from "vant";
 
 Vue.use(Loading);
 Vue.use(Popup);
