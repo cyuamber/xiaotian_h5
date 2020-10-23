@@ -52,6 +52,7 @@ module.exports = {
       warnings: false,
       errors: true
     }
+    // https: true
     // proxy: {
     //   //配置跨域
     //   '/api': {

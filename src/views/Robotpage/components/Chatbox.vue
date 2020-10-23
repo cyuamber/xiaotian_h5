@@ -16,17 +16,21 @@
             />
           </div>
           <div v-if="msg.init">
-            <p class="hot-issue" @click="quickClick()">如何打卡</p>
-            <p class="hot-issue" @click="quickClick()">获取打卡地图</p>
+            <span class="hot-issue" @click="quickClick()">如何打卡?</span>
+            <span class="hot-issue" @click="quickClick()">打卡地图</span>
           </div>
         </div>
       </div>
       <div class="msg-box users-box" v-if="msg.type === 'user'">
         <div class="robot-img">
-          <img src="@/assets/images/useravator.png" alt="小天机器人" />
+          <img src="@/assets/images/useravator.png" alt="用户头像" />
         </div>
         <div class="userMsg">
-          <span>{{ msg.oldform.question }}</span>
+          <span v-if="msg.oldform !=undefined">{{ msg.oldform.question }}</span>
+          <m-audio v-if="msg.voiceUrl !=undefined" :src="msg.voiceUrl" text='' :showDuration='true'></m-audio>
+           <div class="preview">
+            <img v-if="msg.imgUrl !=undefined" :src="msg.imgUrl" alt="" width="20%" @click="showImage(msg.imgUrl)"/>
+          </div>
         </div>
       </div>
     </div>
@@ -37,41 +41,43 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
+import { ImagePreview } from 'vant'
 export default {
-  name: "Chatbox",
+  name: 'Chatbox',
   props: {
-    msgList: "",
+    msgList: ''
   },
 
   data() {
     return {
       showPic: false,
-      picLink: "",
-    };
+      picLink: ''
+    }
   },
   methods: {
     quickClick() {
-      const e = window.event;
+      const e = window.event
       const userMsg = {
-        type: "user",
+        type: 'user',
         oldform: {
           question: e.target.innerHTML,
-          answer: "",
-          source: "",
+          answer: '',
+          source: ''
         },
-        updateold: false,
-      };
-      this.$parent.getAnswer(userMsg);
-      e.preventDefault();
+        updateold: false
+      }
+      this.$parent.getAnswer(userMsg)
+      e.preventDefault()
     },
     showImage(img) {
-      this.showPic = true;
-      this.picLink = img;
-      console.log(img);
-    },
-  },
-};
+      // this.showPic = true
+      // this.picLink = img
+      ImagePreview([img])
+      console.log(img)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -95,18 +101,20 @@ export default {
       float: left;
       width: 60%;
       max-width: 344px;
-      background: #ffffff;
-      border-radius: 24px 24px 24px 24px;
+      background:rgba(15,13,87,1);
+      border-radius: 0 24px 24px 24px;
       padding: 13px 16px 13px 16px;
       font-size: 12px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #333333;
+      color: rgba(132,153,244,0.8);
       line-height: 18px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       .hot-issue {
         color: #337dff;
+        display: inline-block;
+        padding: 5px 10px 0 0;
       }
       img {
         width: 100%;
@@ -116,14 +124,14 @@ export default {
       float: right;
       width: fit-content;
       max-width: 344px;
-      background: #e2fbff;
+      background: linear-gradient(to right,#2859FE , #1F2CB3);
       border-radius: 24px 0px 24px 24px;
       padding: 13px 16px 13px 16px;
       margin-right: 10px;
       font-size: 12px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #333333;
+      color: #C3D3FF;
       line-height: 18px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);

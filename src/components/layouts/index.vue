@@ -19,6 +19,13 @@ export default {
 };
 </script>
 <style>
+*{
+   -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .app-container {
   padding: 0 !important;
   position: fixed;
@@ -27,6 +34,8 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: #143558;
+  /* background: url('../../assets/images/dashboard.jpg') no-repeat center;
+  background-size: cover; */
+  
 }
 </style>

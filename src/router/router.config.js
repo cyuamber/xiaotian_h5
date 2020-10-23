@@ -23,6 +23,12 @@ export const constantRouterMap = [
         name: "RobotTestBtn",
         component: () => import("@/views/Robotpage/RobotTestBtn"),
         meta: { keepAlive: false }
+      },
+      {
+        path: "/photo",
+        name: "Popupinfo",
+        component: () => import("@/views/Robotpage/components/Popupinfo"),
+        meta: { keepAlive: false }
       }
     ]
   }

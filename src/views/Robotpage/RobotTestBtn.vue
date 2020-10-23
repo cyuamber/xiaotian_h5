@@ -46,43 +46,33 @@
           </span>
         </div>
         <div class="bodyInput">
-          <van-icon
-            class="footer-icon"
-            name="add-o"
-            size="0.8rem"
-            style="margin-right: 0.2rem"
-            v-show="!textSwitch"
-            @click="textButtonSwitch()"
-          />
-          <van-icon
-            class="footer-icon"
-            name="volume-o"
-            size="0.8rem"
-            style="margin-right: 0.2rem"
-            v-show="textSwitch"
-            @click="textButtonSwitch()"
-          />
+          <div class="footer-icon" @click="textButtonSwitch()">
+            <van-icon
+              name="add-o"
+              size="0.7rem"
+              v-show="!textSwitch"
+              color="rgba(40,89,253,1)"
+            />
+             <!-- <img v-show="!textSwitch" src="@/assets/images/talk-icon.png" alt="语音"> -->
+            <img v-show="textSwitch" src="@/assets/images/talk-icon.png" alt="语音">
+          </div>
           <textarea
             class="inputArea"
-            placeholder="请在此填写问题"
             v-model="inputContent"
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
           />
-          <button class="talk" v-show="textSwitch" @touchstart="talkStart" @touchend="talkEndClear">
-            <van-icon
-              name="chat-o"
-              size="15"
-              style="margin-right: 5px"
-            />按住说话
-          </button>
-          <van-icon class="footer-icon" name="sign" size="0.8rem" />
+          <button class="talk-button" v-show="textSwitch" @touchstart="talkStart" @touchend="talkEndClear"></button>
+          <div class="checkphotos">
+            <img src="@/assets/images/checkPhotos.png" alt="拍照打卡">
+            <input ref="photoref" type="file" accept="image/*" @change="Photograph()" capture="camera"/>
+          </div>
         </div>
       </div>
     </div>
 
     <Loading v-if="LoadingShow" />
-    <Recorder/>
+    <Recorder @sendTalkMsg='sendTalkMsg'/>
   </div>
 </template>
 
@@ -100,6 +90,9 @@ select {
   -webkit-user-select: auto;
   user-select: auto;
 }
+/* img{
+   pointer-events:none;
+} */
 .ant-drawer-title {
   text-align: left !important;
   color: #fff;
@@ -114,7 +107,7 @@ select {
 .top {
   width: 100%;
   height: 100px;
-  background-color: rgba(243, 243, 243, 0.596);
+  background-color: rgba(13,12,81,0.596);
   text-align: center;
   .top-point {
     display: inline-block;
@@ -146,6 +139,8 @@ select {
 #componentBody {
   width: 100%;
   height: 100vh;
+  background: url('../../assets/images/background_img.png') no-repeat 100% 100%;
+  background-size: 100% 100%;
 }
 .drawerBody {
   overflow: hidden;
@@ -167,8 +162,7 @@ select {
 }
 .bodyDialog {
   width: 100%;
-  height: calc(100% - 4rem);
-  border-bottom: 1px solid #d9d9d9;
+  height: calc(100% - 7.9rem);
   padding: 20px 20px 20px 0;
   display: flex;
   flex-flow: column;
@@ -176,7 +170,8 @@ select {
 }
 .footer {
   width: 100%;
-  background-color: #ffffff;
+  // background-color: #ffffff;
+  color: #fff;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;
@@ -184,10 +179,11 @@ select {
     margin: 10px 0;
     span {
       display: inline-block;
-      padding: 0.2rem;
+      padding: 0.3rem;
       margin: 0 5px 15px 5px;
-      border: 1px gainsboro solid;
-      border-radius: 5px;
+      background: rgba(38,28,176,0.8);
+      border-radius: 25px;
+      color: rgba(166,180,241,0.8);
     }
   }
   .common-question::-webkit-scrollbar {
@@ -196,49 +192,78 @@ select {
   }
 }
 .bodyInput {
+  position: relative;
   width: 100%;
   height: 50px;
   margin: 0 auto;
   margin-bottom: 0.1rem;
   .footer-icon {
-    margin-left: 0.2rem;
+    display: inline-block;
+    width: 0.45rem;
+    height: auto;
+    // margin: 0 0.3rem;
+    position: absolute;
+    top: 7px;
+    left: 25px;
+    img{
+      width: 100%;
+      height: auto;
+    }
+  }
+  .checkphotos{
+    width: 20%;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    img{
+      width: 100%;
+      height: auto;
+    }
+    input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9;
+      opacity: 0;
+    }
   }
 }
-.inputArea {
+.inputArea, .talk-button{
   resize: none;
-  width: 75%;
+  width: 70%;
   overflow: auto;
-  background: transparent;
+  background: rgba(28,22,145,0.8);
   border-style: none;
   font-size: 12px;
   font-weight: 400;
-  color: #555555;
+  color: #fff;
   padding: 0;
   border-style: none;
   box-shadow: none;
-}
-.talk {
-  display: inline-block;
-  width: 75%;
-  resize: none;
-  line-height: 1rem;
-  vertical-align: bottom;
+  margin: 0 3%;
+  height: 0.9rem;
+  line-height: 0.9rem;
   border-radius: 25px;
-  border: 1px #d4d1d1 solid;
-  background-color: #fff;
+  text-indent: 0.4rem;
+}
+.inputArea{
+  width: 56%;
+  margin: 0 3% 0 16%;
 }
 </style>
 
 <script>
-import { mapState } from "vuex";
-import { axiosGet, axiosPost } from "../../utils/http.js";
-import { POINTINFO, COMMONQUESTION, GETANSWERRES } from "../../const/constant";
-import Loading from "../../components/Loading";
-import Chatbox from "./components/Chatbox";
+import { mapState } from 'vuex'
+import { axiosGet, axiosPost } from '../../utils/http.js'
+import { POINTINFO, COMMONQUESTION, GETANSWERRES } from '../../const/constant'
+import Loading from '../../components/Loading'
+import Chatbox from './components/Chatbox'
 import Recorder from './components/Recorder'
-import API from "../../utils/api";
+import API from '../../utils/api'
 export default {
-  name: "RobotTestBtn",
+  name: 'RobotTestBtn',
   components: {
     Loading,
     Chatbox,
@@ -247,134 +272,146 @@ export default {
 
   data() {
     return {
-      inputContent: "",
+      inputContent: '',
       msgList: [],
       width: document.body.clientWidth,
       newform: {
-        question: "",
-        answer: "",
-        source: "",
+        question: '',
+        answer: '',
+        source: ''
       },
-      username: "",
-      phonenum: "",
+      username: '',
+      phonenum: '',
       commonQuestion: COMMONQUESTION,
       clockInPoint: [
         {
-          key: "",
-          title: "C",
-          isCheck: false,
+          key: '',
+          title: 'C',
+          isCheck: false
         },
         {
-          key: "",
-          title: "H",
-          isCheck: false,
+          key: '',
+          title: 'H',
+          isCheck: false
         },
         {
-          key: "",
-          title: "B",
-          isCheck: false,
+          key: '',
+          title: 'B',
+          isCheck: false
         },
         {
-          key: "",
-          title: "N",
-          isCheck: true,
-        },
+          key: '',
+          title: 'N',
+          isCheck: true
+        }
       ],
       toppPointmodelShow: false,
       pointInfo: [],
       LoadingShow: false,
       textSwitch: false,
-      timeOutEvent: 0
-    };
+      timeOutEvent: 0,
+      count: 10,
+      countDownTimes: null,
+      longPress: false,
+      base64ImgData: null
+    }
   },
   methods: {
     showDrawer() {
-      this.msgList = [];
+      this.msgList = []
       const robotMsg = {
-        owner: "robot",
-        type: "text",
+        owner: 'robot',
+        type: 'text',
         init: true,
         msg: [
           {
-            type: "text",
+            type: 'text',
             value:
-              "您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~",
-          },
-        ],
-      };
-      this.msgList.push(robotMsg);
+              '您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~'
+          }
+        ]
+      }
+      this.msgList.push(robotMsg)
     },
     // TODO:这个地方需要抽离成一个公共的vuex action，在各个组件调用时，直接调取此方法
     quickClick() {
-      const e = window.event;
+      const e = window.event
       const userMsg = {
-        type: "user",
+        type: 'user',
         oldform: {
           question: e.target.innerHTML,
-          answer: "",
-          source: "",
+          answer: '',
+          source: ''
         },
-        updateold: false,
-      };
-      this.getAnswer(userMsg);
-      e.preventDefault();
+        updateold: false
+      }
+      this.getAnswer(userMsg)
+      e.preventDefault()
     },
     getAnswer(question) {
       const params = {
         uid: this.userId,
         l: 100,
         c: this.$route.query.c,
-        q: question.oldform.question,
-      };
-      const url = API.port8085.dialogUrl;
+        q: question.oldform.question
+      }
+      const url = API.port8085.dialogUrl
 
       const headers = {
-        userid: this.userId,
-      };
-      this.msgList.push(question);
+        userid: this.userId
+      }
+      this.msgList.push(question)
       const robotMsg = {
         idx: this.msgList.length - 1,
-        owner: "robot",
-        msg: "",
-      };
-      this.inputContent = "";
-      this.LoadingShow = true;
+        owner: 'robot',
+        msg: ''
+      }
+      this.inputContent = ''
+      this.LoadingShow = true
       axiosGet(url, params, headers)
         .then((res) => {
           if (res && res.a.length > 0 && res.a[0].a) {
-            robotMsg.owner = "robot";
+            robotMsg.owner = 'robot'
             robotMsg.msg = res.a[0].a
-              .replace(/\n\r/g, "<br/>")
-              .replace(/\n/g, "<br/>");
+              .replace(/\n\r/g, '<br/>')
+              .replace(/\n/g, '<br/>')
           }
           this.$nextTick(() => {
-            this.msgList.push(robotMsg);
-            setTimeout(function () {
-              const div = document.getElementsByClassName("divScroll");
-              div[0].scrollTop = div[0].scrollHeight;
-            }, 0);
-          });
-          this.LoadingShow = false;
+            this.msgList.push(robotMsg)
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+          })
+          this.LoadingShow = false
         })
         .catch(() => {
-          this.LoadingShow = false;
-          robotMsg.msg = GETANSWERRES;
+          this.LoadingShow = false
+          robotMsg.msg = GETANSWERRES
           this.$nextTick(() => {
-            this.msgList.push(robotMsg);
-            setTimeout(function () {
-              const div = document.getElementsByClassName("divScroll");
-              div[0].scrollTop = div[0].scrollHeight;
-            }, 0);
-          });
+            this.msgList.push(robotMsg)
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+          })
           // ------------------
-        });
+        })
     },
 
     textButtonSwitch() {
       if (this.textSwitch) {
-        this.textSwitch = false;
+        this.textSwitch = false
+        this.inputContent = ''
       } else {
-        this.textSwitch = true;
+        this.textSwitch = true
+      }
+    },
+    countDowns() {
+      this.count--
+      if (this.count <= 0 && this.longPress === true) {
+        clearInterval(this.countDownTimes)
+        this.$store.commit('setMaskShow', false)
       }
     },
     talkEndClear(e) {
@@ -383,8 +420,9 @@ export default {
       if (this.timeOutEvent !== 0) {
         console.log('你这是点击，不是长按')
       } else {
-        this.$store.commit('setMaskShow', false)
-        console.log('这是一个长按------')
+        this.longPress = false
+        clearInterval(this.countDownTimes)
+        // this.$store.commit('setMaskShow', false)
       }
       return false
     },
@@ -392,64 +430,140 @@ export default {
       e.stopPropagation()
       this.timeOutEvent = setTimeout(() => {
         this.timeOutEvent = 0
+        this.longPress = true
         // 真正长按后应该执行的内容
         this.$store.commit('setMaskShow', true)
-        console.log('长按事件触发')
+        this.countDownTimes = setInterval(this.countDowns, 1000)
       }, 500)
       return false
     },
-    getInformation(item) {
-      this.toppPointmodelShow = true;
+    sendTalkMsg(data) {
       const params = {
-        key: item.title,
-      };
-      const url = API.port8085.getCheckInInformationUrl;
-      this.LoadingShow = true;
-      axiosGet(url, params)
+        talkText: data
+      }
+      const url = API.port8085.sendVoiceUrl
+      this.LoadingShow = true
+      axiosPost(url, params)
         .then((res) => {
-          this.pointInfo = res;
-          this.LoadingShow = false;
+          const userMsg = {
+            type: 'user',
+            voiceUrl: res.url,
+            updateold: false
+          }
+          this.msgList.push(userMsg)
+          this.LoadingShow = false
         })
         .catch(() => {
-          this.pointInfo = POINTINFO;
-          this.LoadingShow = false;
-        });
+          const userMsg = {
+            type: 'user',
+            voiceUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3',
+            updateold: false
+          }
+          this.msgList.push(userMsg)
+          this.LoadingShow = false
+          // this.$router.push({ path: '/home' })
+        })
+    },
+    getInformation(item) {
+      this.toppPointmodelShow = true
+      const params = {
+        key: item.title
+      }
+      const url = API.port8085.getCheckInInformationUrl
+      this.LoadingShow = true
+      axiosGet(url, params)
+        .then((res) => {
+          this.pointInfo = res
+          this.LoadingShow = false
+        })
+        .catch(() => {
+          this.pointInfo = POINTINFO
+          this.LoadingShow = false
+        })
     },
 
     pressEnter(e) {
       if (!this.inputContent.match(/^[ ]*$/)) {
         const userMsg = {
-          type: "user",
+          type: 'user',
           oldform: {
             question: this.inputContent,
-            answer: "",
-            source: "",
+            answer: '',
+            source: ''
           },
-          updateold: false,
-        };
-        this.getAnswer(userMsg);
+          updateold: false
+        }
+        this.getAnswer(userMsg)
       }
-      e.preventDefault();
+      e.preventDefault()
     },
+    /**
+     * 获取用户拍照的图片信息
+     */
+    async Photograph() {
+      const imgFile = this.$refs.photoref.files[0]
+      this.base64ImgData = await this.FileReader(imgFile)
+      const formData = new FormData()
+      formData.append('image', imgFile)
+      const headers = {
+        'Content-Type': 'multipart/formdata',
+        'X-CSRF-Token': window.localStorage.getItem('token')
+      }
+      const url = API.port8085.uploadImgUrl
+      this.LoadingShow = true
+      axiosPost(url, formData, formData, headers)
+        .then((res) => {
+          const userMsg = {
+            type: 'user',
+            imgUrl: res.url,
+            updateold: false
+          }
+          this.msgList.push(userMsg)
+          this.LoadingShow = false
+        })
+        .catch(() => {
+          const userMsg = {
+            type: 'user',
+            imgUrl: this.base64ImgData,
+            updateold: false
+          }
+          this.msgList.push(userMsg)
+          this.LoadingShow = false
+        })
+      // 获取图片base64 代码，并存放到 base64ImgData 中
+      console.log(this.base64ImgData, '--------base64ImgData__')
+    },
+    /**
+     * 返回用户拍照图片的base64
+     */
+    FileReader(FileInfo) {
+      // FileReader 方法参考地址：https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader
+      const reader = new FileReader()
+      // readAsDataURL 方法参考地址：https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader/readAsDataURL
+      reader.readAsDataURL(FileInfo)
+      // 监听读取操作结束
+      /* eslint-disable */
+      return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
+    }
   },
   computed: {
-    ...mapState(["channelno"]),
     userId() {
-      return this.$store.state.userId;
+      return this.$store.state.userId
     },
     robotId() {
-      return this.$store.state.robotInfo.robotId;
+      return this.$store.state.robotInfo.robotId
     },
     isAdd() {
-      return this.newform.question && this.newform.answer && this.newform.source
-        ? false
-        : true;
+      return !(this.newform.question && this.newform.answer && this.newform.source)
     },
+    ...mapState({
+      talkText: state => state.app.talkText
+    })
   },
   created() {
-    this.showDrawer();
-    this.username = this.$route.query.username;
-    this.phonenum = this.$route.query.phonenum;
-  },
-};
+    this.showDrawer()
+    this.username = this.$route.query.username
+    this.phonenum = this.$route.query.phonenum
+  }
+}
 </script>
