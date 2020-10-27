@@ -13,6 +13,7 @@
       <input type="hidden" id="visual" value="frequencybars" />
       <div class="recorder-img">
         <p>松手即可发送10秒内语音</p>
+        <div class="imshar"></div>
         <img src="@/assets/images/recorder.png" alt="语音录制" width="100%">
       </div>
     </div>
@@ -351,6 +352,15 @@ export default {
     p{
       color:#3f78eb;
       font-size: 14px;
+    }
+    .imshar{
+      position: absolute;
+      z-index: 100;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
     }
   }
 }

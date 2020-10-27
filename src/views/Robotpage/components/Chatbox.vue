@@ -25,11 +25,11 @@
         <div class="robot-img">
           <img src="@/assets/images/useravator.png" alt="用户头像" />
         </div>
-        <div class="userMsg">
+        <div class="userMsg" :class="{'userMsg_width': msg.imgUrl !=undefined }">
           <span v-if="msg.oldform !=undefined">{{ msg.oldform.question }}</span>
           <m-audio v-if="msg.voiceUrl !=undefined" :src="msg.voiceUrl" text='' :showDuration='true'></m-audio>
            <div class="preview">
-            <img v-if="msg.imgUrl !=undefined" :src="msg.imgUrl" alt="" width="20%" @click="showImage(msg.imgUrl)"/>
+            <img v-if="msg.imgUrl !=undefined" :src="msg.imgUrl" alt="" width="100%" @click="showImage(msg.imgUrl)"/>
           </div>
         </div>
       </div>
@@ -135,6 +135,9 @@ export default {
       line-height: 18px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .userMsg_width{
+      width: 20%;
     }
   }
   .users-box {

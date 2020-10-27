@@ -45,6 +45,7 @@ module.exports = {
   lintOnSave: !IS_PROD,
   productionSourceMap: false, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   devServer: {
+    https: true,
     port: 9020, // 端口
     open: false, // 启动后打开浏览器
     overlay: {
@@ -52,7 +53,6 @@ module.exports = {
       warnings: false,
       errors: true
     }
-    // https: true
     // proxy: {
     //   //配置跨域
     //   '/api': {
