@@ -273,12 +273,31 @@ export default {
     }
   },
   mounted() {
-    this.getAllCheckIconStatus()
+    // this.getAllCheckIconStatus()
+    this.getuploadImgResults()
   },
   methods: {
+    getuploadImgResults() {
+      console.log(this.userId, '---this.userId')
+      const url = API.port8085.getuploadImgResult
+      const params = {
+        userId: this.userId
+      }
+      axiosGet(url, params)
+        .then((res) => {
+          console.log(res, '---getuploadImgResults--res')
+          // if (res && res.length > 0) {
+          //   this.getCheckIconStatus = res
+          //   this.filterCheckIconStatus(this.getCheckIconStatus)
+          // }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     photoMsg(data) {
       console.log(data, '----photoMsg')
-      this.msgList = [...this.msgList]
+      this.msgList = [...data]
     },
     getAllCheckIconStatus() {
       const url = API.port8085.getCheckIconStatus
@@ -339,16 +358,16 @@ export default {
     },
     getAnswer(question) {
       const params = {
-        uid: this.userId,
+        userId: this.userId,
         l: 100,
         c: this.$route.query.c,
         q: question.oldform.question
       }
       const url = API.port8085.dialogUrl
 
-      const headers = {
-        userid: this.userId
-      }
+      // const headers = {
+      //   userid: this.userId
+      // }
       this.msgList.push(question)
       const robotMsg = {
         idx: this.msgList.length - 1,
@@ -357,7 +376,7 @@ export default {
       }
       this.inputContent = ''
       this.$store.commit('setLoadingShow', true)
-      axiosGet(url, params, headers)
+      axiosGet(url, params)
         .then((res) => {
           if (res && res.a.length > 0 && res.a[0].a) {
             robotMsg.owner = 'robot'
@@ -427,8 +446,9 @@ export default {
       return false
     },
     sendTalkMsg(data) {
+      console.log(data, '---sendTalkMsg')
       const params = {
-        talkText: '我是一个人'
+        text: data
       }
       const url = API.port8085.sendVoiceUrl
       this.$store.commit('setLoadingShow', true)
@@ -533,9 +553,6 @@ export default {
     }
   },
   computed: {
-    userId() {
-      return this.$store.state.userId
-    },
     robotId() {
       return this.$store.state.robotInfo.robotId
     },
@@ -544,7 +561,8 @@ export default {
     },
     ...mapState({
       talkText: state => state.app.talkText,
-      LoadingShow:state => state.app.LoadingShow
+      LoadingShow:state => state.app.LoadingShow,
+      userId:state => state.app.userId
     })
   },
   created() {

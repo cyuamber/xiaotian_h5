@@ -25,10 +25,10 @@ function webS() {
   if (startWebsocket === 1) {
     if ('WebSocket' in window) {
       // 一次转写端口
-      websocket = new WebSocket('wss://172.31.232.108:5010')
+      websocket = new WebSocket('ws://172.31.232.108:5010')
       // websocket.binaryType = "arraybuffer";
     } else {
-      websocket = new WebSocket('wss://172.31.232.108:5010')
+      websocket = new WebSocket('ws://172.31.232.108:5010')
       // alert('当前浏览器 Not support websocket')
     }
     // 一次链接发生错误的回调ssss
@@ -50,7 +50,8 @@ function webS() {
     websocket.onmessage = function(event) {
       // var ds = document.querySelector('.num_'+dataFlage);
       var date = JSON.parse(event.data)
-      if (date.end == 1) {
+      console.log(date, 'websocket---date-----')
+      if (date.end === 1) {
         websocket.close()
       }
     }

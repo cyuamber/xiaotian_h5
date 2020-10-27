@@ -13,6 +13,7 @@
   }
 </style>
 <script>
+import { mapState } from 'vuex'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
 export default {
@@ -23,6 +24,18 @@ export default {
     }
   },
   props: ['msgList'],
+  computed: {
+    robotId() {
+      return this.$store.state.robotInfo.robotId
+    },
+    isAdd() {
+      return !(this.newform.question && this.newform.answer && this.newform.source)
+    },
+    ...mapState({
+      userId: state => state.app.userId,
+      userName: state => state.app.userId
+    })
+  },
   methods: {
     /**
      * 获取用户拍照的图片信息
@@ -33,18 +46,18 @@ export default {
       this.base64ImgData = await this.FileReader(imgFile)
       const formData = new FormData()
       formData.append('image', imgFile)
+      console.log(formData.get('image'), "-----formData.get('image')")
       const headers = {
-        'Content-Type': 'multipart/formdata',
+        'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
       }
       const url = API.port8085.uploadImgUrl
       this.$store.commit('setLoadingShow', true)
       const params = {
-        image: formData,
-        userId: 'dadada1',
-        username: 'gongjie'
+        userId: this.userId,
+        username: this.userName
       }
-      axiosPost(url, params, params, headers)
+      axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res-----upload')
           const userMsg = {
