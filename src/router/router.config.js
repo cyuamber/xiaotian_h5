@@ -29,7 +29,13 @@ export const constantRouterMap = [
         name: "Popupinfo",
         component: () => import("@/views/Robotpage/components/Popupinfo"),
         meta: { keepAlive: false }
+      },
+      {
+        path: '/result',
+        name: 'Result',
+        component: () => import('@/views/Result/Result'),
+        meta: { keepAlive: false }
       }
     ]
   }
-];
+]
