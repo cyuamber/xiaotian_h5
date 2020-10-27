@@ -35,3 +35,21 @@ export const GETANSWERRES = [
     value:"http://img01.jituwang.com/171110/256775-1G11021324561.jpg"
   },
 ]
+
+export const GETPRESENT = [
+  '快去中移九天展区领取我为你准备的礼物吧',
+  '期待与你下次的相遇AI\'ll be waiting for you'
+]
+
+export const GREET = [
+  [
+    {
+      type: 'text',
+      value: '亲爱的'
+    },
+    {
+      type: 'var',
+      value: 'name'
+    }
+  ]
+]
