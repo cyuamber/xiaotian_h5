@@ -2,35 +2,15 @@
   <div id="componentBody">
     <div class="drawerBody">
       <van-sticky class="top">
-        <span
+        <div>
+          <img
           class="top-point"
-          :class="{ ischeck: item.isCheck === true }"
-          v-for="(item, index) in clockInPoint"
+          v-for="(item, index) in imgIcon"
           :key="index"
           @click="() => getInformation(item)"
-        >
-          {{ item.title }}
-        </span>
-        <van-popup
-          v-model="toppPointmodelShow"
-          :style="{ width: '80%', height: '80%' }"
-        >
-          <van-swipe
-            class="my-swipe"
-            indicator-color="#6A6A6A"
-            style="height: 95%"
-          >
-            <van-swipe-item v-for="(item, index) in pointInfo" :key="index">
-              <img src="@/assets/xiaotian.png" width="60%" alt="小天机器人" />
-              <p class="point-information">
-                {{ item.info }}
-              </p>
-              <span class="top-point point-model">
-                {{ item.key }}
-              </span>
-            </van-swipe-item>
-          </van-swipe>
-        </van-popup>
+          :src="item.src"
+          alt="" >
+        </div>
       </van-sticky>
       <div class="bodyDialog divScroll">
         <Chatbox :msgList="msgList" />
@@ -46,15 +26,8 @@
           </span>
         </div>
         <div class="bodyInput">
-          <div class="footer-icon" @click="textButtonSwitch()">
-            <van-icon
-              name="add-o"
-              size="0.7rem"
-              v-show="!textSwitch"
-              color="rgba(40,89,253,1)"
-            />
-             <!-- <img v-show="!textSwitch" src="@/assets/images/talk-icon.png" alt="语音"> -->
-            <img v-show="textSwitch" src="@/assets/images/talk-icon.png" alt="语音">
+          <div class="footer-icon" >
+            <img v-show="!textSwitch" src="@/assets/images/talk-icon.png" alt="语音"  @touchstart="talkStart" @touchend="talkEndClear">
           </div>
           <textarea
             class="inputArea"
@@ -62,17 +35,16 @@
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
           />
-          <button class="talk-button" v-show="textSwitch" @touchstart="talkStart" @touchend="talkEndClear"></button>
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡">
-            <input ref="photoref" type="file" accept="image/*" @change="Photograph()" capture="camera"/>
+            <Photograph :msgList="msgList" @photoMsg='photoMsg'/>
           </div>
         </div>
       </div>
     </div>
-
     <Loading v-if="LoadingShow" />
     <Recorder @sendTalkMsg='sendTalkMsg'/>
+    <Popupinfo :msgList="msgList" @photoMsgClose='photoMsg'/>
   </div>
 </template>
 
@@ -117,7 +89,7 @@ select {
     line-height: 1.5rem;
     margin: 20px 10px;
     text-align: center;
-    background-color: #fff;
+    background-color:transparent;
     font-weight: bold;
     font-size: 0.35rem;
   }
@@ -215,6 +187,7 @@ select {
     height: auto;
     display: inline-block;
     position: relative;
+    vertical-align: top;
     img{
       width: 100%;
       height: auto;
@@ -246,20 +219,22 @@ select {
   height: 0.9rem;
   line-height: 0.9rem;
   border-radius: 25px;
-  text-indent: 0.4rem;
+  text-indent: 1rem;
 }
-.inputArea{
-  width: 56%;
-  margin: 0 3% 0 16%;
-}
+// .inputArea{
+//   width: 56%;
+//   margin: 0 3% 0 16%;
+// }
 </style>
 
 <script>
 import { mapState } from 'vuex'
 import { axiosGet, axiosPost } from '../../utils/http.js'
-import { POINTINFO, COMMONQUESTION, GETANSWERRES } from '../../const/constant'
+import { POINTINFO, COMMONQUESTION, GETANSWERRES, GETCHECKICONSTATUS, IMGICON } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
+import Popupinfo from './components/Popupinfo'
+import Photograph from './components/Photograph'
 import Recorder from './components/Recorder'
 import API from '../../utils/api'
 export default {
@@ -267,6 +242,8 @@ export default {
   components: {
     Loading,
     Chatbox,
+    Popupinfo,
+    Photograph,
     Recorder
   },
 
@@ -283,31 +260,10 @@ export default {
       username: '',
       phonenum: '',
       commonQuestion: COMMONQUESTION,
-      clockInPoint: [
-        {
-          key: '',
-          title: 'C',
-          isCheck: false
-        },
-        {
-          key: '',
-          title: 'H',
-          isCheck: false
-        },
-        {
-          key: '',
-          title: 'B',
-          isCheck: false
-        },
-        {
-          key: '',
-          title: 'N',
-          isCheck: true
-        }
-      ],
-      toppPointmodelShow: false,
+      getCheckIconStatus: [],
+      imgIcon: IMGICON,
       pointInfo: [],
-      LoadingShow: false,
+      // LoadingShow: false,
       textSwitch: false,
       timeOutEvent: 0,
       count: 10,
@@ -316,7 +272,40 @@ export default {
       base64ImgData: null
     }
   },
+  mounted() {
+    this.getAllCheckIconStatus()
+  },
   methods: {
+    photoMsg(data) {
+      console.log(data, '----photoMsg')
+      this.msgList = [...this.msgList]
+    },
+    getAllCheckIconStatus() {
+      const url = API.port8085.getCheckIconStatus
+      axiosGet(url)
+        .then((res) => {
+          if (res && res.length > 0) {
+            this.getCheckIconStatus = res
+            this.filterCheckIconStatus(this.getCheckIconStatus)
+          }
+        })
+        .catch(() => {
+          this.getCheckIconStatus = GETCHECKICONSTATUS
+          this.filterCheckIconStatus(this.getCheckIconStatus)
+        })
+    },
+    filterCheckIconStatus(data) {
+      this.imgIcon.map((item, index) => {
+        data.map((items, ind) => {
+          if (items.title === item.title) {
+            item.isCheck = items.isCheck
+            item.src = items.isCheck ? item.checked : item.unchecked
+            item.popupinfoIconSrc = items.isCheck ? item.popupinfoChecked : item.popupinfoUnchecked
+          }
+        })
+      })
+      console.log(this.imgIcon, '-----this.imgIcon')
+    },
     showDrawer() {
       this.msgList = []
       const robotMsg = {
@@ -367,7 +356,7 @@ export default {
         msg: ''
       }
       this.inputContent = ''
-      this.LoadingShow = true
+      this.$store.commit('setLoadingShow', true)
       axiosGet(url, params, headers)
         .then((res) => {
           if (res && res.a.length > 0 && res.a[0].a) {
@@ -383,10 +372,10 @@ export default {
               div[0].scrollTop = div[0].scrollHeight
             }, 0)
           })
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
         .catch(() => {
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
           robotMsg.msg = GETANSWERRES
           this.$nextTick(() => {
             this.msgList.push(robotMsg)
@@ -399,14 +388,14 @@ export default {
         })
     },
 
-    textButtonSwitch() {
-      if (this.textSwitch) {
-        this.textSwitch = false
-        this.inputContent = ''
-      } else {
-        this.textSwitch = true
-      }
-    },
+    // textButtonSwitch() {
+    //   if (this.textSwitch) {
+    //     this.textSwitch = false
+    //     this.inputContent = ''
+    //   } else {
+    //     this.textSwitch = true
+    //   }
+    // },
     countDowns() {
       this.count--
       if (this.count <= 0 && this.longPress === true) {
@@ -422,7 +411,7 @@ export default {
       } else {
         this.longPress = false
         clearInterval(this.countDownTimes)
-        // this.$store.commit('setMaskShow', false)
+        this.$store.commit('setMaskShow', false)
       }
       return false
     },
@@ -439,10 +428,10 @@ export default {
     },
     sendTalkMsg(data) {
       const params = {
-        talkText: data
+        talkText: '我是一个人'
       }
       const url = API.port8085.sendVoiceUrl
-      this.LoadingShow = true
+      this.$store.commit('setLoadingShow', true)
       axiosPost(url, params)
         .then((res) => {
           const userMsg = {
@@ -451,7 +440,7 @@ export default {
             updateold: false
           }
           this.msgList.push(userMsg)
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
         .catch(() => {
           const userMsg = {
@@ -460,25 +449,25 @@ export default {
             updateold: false
           }
           this.msgList.push(userMsg)
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
           // this.$router.push({ path: '/home' })
         })
     },
     getInformation(item) {
-      this.toppPointmodelShow = true
+      this.$store.commit('setToppPointmodelShow', true)
       const params = {
         key: item.title
       }
       const url = API.port8085.getCheckInInformationUrl
-      this.LoadingShow = true
+      this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
           this.pointInfo = res
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
         .catch(() => {
           this.pointInfo = POINTINFO
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
     },
 
@@ -510,7 +499,7 @@ export default {
         'X-CSRF-Token': window.localStorage.getItem('token')
       }
       const url = API.port8085.uploadImgUrl
-      this.LoadingShow = true
+      this.$store.commit('setLoadingShow', true)
       axiosPost(url, formData, formData, headers)
         .then((res) => {
           const userMsg = {
@@ -519,7 +508,7 @@ export default {
             updateold: false
           }
           this.msgList.push(userMsg)
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
         .catch(() => {
           const userMsg = {
@@ -528,18 +517,15 @@ export default {
             updateold: false
           }
           this.msgList.push(userMsg)
-          this.LoadingShow = false
+          this.$store.commit('setLoadingShow', false)
         })
       // 获取图片base64 代码，并存放到 base64ImgData 中
-      console.log(this.base64ImgData, '--------base64ImgData__')
     },
     /**
      * 返回用户拍照图片的base64
      */
     FileReader(FileInfo) {
-      // FileReader 方法参考地址：https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader
       const reader = new FileReader()
-      // readAsDataURL 方法参考地址：https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader/readAsDataURL
       reader.readAsDataURL(FileInfo)
       // 监听读取操作结束
       /* eslint-disable */
@@ -557,7 +543,8 @@ export default {
       return !(this.newform.question && this.newform.answer && this.newform.source)
     },
     ...mapState({
-      talkText: state => state.app.talkText
+      talkText: state => state.app.talkText,
+      LoadingShow:state => state.app.LoadingShow
     })
   },
   created() {

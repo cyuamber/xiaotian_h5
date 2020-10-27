@@ -1,7 +1,9 @@
 const state = {
   userName: '',
   maskShow: false,
-  talkText: ''
+  talkText: '',
+  toppPointmodelShow: false,
+  LoadingShow: false
 }
 const mutations = {
   SET_USER_NAME(state, name) {
@@ -12,6 +14,12 @@ const mutations = {
   },
   setTalkText(state, talkText) {
     state.talkText = talkText
+  },
+  setToppPointmodelShow(state, toppPointmodelShow) {
+    state.toppPointmodelShow = toppPointmodelShow
+  },
+  setLoadingShow(state, LoadingShow) {
+    state.LoadingShow = LoadingShow
   }
 }
 const actions = {
