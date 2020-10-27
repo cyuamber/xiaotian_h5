@@ -2,7 +2,7 @@
 <template>
   <div class="index-container">
     <div class="warpper">
-      <img src="@/assets/images/dashboard.png"  />
+      <img class="index-img" src="@/assets/images/dashboard.png"  />
       <div class="dashboard-button" @click="hrefRobotTestBtn">
         <img src="@/assets/images/dashboard-button.png" alt="">
       </div>
@@ -14,7 +14,7 @@
 export default {
   methods: {
     hrefRobotTestBtn() {
-      this.$router.push({ path: '/robotpage' })
+      this.$router.replace({ path: '/robotpage' })
     }
   }
 }
@@ -24,6 +24,7 @@ export default {
   height: 100vh;
   width: 100%;
   overflow: auto;
+  background-color: rgb(20,3,40);
   .warpper {
     width: 100%;
     height: 100%;
@@ -34,19 +35,26 @@ export default {
     justify-content:center;
 //  background: url('../../assets/images/dashboard.jpg') no-repeat center;
 //  background-size: cover;
-    img {
-      width: 100%;
-      height: auto;
-      display: inline-block;
+    .index-img {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top:0;
+        left: 0;
     }
     .dashboard-button{
       width: 80%;
       height: 53px;
       position: absolute;
-      bottom: 0;
+      top: 660px;
       display:flex;
       align-items:center;
       justify-content:center;
+      img {
+        width: 100%;
+        height: auto;
+        display: inline-block;
+    }
     }
   }
 }
