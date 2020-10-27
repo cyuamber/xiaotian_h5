@@ -13,14 +13,16 @@
   }
 </style>
 <script>
-import { mapState } from 'vuex'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
 export default {
   name: 'Photograph',
   data() {
     return {
-      msgLists: this.msgList
+      msgLists: this.msgList,
+      base64ImgData: null,
+      userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId')
     }
   },
   props: ['msgList'],
@@ -30,11 +32,7 @@ export default {
     },
     isAdd() {
       return !(this.newform.question && this.newform.answer && this.newform.source)
-    },
-    ...mapState({
-      userId: state => state.app.userId,
-      userName: state => state.app.userId
-    })
+    }
   },
   methods: {
     /**
@@ -46,37 +44,49 @@ export default {
       this.base64ImgData = await this.FileReader(imgFile)
       const formData = new FormData()
       formData.append('image', imgFile)
-      console.log(formData.get('image'), "-----formData.get('image')")
       const headers = {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
       }
       const url = API.port8085.uploadImgUrl
       this.$store.commit('setLoadingShow', true)
+      const userMsg = {
+        type: 'user',
+        imgUrl: this.base64ImgData,
+        updateold: false
+      }
+      this.msgLists.push(userMsg)
+      this.$emit('photoMsg', this.msgLists)
       const params = {
         userId: this.userId,
         username: this.userName
       }
+      const robotMsg = {
+        idx: this.msgList.length - 1,
+        owner: 'robot',
+        msg: ''
+      }
       axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res-----upload')
-          const userMsg = {
-            type: 'user',
-            imgUrl: res.url,
-            updateold: false
+          if (res && res.msg) {
+            robotMsg.owner = 'robot'
+            robotMsg.msg = res.msg
+              .replace(/\n\r/g, '<br/>')
+              .replace(/\n/g, '<br/>')
           }
-          this.msgLists.push(userMsg)
+          console.log(robotMsg, 'robotMsg')
+          this.$nextTick(() => {
+            this.msgList.push(robotMsg)
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+          })
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })
         .catch(() => {
-          const userMsg = {
-            type: 'user',
-            imgUrl: this.base64ImgData,
-            updateold: false
-          }
-          this.msgLists.push(userMsg)
-          this.$emit('photoMsg', this.msgLists)
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })

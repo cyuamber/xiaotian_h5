@@ -7,6 +7,8 @@
             class="my-swipe"
             indicator-color="#3F57F1"
             style="height: 100%"
+            ref="swipe"
+            :initial-swipe='swipeToNumber'
           >
             <van-swipe-item v-for="(item, index) in popupInfoImg" :key="index">
               <div class="info">
@@ -90,11 +92,12 @@ export default {
   components: {
     Photograph
   },
-  props: ['msgList'],
+  props: ['msgList', 'swipeToNum'],
   data() {
     return {
       popupInfoImg: IMGICON,
-      msgLists: this.msgList
+      msgLists: this.msgList,
+      swipeToNumber: this.swipeToNum
     }
   },
   computed: {
@@ -105,6 +108,11 @@ export default {
       set(val) {
         this.$store.commit('setToppPointmodelShow', false)
       }
+    }
+  },
+  watch: {
+    swipeToNum(newVal, oldVal) {
+      this.swipeToNumber = newVal
     }
   },
   methods: {

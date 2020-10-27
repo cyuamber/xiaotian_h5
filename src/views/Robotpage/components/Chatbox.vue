@@ -8,12 +8,12 @@
         <div class="robotMsg">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
             <div v-if="dialogue.type === 'text'">{{ dialogue.value }}</div>
-            <img
+            <!-- <img
               v-else-if="dialogue.type === 'img'"
               @click="showImage(dialogue.value)"
               :src="dialogue.value"
               alt="小天机器人"
-            />
+            /> -->
           </div>
           <div v-if="msg.init">
             <span class="hot-issue" @click="quickClick()">如何打卡?</span>
@@ -26,10 +26,10 @@
           <img src="@/assets/images/useravator.png" alt="用户头像" />
         </div>
         <div class="userMsg" :class="{'userMsg_width': msg.imgUrl !=undefined }">
-          <span v-if="msg.oldform !=undefined">{{ msg.oldform.question }}</span>
+          <span v-if="msg.oldform !=undefined && msg.voiceUrl === undefined">{{ msg.oldform.question }}</span>
           <m-audio v-if="msg.voiceUrl !=undefined" :src="msg.voiceUrl" text='' :showDuration='true'></m-audio>
-           <div class="preview">
-            <img v-if="msg.imgUrl !=undefined" :src="msg.imgUrl" alt="" width="100%" @click="showImage(msg.imgUrl)"/>
+           <div class="preview" v-if="msg.imgUrl !=undefined">
+            <img :src="msg.imgUrl" alt="" width="100%" @click="showImage(msg.imgUrl)"/>
           </div>
         </div>
       </div>
@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import { ImagePreview } from 'vant'
 export default {
   name: 'Chatbox',
   props: {
+    // eslint-disable-next-line vue/require-prop-type-constructor
     msgList: ''
   },
 

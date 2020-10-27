@@ -7,7 +7,7 @@
           class="top-point"
           v-for="(item, index) in imgIcon"
           :key="index"
-          @click="() => getInformation(item)"
+          @click="() => getInformation(index)"
           :src="item.src"
           alt="" >
         </div>
@@ -44,7 +44,7 @@
     </div>
     <Loading v-if="LoadingShow" />
     <Recorder @sendTalkMsg='sendTalkMsg'/>
-    <Popupinfo :msgList="msgList" @photoMsgClose='photoMsg'/>
+    <Popupinfo :msgList="msgList" @photoMsgClose='photoMsg' :swipeToNum='swipeToNum' />
   </div>
 </template>
 
@@ -262,14 +262,17 @@ export default {
       commonQuestion: COMMONQUESTION,
       getCheckIconStatus: [],
       imgIcon: IMGICON,
-      pointInfo: [],
+      pointInfo: POINTINFO,
       // LoadingShow: false,
       textSwitch: false,
       timeOutEvent: 0,
       count: 10,
       countDownTimes: null,
       longPress: false,
-      base64ImgData: null
+      base64ImgData: null,
+      userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId'),
+      swipeToNum: 0
     }
   },
   mounted() {
@@ -278,40 +281,34 @@ export default {
   },
   methods: {
     getuploadImgResults() {
-      console.log(this.userId, '---this.userId')
       const url = API.port8085.getuploadImgResult
       const params = {
         userId: this.userId
       }
+      this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
+          this.$store.commit('setLoadingShow', false)
           console.log(res, '---getuploadImgResults--res')
-          // if (res && res.length > 0) {
-          //   this.getCheckIconStatus = res
-          //   this.filterCheckIconStatus(this.getCheckIconStatus)
-          // }
+          if (res && res.length > 0) {
+            this.getCheckIconStatus = res
+            this.filterCheckIconStatus(this.getCheckIconStatus)
+          } else {
+            this.getCheckIconStatus = GETCHECKICONSTATUS
+            this.filterCheckIconStatus(this.getCheckIconStatus)
+          }
         })
         .catch((err) => {
           console.log(err)
+          this.getCheckIconStatus = GETCHECKICONSTATUS
+          this.filterCheckIconStatus(this.getCheckIconStatus)
+          this.$store.commit('setLoadingShow', false)
         })
     },
     photoMsg(data) {
       console.log(data, '----photoMsg')
       this.msgList = [...data]
-    },
-    getAllCheckIconStatus() {
-      const url = API.port8085.getCheckIconStatus
-      axiosGet(url)
-        .then((res) => {
-          if (res && res.length > 0) {
-            this.getCheckIconStatus = res
-            this.filterCheckIconStatus(this.getCheckIconStatus)
-          }
-        })
-        .catch(() => {
-          this.getCheckIconStatus = GETCHECKICONSTATUS
-          this.filterCheckIconStatus(this.getCheckIconStatus)
-        })
+      this.getuploadImgResults()
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
@@ -323,7 +320,6 @@ export default {
           }
         })
       })
-      console.log(this.imgIcon, '-----this.imgIcon')
     },
     showDrawer() {
       this.msgList = []
@@ -356,36 +352,35 @@ export default {
       this.getAnswer(userMsg)
       e.preventDefault()
     },
-    getAnswer(question) {
+    getAnswer(questions) {
       const params = {
-        userId: this.userId,
-        l: 100,
-        c: this.$route.query.c,
-        q: question.oldform.question
+        text: questions.oldform.question
       }
-      const url = API.port8085.dialogUrl
-
-      // const headers = {
-      //   userid: this.userId
-      // }
-      this.msgList.push(question)
+      const url = API.port8085.sendTextUrl
+      this.msgList.push(questions)
       const robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
-        msg: ''
+        msg: [
+          {
+            type: 'text',
+            value: ''
+          }
+        ]
       }
       this.inputContent = ''
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
-          if (res && res.a.length > 0 && res.a[0].a) {
+          if (res && res.msg) {
             robotMsg.owner = 'robot'
-            robotMsg.msg = res.a[0].a
+            robotMsg.msg[0].value = res.msg
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
           this.$nextTick(() => {
             this.msgList.push(robotMsg)
+            this.msgList = [...this.msgList]
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')
               div[0].scrollTop = div[0].scrollHeight
@@ -393,7 +388,8 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err, '=====err')
           this.$store.commit('setLoadingShow', false)
           robotMsg.msg = GETANSWERRES
           this.$nextTick(() => {
@@ -406,15 +402,6 @@ export default {
           // ------------------
         })
     },
-
-    // textButtonSwitch() {
-    //   if (this.textSwitch) {
-    //     this.textSwitch = false
-    //     this.inputContent = ''
-    //   } else {
-    //     this.textSwitch = true
-    //   }
-    // },
     countDowns() {
       this.count--
       if (this.count <= 0 && this.longPress === true) {
@@ -445,50 +432,39 @@ export default {
       }, 500)
       return false
     },
-    sendTalkMsg(data) {
-      console.log(data, '---sendTalkMsg')
-      const params = {
-        text: data
+    sendTalkMsg(talkMsgs) {
+      console.log(talkMsgs, '---sendTalkMsg')
+      const userMsg = {
+        type: 'user',
+        oldform: {
+          question: talkMsgs.talkMsg,
+          answer: '',
+          source: ''
+        },
+        voiceUrl: talkMsgs.audioUrl,
+        updateold: false
       }
-      const url = API.port8085.sendVoiceUrl
-      this.$store.commit('setLoadingShow', true)
-      axiosPost(url, params)
-        .then((res) => {
-          const userMsg = {
-            type: 'user',
-            voiceUrl: res.url,
-            updateold: false
-          }
-          this.msgList.push(userMsg)
-          this.$store.commit('setLoadingShow', false)
-        })
-        .catch(() => {
-          const userMsg = {
-            type: 'user',
-            voiceUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3',
-            updateold: false
-          }
-          this.msgList.push(userMsg)
-          this.$store.commit('setLoadingShow', false)
-          // this.$router.push({ path: '/home' })
-        })
+      this.msgList.push(userMsg)
+      this.getAnswer(userMsg)
     },
     getInformation(item) {
+      console.log(item, '---item')
+      this.swipeToNum = item
       this.$store.commit('setToppPointmodelShow', true)
-      const params = {
-        key: item.title
-      }
-      const url = API.port8085.getCheckInInformationUrl
-      this.$store.commit('setLoadingShow', true)
-      axiosGet(url, params)
-        .then((res) => {
-          this.pointInfo = res
-          this.$store.commit('setLoadingShow', false)
-        })
-        .catch(() => {
-          this.pointInfo = POINTINFO
-          this.$store.commit('setLoadingShow', false)
-        })
+      // const params = {
+      //   key: item.title
+      // }
+      // const url = API.port8085.getCheckInInformationUrl
+      // this.$store.commit('setLoadingShow', true)
+      // axiosGet(url, params)
+      //   .then((res) => {
+      //     this.pointInfo = res
+      //     this.$store.commit('setLoadingShow', false)
+      //   })
+      //   .catch(() => {
+      //     this.pointInfo = POINTINFO
+      //     this.$store.commit('setLoadingShow', false)
+      //   })
     },
 
     pressEnter(e) {
@@ -562,13 +538,12 @@ export default {
     ...mapState({
       talkText: state => state.app.talkText,
       LoadingShow:state => state.app.LoadingShow,
-      userId:state => state.app.userId
     })
   },
   created() {
     this.showDrawer()
-    this.username = this.$route.query.username
-    this.phonenum = this.$route.query.phonenum
+    // this.username = this.$route.query.username
+    // this.phonenum = this.$route.query.phonenum
   }
 }
 </script>
