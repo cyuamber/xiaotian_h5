@@ -1,6 +1,9 @@
 <template>
     <div class="result-container">
         <img class="result-bg" src="@/assets/images/result-bg.png"  />
+        <div class="back-button" @click="backToRobot">
+            <img src="@/assets/images/back.png" />
+        </div>
         <img class="result-pen" src="@/assets/images/pen.png" />
         <div class="result-greet">
             <div class="greet-text">
@@ -81,6 +84,9 @@ export default {
     },
     getName() {
         // 从微信获取名字
+    },
+    backToRobot() {
+      this.$router.replace({ path: '/robotpage' })
     }
   }
 }
@@ -95,6 +101,15 @@ export default {
         top: 0;
         left: 0;
         z-index: -1;
+    }
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        img {
+            width: 20px;
+            height: 20px;
+        }
     }
     .result-pen {
         position: absolute;
@@ -161,6 +176,7 @@ export default {
             height: 153px;
             width: 107px;
             margin-left: 40px;
+            margin-top: -35px;
         }
     }
 }
