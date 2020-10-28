@@ -64,20 +64,25 @@ export default {
       const robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
-        msg: ''
+        msg: [
+          {
+            type: 'text',
+            value: ''
+          }
+        ]
       }
       axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res-----upload')
           if (res && res.msg) {
             robotMsg.owner = 'robot'
-            robotMsg.msg = res.msg
+            robotMsg.msg[0].value = res.msg
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
-          console.log(robotMsg, 'robotMsg')
           this.$nextTick(() => {
-            this.msgList.push(robotMsg)
+            this.msgLists.push(robotMsg)
+            this.$emit('photoMsg', this.msgLists)
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')
               div[0].scrollTop = div[0].scrollHeight

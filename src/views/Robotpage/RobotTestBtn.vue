@@ -426,7 +426,6 @@ export default {
       this.timeOutEvent = setTimeout(() => {
         this.timeOutEvent = 0
         this.longPress = true
-        // 真正长按后应该执行的内容
         this.$store.commit('setMaskShow', true)
         this.countDownTimes = setInterval(this.countDowns, 1000)
       }, 500)
@@ -451,20 +450,6 @@ export default {
       console.log(item, '---item')
       this.swipeToNum = item
       this.$store.commit('setToppPointmodelShow', true)
-      // const params = {
-      //   key: item.title
-      // }
-      // const url = API.port8085.getCheckInInformationUrl
-      // this.$store.commit('setLoadingShow', true)
-      // axiosGet(url, params)
-      //   .then((res) => {
-      //     this.pointInfo = res
-      //     this.$store.commit('setLoadingShow', false)
-      //   })
-      //   .catch(() => {
-      //     this.pointInfo = POINTINFO
-      //     this.$store.commit('setLoadingShow', false)
-      //   })
     },
 
     pressEnter(e) {
@@ -481,51 +466,6 @@ export default {
         this.getAnswer(userMsg)
       }
       e.preventDefault()
-    },
-    /**
-     * 获取用户拍照的图片信息
-     */
-    async Photograph() {
-      const imgFile = this.$refs.photoref.files[0]
-      this.base64ImgData = await this.FileReader(imgFile)
-      const formData = new FormData()
-      formData.append('image', imgFile)
-      const headers = {
-        'Content-Type': 'multipart/formdata',
-        'X-CSRF-Token': window.localStorage.getItem('token')
-      }
-      const url = API.port8085.uploadImgUrl
-      this.$store.commit('setLoadingShow', true)
-      axiosPost(url, formData, formData, headers)
-        .then((res) => {
-          const userMsg = {
-            type: 'user',
-            imgUrl: res.url,
-            updateold: false
-          }
-          this.msgList.push(userMsg)
-          this.$store.commit('setLoadingShow', false)
-        })
-        .catch(() => {
-          const userMsg = {
-            type: 'user',
-            imgUrl: this.base64ImgData,
-            updateold: false
-          }
-          this.msgList.push(userMsg)
-          this.$store.commit('setLoadingShow', false)
-        })
-      // 获取图片base64 代码，并存放到 base64ImgData 中
-    },
-    /**
-     * 返回用户拍照图片的base64
-     */
-    FileReader(FileInfo) {
-      const reader = new FileReader()
-      reader.readAsDataURL(FileInfo)
-      // 监听读取操作结束
-      /* eslint-disable */
-      return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
     }
   },
   computed: {
