@@ -275,7 +275,7 @@ export default {
       axiosGet(url, params)
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
-          if (res && res.length > 0) {
+          if (res && res.data.length > 0) {
             this.getCheckIconStatus = res;
             this.filterCheckIconStatus(this.getCheckIconStatus);
           } else {
@@ -311,6 +311,7 @@ export default {
       data.map(items => {
         statusAll.push(items.isCheck)
       })
+      console.log(!statusAll.includes(false))
       if (!statusAll.includes(false)) {
         this.allPhotoIscheck = true
       }
@@ -379,7 +380,7 @@ export default {
           this.$nextTick(() => {
             this.msgList.push(robotMsg);
             this.msgList = [...this.msgList];
-            setTimeout(function () {
+            setTimeout(()=> {
               const div = document.getElementsByClassName("divScroll");
               div[0].scrollTop = div[0].scrollHeight;
             }, 0);
@@ -389,7 +390,6 @@ export default {
         .catch((err) => {
           console.log(err, "=====err");
           this.$store.commit("setLoadingShow", false);
-          this.$router.replace({ path: '/home' })
         });
     },
     countDowns() {
@@ -477,8 +477,6 @@ export default {
   },
   created() {
     this.showDrawer();
-    // this.username = this.$route.query.username
-    // this.phonenum = this.$route.query.phonenum
   },
 };
 </script>

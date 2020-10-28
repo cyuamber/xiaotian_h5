@@ -89,22 +89,22 @@ export const GETCHECKICONSTATUS = [
   {
     key: '',
     title: 'C',
-    isCheck: true
+    isCheck: false
   },
   {
     key: '',
     title: 'B',
-    isCheck: true
+    isCheck: false
   },
   {
     key: '',
     title: 'N',
-    isCheck: true
+    isCheck: false
   },
   {
     key: '',
     title: 'H',
-    isCheck: true
+    isCheck: false
   }
 ]
 
