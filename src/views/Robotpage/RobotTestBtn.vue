@@ -4,12 +4,13 @@
       <van-sticky class="top">
         <div>
           <img
-          class="top-point"
-          v-for="(item, index) in imgIcon"
-          :key="index"
-          @click="() => getInformation(index)"
-          :src="item.src"
-          alt="" >
+            class="top-point"
+            v-for="(item, index) in imgIcon"
+            :key="index"
+            @click="() => getInformation(item, index)"
+            :src="item.src"
+            alt=""
+          />
         </div>
       </van-sticky>
       <div class="bodyDialog divScroll">
@@ -26,8 +27,14 @@
           </span>
         </div>
         <div class="bodyInput">
-          <div class="footer-icon" >
-            <img v-show="!textSwitch" src="@/assets/images/talk-icon.png" alt="语音"  @touchstart="talkStart" @touchend="talkEndClear">
+          <div class="footer-icon">
+            <img
+              v-show="!textSwitch"
+              src="@/assets/images/talk-icon.png"
+              alt="语音"
+              @touchstart="talkStart"
+              @touchend="talkEndClear"
+            />
           </div>
           <textarea
             class="inputArea"
@@ -36,15 +43,19 @@
             v-show="!textSwitch"
           />
           <div class="checkphotos">
-            <img src="@/assets/images/checkPhotos.png" alt="拍照打卡">
-            <Photograph :msgList="msgList" @photoMsg='photoMsg'/>
+            <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
+            <Photograph :msgList="msgList" @photoMsg="photoMsg" />
           </div>
         </div>
       </div>
     </div>
     <Loading v-if="LoadingShow" />
-    <Recorder @sendTalkMsg='sendTalkMsg'/>
-    <Popupinfo :msgList="msgList" @photoMsgClose='photoMsg' :swipeToNum='swipeToNum' />
+    <Recorder @sendTalkMsg="sendTalkMsg" />
+    <Popupinfo
+      :msgList="msgList"
+      @photoMsgClose="photoMsg"
+      :swipeToNum="swipeToNum"
+    />
   </div>
 </template>
 
@@ -79,7 +90,7 @@ select {
 .top {
   width: 100%;
   height: 100px;
-  background-color: rgba(13,12,81,0.596);
+  background-color: rgba(13, 12, 81, 0.596);
   text-align: center;
   .top-point {
     display: inline-block;
@@ -89,7 +100,7 @@ select {
     line-height: 1.5rem;
     margin: 20px 10px;
     text-align: center;
-    background-color:transparent;
+    background-color: transparent;
     font-weight: bold;
     font-size: 0.35rem;
   }
@@ -111,7 +122,7 @@ select {
 #componentBody {
   width: 100%;
   height: 100vh;
-  background: url('../../assets/images/background_img.png') no-repeat 100% 100%;
+  background: url("../../assets/images/background_img.png") no-repeat 100% 100%;
   background-size: 100% 100%;
 }
 .drawerBody {
@@ -153,9 +164,9 @@ select {
       display: inline-block;
       padding: 0.3rem;
       margin: 0 5px 15px 5px;
-      background: rgba(38,28,176,0.8);
+      background: rgba(38, 28, 176, 0.8);
       border-radius: 25px;
-      color: rgba(166,180,241,0.8);
+      color: rgba(166, 180, 241, 0.8);
     }
   }
   .common-question::-webkit-scrollbar {
@@ -177,18 +188,18 @@ select {
     position: absolute;
     top: 7px;
     left: 25px;
-    img{
+    img {
       width: 100%;
       height: auto;
     }
   }
-  .checkphotos{
+  .checkphotos {
     width: 20%;
     height: auto;
     display: inline-block;
     position: relative;
     vertical-align: top;
-    img{
+    img {
       width: 100%;
       height: auto;
     }
@@ -203,11 +214,12 @@ select {
     }
   }
 }
-.inputArea, .talk-button{
+.inputArea,
+.talk-button {
   resize: none;
   width: 70%;
   overflow: auto;
-  background: rgba(28,22,145,0.8);
+  background: rgba(28, 22, 145, 0.8);
   border-style: none;
   font-size: 12px;
   font-weight: 400;
@@ -228,37 +240,43 @@ select {
 </style>
 
 <script>
-import { mapState } from 'vuex'
-import { axiosGet, axiosPost } from '../../utils/http.js'
-import { POINTINFO, COMMONQUESTION, GETANSWERRES, GETCHECKICONSTATUS, IMGICON } from '../../const/constant'
-import Loading from '../../components/Loading'
-import Chatbox from './components/Chatbox'
-import Popupinfo from './components/Popupinfo'
-import Photograph from './components/Photograph'
-import Recorder from './components/Recorder'
-import API from '../../utils/api'
+import { mapState } from "vuex";
+import { axiosGet, axiosPost } from "../../utils/http.js";
+import {
+  POINTINFO,
+  COMMONQUESTION,
+  GETANSWERRES,
+  GETCHECKICONSTATUS,
+  IMGICON,
+} from "../../const/constant";
+import Loading from "../../components/Loading";
+import Chatbox from "./components/Chatbox";
+import Popupinfo from "./components/Popupinfo";
+import Photograph from "./components/Photograph";
+import Recorder from "./components/Recorder";
+import API from "../../utils/api";
 export default {
-  name: 'RobotTestBtn',
+  name: "RobotTestBtn",
   components: {
     Loading,
     Chatbox,
     Popupinfo,
     Photograph,
-    Recorder
+    Recorder,
   },
 
   data() {
     return {
-      inputContent: '',
+      inputContent: "",
       msgList: [],
       width: document.body.clientWidth,
       newform: {
-        question: '',
-        answer: '',
-        source: ''
+        question: "",
+        answer: "",
+        source: "",
       },
-      username: '',
-      phonenum: '',
+      username: "",
+      phonenum: "",
       commonQuestion: COMMONQUESTION,
       getCheckIconStatus: [],
       imgIcon: IMGICON,
@@ -270,220 +288,231 @@ export default {
       countDownTimes: null,
       longPress: false,
       base64ImgData: null,
-      userName: localStorage.getItem('userName'),
-      userId: localStorage.getItem('userId'),
-      swipeToNum: 0
-    }
+      userName: localStorage.getItem("userName"),
+      userId: localStorage.getItem("userId"),
+      swipeToNum: 0,
+    };
   },
   mounted() {
     // this.getAllCheckIconStatus()
-    this.getuploadImgResults()
+    this.getuploadImgResults();
   },
   methods: {
     getuploadImgResults() {
-      const url = API.port8085.getuploadImgResult
+      const url = API.port8085.getuploadImgResult;
       const params = {
-        userId: this.userId
-      }
-      this.$store.commit('setLoadingShow', true)
+        userId: this.userId,
+      };
+      this.$store.commit("setLoadingShow", true);
       axiosGet(url, params)
         .then((res) => {
-          this.$store.commit('setLoadingShow', false)
-          console.log(res, '---getuploadImgResults--res')
+          this.$store.commit("setLoadingShow", false);
+          console.log(res, "---getuploadImgResults--res");
           if (res && res.length > 0) {
-            this.getCheckIconStatus = res
-            this.filterCheckIconStatus(this.getCheckIconStatus)
+            this.getCheckIconStatus = res;
+            this.filterCheckIconStatus(this.getCheckIconStatus);
           } else {
-            this.getCheckIconStatus = GETCHECKICONSTATUS
-            this.filterCheckIconStatus(this.getCheckIconStatus)
+            this.getCheckIconStatus = GETCHECKICONSTATUS;
+            this.filterCheckIconStatus(this.getCheckIconStatus);
           }
         })
         .catch((err) => {
-          console.log(err)
-          this.getCheckIconStatus = GETCHECKICONSTATUS
-          this.filterCheckIconStatus(this.getCheckIconStatus)
-          this.$store.commit('setLoadingShow', false)
-        })
+          console.log(err);
+          this.getCheckIconStatus = GETCHECKICONSTATUS;
+          this.filterCheckIconStatus(this.getCheckIconStatus);
+          this.$store.commit("setLoadingShow", false);
+        });
     },
     photoMsg(data) {
-      console.log(data, '----photoMsg')
-      this.msgList = [...data]
-      this.getuploadImgResults()
+      console.log(data, "----photoMsg");
+      this.msgList = [...data];
+      this.getuploadImgResults();
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {
           if (items.title === item.title) {
-            item.isCheck = items.isCheck
-            item.src = items.isCheck ? item.checked : item.unchecked
-            item.popupinfoIconSrc = items.isCheck ? item.popupinfoChecked : item.popupinfoUnchecked
+            item.isCheck = items.isCheck;
+            item.src = items.isCheck ? item.checked : item.unchecked;
+            item.popupinfoIconSrc = items.isCheck
+              ? item.popupinfoChecked
+              : item.popupinfoUnchecked;
           }
-        })
-      })
+        });
+      });
     },
     showDrawer() {
-      this.msgList = []
+      this.msgList = [];
       const robotMsg = {
-        owner: 'robot',
-        type: 'text',
+        owner: "robot",
+        type: "text",
         init: true,
         msg: [
           {
-            type: 'text',
+            type: "text",
             value:
-              '您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~'
-          }
-        ]
-      }
-      this.msgList.push(robotMsg)
+              "您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~",
+          },
+        ],
+      };
+      this.msgList.push(robotMsg);
     },
     // TODO:这个地方需要抽离成一个公共的vuex action，在各个组件调用时，直接调取此方法
-    quickClick() {
-      const e = window.event
+    quickClick(word) {
+      const e = window.event;
+      const question =
+        e.target.innerHTML && e.target.innerHTML !== ""
+          ? e.target.innerHTML
+          : word;
       const userMsg = {
-        type: 'user',
+        type: "user",
         oldform: {
-          question: e.target.innerHTML,
-          answer: '',
-          source: ''
+          question: question,
+          answer: "",
+          source: "",
         },
-        updateold: false
-      }
-      this.getAnswer(userMsg)
-      e.preventDefault()
+        updateold: false,
+      };
+      this.getAnswer(userMsg);
+      e.preventDefault();
     },
     getAnswer(questions) {
       const params = {
-        text: questions.oldform.question
-      }
-      const url = API.port8085.sendTextUrl
-      this.msgList.push(questions)
+        text: questions.oldform.question,
+      };
+      const url = API.port8085.sendTextUrl;
+      this.msgList.push(questions);
       const robotMsg = {
         idx: this.msgList.length - 1,
-        owner: 'robot',
+        owner: "robot",
         msg: [
           {
-            type: 'text',
-            value: ''
-          }
-        ]
-      }
-      this.inputContent = ''
-      this.$store.commit('setLoadingShow', true)
+            type: "text",
+            value: "",
+          },
+        ],
+      };
+      this.inputContent = "";
+      this.$store.commit("setLoadingShow", true);
       axiosGet(url, params)
         .then((res) => {
           if (res && res.msg) {
-            robotMsg.owner = 'robot'
+            robotMsg.owner = "robot";
             robotMsg.msg[0].value = res.msg
-              .replace(/\n\r/g, '<br/>')
-              .replace(/\n/g, '<br/>')
+              .replace(/\n\r/g, "<br/>")
+              .replace(/\n/g, "<br/>");
           }
           this.$nextTick(() => {
-            this.msgList.push(robotMsg)
-            this.msgList = [...this.msgList]
-            setTimeout(function() {
-              const div = document.getElementsByClassName('divScroll')
-              div[0].scrollTop = div[0].scrollHeight
-            }, 0)
-          })
-          this.$store.commit('setLoadingShow', false)
+            this.msgList.push(robotMsg);
+            this.msgList = [...this.msgList];
+            setTimeout(function () {
+              const div = document.getElementsByClassName("divScroll");
+              div[0].scrollTop = div[0].scrollHeight;
+            }, 0);
+          });
+          this.$store.commit("setLoadingShow", false);
         })
         .catch((err) => {
-          console.log(err, '=====err')
-          this.$store.commit('setLoadingShow', false)
-          robotMsg.msg = GETANSWERRES
+          console.log(err, "=====err");
+          this.$store.commit("setLoadingShow", false);
+          robotMsg.msg = GETANSWERRES;
           this.$nextTick(() => {
-            this.msgList.push(robotMsg)
-            setTimeout(function() {
-              const div = document.getElementsByClassName('divScroll')
-              div[0].scrollTop = div[0].scrollHeight
-            }, 0)
-          })
+            this.msgList.push(robotMsg);
+            setTimeout(function () {
+              const div = document.getElementsByClassName("divScroll");
+              div[0].scrollTop = div[0].scrollHeight;
+            }, 0);
+          });
           // ------------------
-        })
+        });
     },
     countDowns() {
-      this.count--
+      this.count--;
       if (this.count <= 0 && this.longPress === true) {
-        clearInterval(this.countDownTimes)
-        this.$store.commit('setMaskShow', false)
+        clearInterval(this.countDownTimes);
+        this.$store.commit("setMaskShow", false);
       }
     },
     talkEndClear(e) {
-      e.stopPropagation()
-      clearTimeout(this.timeOutEvent)
+      e.stopPropagation();
+      clearTimeout(this.timeOutEvent);
       if (this.timeOutEvent !== 0) {
-        console.log('你这是点击，不是长按')
+        console.log("你这是点击，不是长按");
       } else {
-        this.longPress = false
-        clearInterval(this.countDownTimes)
-        this.$store.commit('setMaskShow', false)
+        this.longPress = false;
+        clearInterval(this.countDownTimes);
+        this.$store.commit("setMaskShow", false);
       }
-      return false
+      return false;
     },
     talkStart(e) {
-      e.stopPropagation()
+      e.stopPropagation();
       this.timeOutEvent = setTimeout(() => {
-        this.timeOutEvent = 0
-        this.longPress = true
-        this.$store.commit('setMaskShow', true)
-        this.countDownTimes = setInterval(this.countDowns, 1000)
-      }, 500)
-      return false
+        this.timeOutEvent = 0;
+        this.longPress = true;
+        this.$store.commit("setMaskShow", true);
+        this.countDownTimes = setInterval(this.countDowns, 1000);
+      }, 500);
+      return false;
     },
     sendTalkMsg(talkMsgs) {
-      console.log(talkMsgs, '---sendTalkMsg')
+      console.log(talkMsgs, "---sendTalkMsg");
       const userMsg = {
-        type: 'user',
+        type: "user",
         oldform: {
           question: talkMsgs.talkMsg,
-          answer: '',
-          source: ''
+          answer: "",
+          source: "",
         },
         voiceUrl: talkMsgs.audioUrl,
-        updateold: false
-      }
-      this.msgList.push(userMsg)
-      this.getAnswer(userMsg)
+        updateold: false,
+      };
+      this.msgList.push(userMsg);
+      this.getAnswer(userMsg);
     },
-    getInformation(item) {
-      console.log(item, '---item')
-      this.swipeToNum = item
-      this.$store.commit('setToppPointmodelShow', true)
+    getInformation(item, index) {
+      console.log(item.title, "---item");
+      this.quickClick(item.title); //点击图标时自动发送对应文字
+      this.swipeToNum = index;
+      this.$store.commit("setToppPointmodelShow", true);
     },
 
     pressEnter(e) {
       if (!this.inputContent.match(/^[ ]*$/)) {
         const userMsg = {
-          type: 'user',
+          type: "user",
           oldform: {
             question: this.inputContent,
-            answer: '',
-            source: ''
+            answer: "",
+            source: "",
           },
-          updateold: false
-        }
-        this.getAnswer(userMsg)
+          updateold: false,
+        };
+        this.getAnswer(userMsg);
       }
-      e.preventDefault()
-    }
+      e.preventDefault();
+    },
   },
   computed: {
     robotId() {
-      return this.$store.state.robotInfo.robotId
+      return this.$store.state.robotInfo.robotId;
     },
     isAdd() {
-      return !(this.newform.question && this.newform.answer && this.newform.source)
+      return !(
+        this.newform.question &&
+        this.newform.answer &&
+        this.newform.source
+      );
     },
     ...mapState({
-      talkText: state => state.app.talkText,
-      LoadingShow:state => state.app.LoadingShow,
-    })
+      talkText: (state) => state.app.talkText,
+      LoadingShow: (state) => state.app.LoadingShow,
+    }),
   },
   created() {
-    this.showDrawer()
+    this.showDrawer();
     // this.username = this.$route.query.username
     // this.phonenum = this.$route.query.phonenum
-  }
-}
+  },
+};
 </script>
