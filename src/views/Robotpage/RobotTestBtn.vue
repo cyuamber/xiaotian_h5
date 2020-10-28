@@ -229,7 +229,7 @@ export default {
     Chatbox,
     Popupinfo,
     Photograph,
-    Recorder: () => import('/components/Recorder')
+    Recorder: () => import('./components/Recorder')
   },
 
   data() {
