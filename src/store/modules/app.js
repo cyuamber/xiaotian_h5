@@ -1,5 +1,4 @@
 const state = {
-  userName: '',
   maskShow: false,
   talkText: '',
   toppPointmodelShow: false,

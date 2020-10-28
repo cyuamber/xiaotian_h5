@@ -108,3 +108,17 @@ export function param2Obj(url) {
       '"}'
   )
 }
+
+/**
+ * @param {number} len
+ * @returns {string}
+ */
+export function get_UserName(len) {
+  var x = '0123456789qwertyuioplkjhgfdsazxcvbnm'
+  var tmp = ''
+  var timestamp = new Date().getTime()
+  for (var i = 0; i < len; i++) {
+    tmp += x.charAt(Math.ceil(Math.random() * 100000000) % x.length)
+  }
+  return (timestamp + tmp)
+}

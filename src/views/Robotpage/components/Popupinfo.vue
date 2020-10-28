@@ -7,6 +7,8 @@
             class="my-swipe"
             indicator-color="#3F57F1"
             style="height: 100%"
+            ref="swipe"
+            :initial-swipe='swipeToNumber'
           >
             <van-swipe-item v-for="(item, index) in popupInfoImg" :key="index">
               <div class="info">
@@ -15,7 +17,7 @@
                     :src="item.popupinfoIconSrc"
                     alt="">
                     <p class="title-text">
-                      {{item.popupinfoTitleEn}}<br/>{{item.popupinfoTitleCH}}
+                      <span class="title-eng">{{item.popupinfoTitleEn}}  </span><span class="title-ch">{{item.popupinfoTitleCH}}</span>
                     </p>
                 </div>
                 <p class="info-content">
@@ -37,27 +39,32 @@
   .info{
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(rgba(32,44,238,0.9), rgba(20,24,113,1));
-    color: #6888FD;
+    background-image: linear-gradient(-74deg, #2c47bf 0%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#ffffff, #ffffff);
+    color: rgb(255, 255, 255, 0.8);
     .title{
-      width: 60%;
       margin: 0 auto;
       text-align: center;
       padding-top: 30px;
       img{
-        width: 25%;
-        border-radius: 50%;
-        display: inline-block;
-        vertical-align: top;
+        width: 80px;
+        position: absolute;
+        top: 0;
+        left: 12px;
+        top: -8px;
       }
       .title-text{
         display: inline-block;
-        margin: 0;
+        margin: 0 -30px 40px 40px;
         text-align: left;
-        font-size: 16px;
-        font-weight: 700;
+        font-family: PingFangSC-Semibold;
         padding: 0 10px;
         line-height: 0.6rem;
+        .title-eng {
+          font-size: 26px;
+        }
+        .title-ch {
+          font-size: 20px;
+        }
       }
     }
     .info-content{
@@ -90,11 +97,12 @@ export default {
   components: {
     Photograph
   },
-  props: ['msgList'],
+  props: ['msgList', 'swipeToNum'],
   data() {
     return {
       popupInfoImg: IMGICON,
-      msgLists: this.msgList
+      msgLists: this.msgList,
+      swipeToNumber: this.swipeToNum
     }
   },
   computed: {
@@ -105,6 +113,11 @@ export default {
       set(val) {
         this.$store.commit('setToppPointmodelShow', false)
       }
+    }
+  },
+  watch: {
+    swipeToNum(newVal, oldVal) {
+      this.swipeToNumber = newVal
     }
   },
   methods: {

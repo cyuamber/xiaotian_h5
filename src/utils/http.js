@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import Qs from 'qs'
 const defaultHeaders = () => ({
   'Content-Type': 'application/json'
   // "Access-Control-Allow-Origin": "*",
@@ -9,10 +9,25 @@ const defaultHeaders = () => ({
 // create axios instance
 const http = axios.create({
   baseURL: '',
-  withCredentials: true, // set cross-origin
+  // withCredentials: true, // set cross-origin
   crossDomain: true,
-  timeout: 5000
+  timeout: 10000
 })
+
+axios.defaults.transformRequest = [function(data, config) {
+  if (!config['Content-Type']) return Qs.stringify(data);
+  switch (config['Content-Type'].toLowerCase()) {
+    case 'application/json;charset=utf-8': {
+      return JSON.stringify(data)
+    }
+    case 'multipart/formdata;charset=utf-8': {
+      return data
+    }
+    default: {
+      return Qs.stringify(data)
+    }
+  }
+}]
 
 export function axiosGet(url, params, data, headers) {
   return new Promise((resolve, reject) => {

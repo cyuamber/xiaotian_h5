@@ -11,7 +11,15 @@
 </template>
 
 <script>
+import { get_UserName } from '../../utils/index.js'
 export default {
+  mounted() {
+    console.log(localStorage.getItem('userName'), localStorage.getItem('userId'))
+    if (localStorage.getItem('userName') === null) {
+      localStorage.setItem('userName', get_UserName(32))
+      localStorage.setItem('userId', get_UserName(32))
+    }
+  },
   methods: {
     hrefRobotTestBtn() {
       this.$router.replace({ path: '/robotpage' })

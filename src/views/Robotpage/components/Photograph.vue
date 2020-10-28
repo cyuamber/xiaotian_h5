@@ -19,10 +19,21 @@ export default {
   name: 'Photograph',
   data() {
     return {
-      msgLists: this.msgList
+      msgLists: this.msgList,
+      base64ImgData: null,
+      userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId')
     }
   },
   props: ['msgList'],
+  computed: {
+    robotId() {
+      return this.$store.state.robotInfo.robotId
+    },
+    isAdd() {
+      return !(this.newform.question && this.newform.answer && this.newform.source)
+    }
+  },
   methods: {
     /**
      * 获取用户拍照的图片信息
@@ -34,36 +45,53 @@ export default {
       const formData = new FormData()
       formData.append('image', imgFile)
       const headers = {
-        'Content-Type': 'multipart/formdata',
+        'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
       }
       const url = API.port8085.uploadImgUrl
       this.$store.commit('setLoadingShow', true)
-      const params = {
-        image: formData,
-        userId: 'dadada1',
-        username: 'gongjie'
+      const userMsg = {
+        type: 'user',
+        imgUrl: this.base64ImgData,
+        updateold: false
       }
-      axiosPost(url, params, params, headers)
+      this.msgLists.push(userMsg)
+      this.$emit('photoMsg', this.msgLists)
+      const params = {
+        userId: this.userId,
+        username: this.userName
+      }
+      const robotMsg = {
+        idx: this.msgList.length - 1,
+        owner: 'robot',
+        msg: [
+          {
+            type: 'text',
+            value: ''
+          }
+        ]
+      }
+      axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res-----upload')
-          const userMsg = {
-            type: 'user',
-            imgUrl: res.url,
-            updateold: false
+          if (res && res.msg) {
+            robotMsg.owner = 'robot'
+            robotMsg.msg[0].value = res.msg
+              .replace(/\n\r/g, '<br/>')
+              .replace(/\n/g, '<br/>')
           }
-          this.msgLists.push(userMsg)
+          this.$nextTick(() => {
+            this.msgLists.push(robotMsg)
+            this.$emit('photoMsg', this.msgLists)
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+          })
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })
         .catch(() => {
-          const userMsg = {
-            type: 'user',
-            imgUrl: this.base64ImgData,
-            updateold: false
-          }
-          this.msgLists.push(userMsg)
-          this.$emit('photoMsg', this.msgLists)
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })

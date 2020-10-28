@@ -63,7 +63,10 @@ export default {
       reader: null,
       canvasWidth: 100,
       canvasHeight: 40,
-      talkMsg: '前端mock数据'
+      talkMsgs: {
+        talkMsg: '前端mock数据',
+        audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
+      }
       // audio :document.createElement('audio'),
       // voicetext:null,
       // audio :document.querySelector('.progress_bar_audio')
@@ -256,7 +259,7 @@ export default {
       localStorage.setItem('start', this.start)
       localStorage.setItem('recorderFlage', recorderFlage)
       // this.$store.commit('setTalkText', '')
-      this.$emit('sendTalkMsg', this.talkMsg)
+      this.$emit('sendTalkMsg', this.talkMsgs)
     },
     beginRecord(mediaStream) {
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
@@ -350,7 +353,7 @@ export default {
     bottom: 0;
     text-align: center;
     p{
-      color:#3f78eb;
+      color: #ffffff;
       font-size: 14px;
     }
     .imshar{
