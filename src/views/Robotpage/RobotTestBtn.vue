@@ -2,6 +2,7 @@
   <div id="componentBody">
     <div class="drawerBody">
       <van-sticky class="top">
+        <img class="top-img" src="@/assets/images/robot_top.png">
         <div>
           <img
           class="top-point"
@@ -79,9 +80,18 @@ select {
 .top {
   width: 100%;
   height: 100px;
-  background-color: rgba(13,12,81,0.596);
   text-align: center;
+  position: relative;
+  .top-img {
+    width: 375px;
+    height: 126px;
+    margin-top: -25px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   .top-point {
+    position:relative;
     display: inline-block;
     width: 1.5rem;
     height: 1.5rem;
@@ -92,6 +102,7 @@ select {
     background-color:transparent;
     font-weight: bold;
     font-size: 0.35rem;
+    z-index: 3;
   }
   .ischeck {
     background-color: #2fe376;
@@ -111,8 +122,9 @@ select {
 #componentBody {
   width: 100%;
   height: 100vh;
-  background: url('../../assets/images/background_img.png') no-repeat 100% 100%;
-  background-size: 100% 100%;
+  // background: url('../../assets/images/background_img.png') no-repeat 100% 100%;
+  // background-size: 100% 100%;
+  background-color: #DFE7EE;
 }
 .drawerBody {
   overflow: hidden;

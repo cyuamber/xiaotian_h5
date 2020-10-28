@@ -2,7 +2,7 @@
 <template>
   <div class="index-container">
     <div class="warpper">
-      <img class="index-img" src="@/assets/images/dashboard.png"  />
+      <img class="index-img" src="@/assets/images/home-background.png"  />
       <div class="dashboard-button" @click="hrefRobotTestBtn">
         <img src="@/assets/images/dashboard-button.png" alt="">
       </div>
@@ -24,7 +24,7 @@ export default {
   height: 100vh;
   width: 100%;
   overflow: auto;
-  background-color: rgb(20,3,40);
+  background-color: #2457CA;
   .warpper {
     width: 100%;
     height: 100%;
@@ -46,7 +46,7 @@ export default {
       width: 80%;
       height: 53px;
       position: absolute;
-      top: 660px;
+      top: 710px;
       display:flex;
       align-items:center;
       justify-content:center;
