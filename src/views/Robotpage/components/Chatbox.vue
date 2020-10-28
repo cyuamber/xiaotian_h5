@@ -17,7 +17,7 @@
                   <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
                 </span>
                 <span
-                v-if="dialogue.code === 200 || !allPhotoIscheck"
+                v-if="dialogue.code === 200 && !allPhotoIscheck"
                 class="hot-issue reclock-button"
                 >
                   继续打卡
