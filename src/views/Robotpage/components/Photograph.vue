@@ -14,6 +14,7 @@
 </style>
 <script>
 import API from '../../../utils/api'
+import { GETCHECKICONSTATUS } from '../../../const/constant'
 import { axiosPost } from '../../../utils/http.js'
 export default {
   name: 'Photograph',
@@ -67,7 +68,8 @@ export default {
         msg: [
           {
             type: 'text',
-            value: ''
+            value: '',
+            code: null
           }
         ]
       }
@@ -76,6 +78,7 @@ export default {
           console.log(res, 'res-----upload')
           if (res && res.msg) {
             robotMsg.owner = 'robot'
+            robotMsg.msg[0].code = res.code
             robotMsg.msg[0].value = res.msg
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')

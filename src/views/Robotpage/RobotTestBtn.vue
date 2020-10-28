@@ -13,7 +13,7 @@
         </div>
       </van-sticky>
       <div class="bodyDialog divScroll">
-        <Chatbox :msgList="msgList" />
+        <Chatbox :msgList="msgList" :allPhotoIscheck='allPhotoIscheck' />
       </div>
       <div class="footer">
         <div class="common-question">
@@ -44,37 +44,9 @@
     </div>
     <Loading v-if="LoadingShow" />
     <Recorder @sendTalkMsg='sendTalkMsg'/>
-    <Popupinfo :msgList="msgList" @photoMsgClose='photoMsg' :swipeToNum='swipeToNum' />
+    <Popupinfo :msgList="msgList" @photoMsg='photoMsg' :swipeToNum='swipeToNum' :allPhotoIscheck='allPhotoIscheck' />
   </div>
 </template>
-
-<style>
-body {
-  -webkit-touch-callout: none; /*系统默认菜单被禁用*/
-  -webkit-user-select: none; /*webkit浏览器*/
-  -khtml-user-select: none; /*早起浏览器*/
-  -moz-user-select: none; /*火狐浏览器*/
-  -ms-user-select: none; /*IE浏览器*/
-  user-select: none; /*用户是否能够选中文本*/
-}
-input,
-select {
-  -webkit-user-select: auto;
-  user-select: auto;
-}
-/* img{
-   pointer-events:none;
-} */
-.ant-drawer-title {
-  text-align: left !important;
-  color: #fff;
-}
-.ant-drawer-close {
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-}
-</style>
 <style lang="less" scoped>
 .top {
   width: 100%;
@@ -229,7 +201,7 @@ select {
 
 <script>
 import { mapState } from 'vuex'
-import { axiosGet, axiosPost } from '../../utils/http.js'
+import { axiosGet } from '../../utils/http.js'
 import { POINTINFO, COMMONQUESTION, GETANSWERRES, GETCHECKICONSTATUS, IMGICON } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
@@ -272,15 +244,15 @@ export default {
       base64ImgData: null,
       userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
-      swipeToNum: 0
+      swipeToNum: 0,
+      allPhotoIscheck: false
     }
   },
   mounted() {
-    // this.getAllCheckIconStatus()
     this.getuploadImgResults()
   },
   methods: {
-    getuploadImgResults() {
+    getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
       const params = {
         userId: this.userId
@@ -289,7 +261,6 @@ export default {
       axiosGet(url, params)
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
-          console.log(res, '---getuploadImgResults--res')
           if (res && res.length > 0) {
             this.getCheckIconStatus = res
             this.filterCheckIconStatus(this.getCheckIconStatus)
@@ -306,9 +277,9 @@ export default {
         })
     },
     photoMsg(data) {
-      console.log(data, '----photoMsg')
       this.msgList = [...data]
-      this.getuploadImgResults()
+      const photocheck = true
+      this.getuploadImgResults(photocheck)
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
@@ -320,6 +291,13 @@ export default {
           }
         })
       })
+      const statusAll = []
+      data.map(items => {
+        statusAll.push(items.isCheck)
+      })
+      if (!statusAll.includes(false)) {
+        this.allPhotoIscheck = true
+      }
     },
     showDrawer() {
       this.msgList = []
@@ -477,7 +455,7 @@ export default {
     },
     ...mapState({
       talkText: state => state.app.talkText,
-      LoadingShow:state => state.app.LoadingShow,
+      LoadingShow: state => state.app.LoadingShow
     })
   },
   created() {

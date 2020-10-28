@@ -7,13 +7,28 @@
         </div>
         <div class="robotMsg">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
-            <div v-if="dialogue.type === 'text'">{{ dialogue.value }}</div>
-            <!-- <img
+            <div v-if="dialogue.type === 'text'">
+                {{ dialogue.value }}<br>
+                <span
+                v-if="dialogue.code === 402 || dialogue.code === 405"
+                class="hot-issue reclock-button"
+                >
+                  重新打卡
+                  <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
+                </span>
+                <span
+                v-if="dialogue.code === 200 && allPhotoIscheck"
+                class="hot-issue reclock-button"
+                @click="hrefRobotTestBtn()">
+                  立即查看「记忆界面」
+                </span>
+              </div>
+              <img
               v-else-if="dialogue.type === 'img'"
               @click="showImage(dialogue.value)"
               :src="dialogue.value"
               alt="小天机器人"
-            /> -->
+            />
           </div>
           <div v-if="msg.init">
             <span class="hot-issue" @click="quickClick()">如何打卡?</span>
@@ -42,11 +57,17 @@
 
 <script>
 import { ImagePreview } from 'vant'
+import Photograph from './Photograph'
 export default {
   name: 'Chatbox',
+  components: {
+    Photograph,
+  },
   props: {
     // eslint-disable-next-line vue/require-prop-type-constructor
-    msgList: ''
+    msgList: '',
+    // eslint-disable-next-line vue/require-prop-type-constructor
+    allPhotoIscheck: ''
   },
 
   data() {
@@ -75,6 +96,13 @@ export default {
       // this.picLink = img
       ImagePreview([img])
       console.log(img)
+    },
+    photoMsg(data) {
+      this.msgList = [...this.msgList]
+      this.$emit('photoMsgClose', this.msgList)
+    },
+    hrefRobotTestBtn() {
+      this.$router.replace({ path: '/result' })
     }
   }
 }
@@ -115,6 +143,12 @@ export default {
         color: #337dff;
         display: inline-block;
         padding: 5px 10px 0 0;
+      }
+      .reclock-button{
+        width: 100%;
+        display: inline-block;
+        padding: 5px 0;
+        position: relative;
       }
       img {
         width: 100%;

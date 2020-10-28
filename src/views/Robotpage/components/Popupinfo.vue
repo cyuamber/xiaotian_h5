@@ -25,8 +25,13 @@
                 </p>
                 <div class="check_button">
                   <img
+                  v-if="allPhotoIschecked"
+                  @click="hrefRobotTestBtn()"
+                  :src="require('../../../assets/images/viewResults.png')"
+                  alt="查看结果">
+                  <img
+                  v-if="!allPhotoIschecked"
                   :src="item.isCheck ?require('../../../assets/images/Popupinfo_button_checked.png'):require('../../../assets/images/Popupinfo_button_unchecked.png')"
-                  @click="clockInNow(item.isCheck)"
                   >
                   <Photograph v-if="!item.isCheck" :msgList="msgLists" @photoMsg='photoMsg'/>
                 </div>
@@ -92,12 +97,13 @@ export default {
   components: {
     Photograph
   },
-  props: ['msgList', 'swipeToNum'],
+  props: ['msgList', 'swipeToNum', 'allPhotoIscheck'],
   data() {
     return {
       popupInfoImg: IMGICON,
       msgLists: this.msgList,
-      swipeToNumber: this.swipeToNum
+      swipeToNumber: this.swipeToNum,
+      allPhotoIschecked: this.allPhotoIscheck
     }
   },
   computed: {
@@ -113,12 +119,19 @@ export default {
   watch: {
     swipeToNum(newVal, oldVal) {
       this.swipeToNumber = newVal
+    },
+    allPhotoIscheck(newVal, oldVal) {
+      this.allPhotoIschecked = newVal
     }
   },
   methods: {
     photoMsg(data) {
       this.msgLists = [...this.msgLists]
       this.$emit('photoMsgClose', this.msgLists)
+    },
+    hrefRobotTestBtn() {
+      this.$store.commit('setToppPointmodelShow', false)
+      this.$router.replace({ path: '/result' })
     }
   }
 }
