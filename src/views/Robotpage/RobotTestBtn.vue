@@ -209,11 +209,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import { axiosGet, axiosPost } from '../../utils/http.js'
+import { axiosGet } from '../../utils/http.js'
 import {
   POINTINFO,
   COMMONQUESTION,
-  GETANSWERRES,
   GETCHECKICONSTATUS,
   IMGICON
 } from '../../const/constant'
@@ -221,7 +220,7 @@ import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
 import Popupinfo from './components/Popupinfo'
 import Photograph from './components/Photograph'
-import Recorder from './components/Recorder'
+// import Recorder from './components/Recorder'
 import API from '../../utils/api'
 export default {
   name: 'RobotTestBtn',
@@ -230,7 +229,7 @@ export default {
     Chatbox,
     Popupinfo,
     Photograph,
-    Recorder
+    Recorder: () => import('/components/Recorder')
   },
 
   data() {
@@ -276,7 +275,7 @@ export default {
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
           if (res && res.data.length > 0) {
-            this.getCheckIconStatus = GETCHECKICONSTATUS || res.data
+            this.getCheckIconStatus = typeof res.data[0] !== 'object' ? GETCHECKICONSTATUS : res.data
             this.filterCheckIconStatus(this.getCheckIconStatus)
           }
         })
