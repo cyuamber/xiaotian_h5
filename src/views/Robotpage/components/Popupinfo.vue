@@ -113,6 +113,9 @@ export default {
       },
       set(val) {
         this.$store.commit('setToppPointmodelShow', false)
+        this.popupInfoImg.map(item => {
+          item.zIndex = false
+        })
       }
     }
   },

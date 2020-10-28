@@ -10,6 +10,7 @@
             @click="() => getInformation(item, index)"
             :src="item.src"
             alt=""
+            :class="{'z-index': item.zIndex}"
           />
         </div>
       </van-sticky>
@@ -71,6 +72,10 @@
     background-color: transparent;
     font-weight: bold;
     font-size: 0.35rem;
+    position: relative;
+  }
+  .z-index{
+    z-index:100000
   }
   .ischeck {
     background-color: #2fe376;
@@ -437,6 +442,10 @@ export default {
     getInformation(item, index) {
       console.log(item.title, '---item')
       this.quickClick(item.title) // 点击图标时自动发送对应文字
+      this.imgIcon.map(item => {
+        item.zIndex = false
+      })
+      this.imgIcon[index].zIndex = true
       this.swipeToNum = index
       this.$store.commit('setToppPointmodelShow', true)
     },
