@@ -50,17 +50,8 @@
       </div>
     </div>
     <Loading v-if="LoadingShow" />
-<<<<<<< HEAD
     <Recorder @sendTalkMsg='sendTalkMsg'/>
     <Popupinfo :msgList="msgList" @photoMsg='photoMsg' :swipeToNum='swipeToNum' :allPhotoIscheck='allPhotoIscheck' />
-=======
-    <Recorder @sendTalkMsg="sendTalkMsg" />
-    <Popupinfo
-      :msgList="msgList"
-      @photoMsgClose="photoMsg"
-      :swipeToNum="swipeToNum"
-    />
->>>>>>> b46687bc289780fa04d667f2e3abbce9cb71f842
   </div>
 </template>
 <style lang="less" scoped>
@@ -398,15 +389,7 @@ export default {
         .catch((err) => {
           console.log(err, "=====err");
           this.$store.commit("setLoadingShow", false);
-          robotMsg.msg = GETANSWERRES;
-          this.$nextTick(() => {
-            this.msgList.push(robotMsg);
-            setTimeout(function () {
-              const div = document.getElementsByClassName("divScroll");
-              div[0].scrollTop = div[0].scrollHeight;
-            }, 0);
-          });
-          // ------------------
+          this.$router.replace({ path: '/home' })
         });
     },
     countDowns() {
