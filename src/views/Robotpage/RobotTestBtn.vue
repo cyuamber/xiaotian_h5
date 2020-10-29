@@ -86,7 +86,6 @@
     text-align: center;
     font-weight: bold;
     font-size: 0.35rem;
-    z-index: 3;
     position: relative;
   }
   .z-index {
@@ -132,8 +131,8 @@
 }
 .bodyDialog {
   width: 100%;
-  height: calc(100% - 7.9rem);
-  padding: 20px 20px 20px 0;
+  height: calc(100% - 255px);
+  padding: 20px 20px 0px 0;
   display: flex;
   flex-flow: column;
   overflow: auto;
@@ -142,15 +141,16 @@
   width: 100%;
   // background-color: #ffffff;
   color: #fff;
+  height: 135px;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
-    margin: 10px 0;
+    margin: 13px 0 13px 0;
     span {
       display: inline-block;
       padding: 9px;
-      margin: 0 5px 15px 5px;
+      margin: 0 5px 0px 5px;
       background-color: #ffffff;
       border-radius: 25px;
       color: #10164e;
@@ -166,16 +166,15 @@
 .bodyInput {
   position: relative;
   width: 100%;
-  height: 50px;
+  height: 77px;
   margin: 0 auto;
-  margin-bottom: 0.1rem;
   .footer-icon {
     display: inline-block;
-    width: 0.45rem;
-    height: auto;
+    width: 18px;
+    height: 24px;
     // margin: 0 0.3rem;
     position: absolute;
-    top: 7px;
+    top: 10px;
     left: 25px;
     img {
       width: 100%;
@@ -183,10 +182,10 @@
     }
   }
   .checkphotos {
-    width: 20%;
+    width: 95px;
     height: auto;
-    margin-top: -3px;
     display: inline-block;
+    margin-top: -3px;
     position: relative;
     vertical-align: top;
     img {
@@ -207,19 +206,19 @@
 .inputArea,
 .talk-button {
   resize: none;
-  width: 70%;
+  width: 240px;
   overflow: auto;
   background-color: #ffffff;
   border-style: none;
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 400;
-  color: #fff;
+  color: #10164e;
   padding: 0;
   border-style: none;
   box-shadow: none;
   margin: 0 3%;
-  height: 0.9rem;
-  line-height: 0.9rem;
+  height: 44px;
+  line-height: 44px;
   border-radius: 25px;
   text-indent: 1rem;
 }
