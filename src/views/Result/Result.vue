@@ -1,25 +1,27 @@
 <template>
     <div class="result-container">
-        <img class="result-bg" src="@/assets/images/result-bg.png"  />
+        <img class="result-bg" src="@/assets/images/result-background.png"  />
         <div class="back-button" @click="backToRobot">
             <img src="@/assets/images/back.png" />
         </div>
-        <img class="result-pen" src="@/assets/images/pen.png" />
         <div class="result-greet">
             <div class="greet-text">
                 <div>亲爱的{{name}},</div>
                 <div>2020年{{month}}月{{day}}日{{hour}}时{{min}}分你来到会场</div>
+                <div>你知道无论什么时候</div>
+                <div>我都在等待与你相遇，一起去探索5G+AI的世界</div>
             </div>
-            <img class="greet-img" src="@/assets/images/greet-text.png">
         </div>
         <div class="result-visit">
-            <img class="visit-title" src="@/assets/images/visit-title.png">
+            <div class="visit-title">
+                你对这里充满了好奇
+            </div>
             <div class="visit-item" v-for="(item, index) in visitList" :key=index>
                 <div>{{item.hour}}时{{item.min}}分</div>
                 <div>我们到达了{{item.place}}区域，探寻了{{item.project}}，感受到了{{item.feel}}</div>
             </div>
         </div>
-        <div class="result-complete">
+        <!-- <div class="result-complete">
             <img class="complete-title" src="@/assets/images/complete.png">
             <div class="complete-content">
                 <div class="complete-item" v-for="(item, index) in completeText" :key=index>
@@ -27,7 +29,7 @@
                 </div>
             </div>
             <img class="complete-present" src="@/assets/images/present.png" />
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -94,13 +96,16 @@ export default {
 <style lang="less" scoped>
 .result-container {
     position: relative;
+    height: 100vh;
+    width: 100%;
+    background-color: #123199;
+    z-index: -2;
     .result-bg {
-        height: 100vh;
-        width: 100%;
         position: absolute;
         top: 0;
         left: 0;
         z-index: -1;
+        width: 100%;
     }
     .back-button {
         position: absolute;
@@ -111,39 +116,30 @@ export default {
             height: 20px;
         }
     }
-    .result-pen {
-        position: absolute;
-        left: 284px;
-        top: 16px;
-        height: 84px;
-        width: 67px;
-    }
     .result-greet {
-        margin-left: 33px;
+        margin-left: 34px;
         padding-top: 51px;
        .greet-text {
-           color: #4f60ff;
+           color: #d0e1fa;
            font-size: 15px;
            font-family: SourceHanSansCN-Medium;
            line-height: 24px;
            margin-bottom: 4px;
        }
-       .greet-img {
-           width: 311px;
-           height: 41px;
-       }
     }
     .result-visit {
         margin-top: 37px;
-        margin-left: 33px;
+        margin-left: 34px;
         .visit-title {
-            width: 215px;
-            height: 23px;
             margin-bottom: 3px;
+            font-family: PingFangSC-Semibold;
+            font-size: 24px;
+            line-height: 24px;
+            color: #d0e1fa;
         }
         .visit-item {
             font-size: 14px;
-            color: #5a6ee1;
+            color: #abd1ff;
             line-height: 20px;
             font-family: SourceHanSansCN-Regular;
             width: 272px;
@@ -151,33 +147,33 @@ export default {
             margin-top: 15px;
         }
     }
-    .result-complete {
-        margin-top: 35px;
-        margin-left: 33px;
-        .complete-title {
-            width: 95px;
-            height: 23px;
-            display: block;
-        }
-        .complete-content {
-            float: left;
-            .complete-item {
-                font-family: SourceHanSansCN-Medium;
-                font-size: 15px;
-                color: #5a6ee1;
-                line-height: 22px;
-                height: 38px;
-                width: 156px;
-                padding-top: 18px;
-            }
-        }
-        .complete-present {
-            float: left;
-            height: 153px;
-            width: 107px;
-            margin-left: 40px;
-            margin-top: -35px;
-        }
-    }
+    // .result-complete {
+    //     margin-top: 35px;
+    //     margin-left: 33px;
+    //     .complete-title {
+    //         width: 95px;
+    //         height: 23px;
+    //         display: block;
+    //     }
+    //     .complete-content {
+    //         float: left;
+    //         .complete-item {
+    //             font-family: SourceHanSansCN-Medium;
+    //             font-size: 15px;
+    //             color: #5a6ee1;
+    //             line-height: 22px;
+    //             height: 38px;
+    //             width: 156px;
+    //             padding-top: 18px;
+    //         }
+    //     }
+    //     .complete-present {
+    //         float: left;
+    //         height: 153px;
+    //         width: 107px;
+    //         margin-left: 40px;
+    //         margin-top: -35px;
+    //     }
+    // }
 }
 </style>

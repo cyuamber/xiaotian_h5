@@ -2,6 +2,7 @@
   <div id="componentBody">
     <div class="drawerBody">
       <van-sticky class="top">
+        <img class="top-img" src="@/assets/images/robot_top.png">
         <div>
           <img
             class="top-point"
@@ -64,9 +65,18 @@
 .top {
   width: 100%;
   height: 100px;
-  background-color: rgba(13, 12, 81, 0.596);
   text-align: center;
+  position: relative;
+  .top-img {
+    width: 375px;
+    height: 126px;
+    margin-top: -25px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   .top-point {
+    position:relative;
     display: inline-block;
     width: 1.5rem;
     height: 1.5rem;
@@ -74,9 +84,9 @@
     line-height: 1.5rem;
     margin: 20px 10px;
     text-align: center;
-    background-color: transparent;
     font-weight: bold;
     font-size: 0.35rem;
+    z-index: 3;
     position: relative;
   }
   .z-index {
@@ -100,8 +110,7 @@
 #componentBody {
   width: 100%;
   height: 100vh;
-  background: url("../../assets/images/background_img.png") no-repeat 100% 100%;
-  background-size: 100% 100%;
+  background-color: #DFE7EE;
 }
 .drawerBody {
   overflow: hidden;
@@ -140,11 +149,13 @@
     margin: 10px 0;
     span {
       display: inline-block;
-      padding: 0.3rem;
+      padding: 9px;
       margin: 0 5px 15px 5px;
-      background: rgba(38, 28, 176, 0.8);
+      background-color: #ffffff;
       border-radius: 25px;
-      color: rgba(166, 180, 241, 0.8);
+      color: #10164e;
+      opacity: 0.7;
+      font-size: 15px;
     }
   }
   .common-question::-webkit-scrollbar {
@@ -174,6 +185,7 @@
   .checkphotos {
     width: 20%;
     height: auto;
+    margin-top: -3px;
     display: inline-block;
     position: relative;
     vertical-align: top;
@@ -197,7 +209,7 @@
   resize: none;
   width: 70%;
   overflow: auto;
-  background: rgba(28, 22, 145, 0.8);
+  background-color: #ffffff;
   border-style: none;
   font-size: 12px;
   font-weight: 400;
@@ -333,7 +345,7 @@ export default {
           {
             type: "text",
             value:
-              "您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~",
+              "您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上次吧～",
           },
         ],
       };
@@ -501,155 +513,3 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-.top {
-  width: 100%;
-  height: 100px;
-  background-color: rgba(13, 12, 81, 0.596);
-  text-align: center;
-  .top-point {
-    display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 50%;
-    line-height: 1.5rem;
-    margin: 20px 10px;
-    text-align: center;
-    background-color: transparent;
-    font-weight: bold;
-    font-size: 0.35rem;
-  }
-  .ischeck {
-    background-color: #2fe376;
-    color: #fff;
-  }
-  .point-information {
-    width: 80%;
-    margin: 0 auto;
-    text-align: left !important;
-    line-height: 0.6rem;
-  }
-  .point-model {
-    background-color: #bebebe;
-    color: #ffffff;
-  }
-}
-#componentBody {
-  width: 100%;
-  height: 100vh;
-  background: url("../../assets/images/background_img.png") no-repeat 100% 100%;
-  background-size: 100% 100%;
-}
-.drawerBody {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-}
-.divScroll::-webkit-scrollbar {
-  width: 6px;
-}
-.divScroll::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-  background: #d9d9d9;
-  opacity: 0.2;
-}
-.divScroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.bodyDialog {
-  width: 100%;
-  height: calc(100% - 7.9rem);
-  padding: 20px 20px 20px 0;
-  display: flex;
-  flex-flow: column;
-  overflow: auto;
-}
-.footer {
-  width: 100%;
-  // background-color: #ffffff;
-  color: #fff;
-  .common-question {
-    white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    margin: 10px 0;
-    span {
-      display: inline-block;
-      padding: 0.3rem;
-      margin: 0 5px 15px 5px;
-      background: rgba(38, 28, 176, 0.8);
-      border-radius: 25px;
-      color: rgba(166, 180, 241, 0.8);
-    }
-  }
-  .common-question::-webkit-scrollbar {
-    width: 0 !important;
-    display: none;
-  }
-}
-.bodyInput {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  margin: 0 auto;
-  margin-bottom: 0.1rem;
-  .footer-icon {
-    display: inline-block;
-    width: 0.45rem;
-    height: auto;
-    // margin: 0 0.3rem;
-    position: absolute;
-    top: 7px;
-    left: 25px;
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-  .checkphotos {
-    width: 20%;
-    height: auto;
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    img {
-      width: 100%;
-      height: auto;
-    }
-    input[type="file"] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9;
-      opacity: 0;
-    }
-  }
-}
-.inputArea,
-.talk-button {
-  resize: none;
-  width: 70%;
-  overflow: auto;
-  background: rgba(28, 22, 145, 0.8);
-  border-style: none;
-  font-size: 12px;
-  font-weight: 400;
-  color: #fff;
-  padding: 0;
-  border-style: none;
-  box-shadow: none;
-  margin: 0 3%;
-  height: 0.9rem;
-  line-height: 0.9rem;
-  border-radius: 25px;
-  text-indent: 1rem;
-}
-// .inputArea{
-//   width: 56%;
-//   margin: 0 3% 0 16%;
-// }
-</style>

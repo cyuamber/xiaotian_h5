@@ -1,6 +1,9 @@
 <template>
   <van-overlay :show="maskShow">
     <div class="wrapper">
+      <div class="talking">
+        <img class="talking-img" src="@/assets/images/talking.gif">
+      </div>
       <div class="canvas" id="canvas">
         <canvas class="visualizer" width="100" height="0"></canvas>
         <canvas
@@ -66,7 +69,7 @@ export default {
       talkMsgs: {
         talkMsg: '前端mock数据',
         audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
-      }
+      },
       // audio :document.createElement('audio'),
       // voicetext:null,
       // audio :document.querySelector('.progress_bar_audio')
@@ -342,18 +345,26 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
+  flex-flow: column;
   .canvas{
     width: 400px;
     height: 100px;
     margin: 0 auto;
     text-align: center;
   }
+  .talking {
+    width: 100%;
+    .talking-img {
+      width: 375px;
+      height: 165px;
+  }
+  }
   .recorder-img{
     position: absolute;
     bottom: 0;
     text-align: center;
     p{
-      color:#3f78eb;
+      color: #ffffff;
       font-size: 14px;
     }
     .imshar{
