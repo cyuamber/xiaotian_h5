@@ -11,11 +11,12 @@
             @click="() => getInformation(item, index)"
             :src="item.src"
             alt=""
+            :class="{ 'z-index': item.zIndex }"
           />
         </div>
       </van-sticky>
       <div class="bodyDialog divScroll">
-        <Chatbox :msgList="msgList" :allPhotoIscheck='allPhotoIscheck' />
+        <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" />
       </div>
       <div class="footer">
         <div class="common-question">
@@ -51,8 +52,13 @@
       </div>
     </div>
     <Loading v-if="LoadingShow" />
-    <Recorder @sendTalkMsg='sendTalkMsg'/>
-    <Popupinfo :msgList="msgList" @photoMsg='photoMsg' :swipeToNum='swipeToNum' :allPhotoIscheck='allPhotoIscheck' />
+    <Recorder @sendTalkMsg="sendTalkMsg" />
+    <Popupinfo
+      :msgList="msgList"
+      @photoMsg="photoMsg"
+      :swipeToNum="swipeToNum"
+      :allPhotoIscheck="allPhotoIscheck"
+    />
   </div>
 </template>
 <style lang="less" scoped>
@@ -78,10 +84,13 @@
     line-height: 1.5rem;
     margin: 20px 10px;
     text-align: center;
-    background-color: transparent;
     font-weight: bold;
     font-size: 0.35rem;
     z-index: 3;
+    position: relative;
+  }
+  .z-index {
+    z-index: 100000;
   }
   .ischeck {
     background-color: #2fe376;
@@ -101,8 +110,6 @@
 #componentBody {
   width: 100%;
   height: 100vh;
-  // background: url('../../assets/images/background_img.png') no-repeat 100% 100%;
-  // background-size: 100% 100%;
   background-color: #DFE7EE;
 }
 .drawerBody {
@@ -224,19 +231,20 @@
 
 <script>
 import { mapState } from "vuex";
-import { axiosGet, axiosPost } from "../../utils/http.js";
+import { axiosGet } from "../../utils/http.js";
 import {
   POINTINFO,
   COMMONQUESTION,
-  GETANSWERRES,
   GETCHECKICONSTATUS,
   IMGICON,
 } from "../../const/constant";
 import Loading from "../../components/Loading";
 import Chatbox from "./components/Chatbox";
-import Popupinfo from "./components/Popupinfo";
-import Photograph from "./components/Photograph";
-import Recorder from "./components/Recorder";
+
+const Recorder = () => import("./components/Recorder");
+const Popupinfo = () => import("./components/Popupinfo");
+const Photograph = () => import("./components/Photograph");
+
 import API from "../../utils/api";
 export default {
   name: "RobotTestBtn",
@@ -245,7 +253,7 @@ export default {
     Chatbox,
     Popupinfo,
     Photograph,
-    Recorder,
+    Recorder: () => import("./components/Recorder"),
   },
 
   data() {
@@ -271,44 +279,40 @@ export default {
       countDownTimes: null,
       longPress: false,
       base64ImgData: null,
-      userName: localStorage.getItem('userName'),
-      userId: localStorage.getItem('userId'),
+      userName: localStorage.getItem("userName"),
+      userId: localStorage.getItem("userId"),
       swipeToNum: 0,
-      allPhotoIscheck: false
-    }
+      allPhotoIscheck: false,
+    };
   },
   mounted() {
-    this.getuploadImgResults()
+    this.getuploadImgResults();
   },
   methods: {
     getuploadImgResults(photocheck) {
-      const url = API.port8085.getuploadImgResult
+      const url = API.port8085.getuploadImgResult;
       const params = {
         userId: this.userId,
       };
       this.$store.commit("setLoadingShow", true);
       axiosGet(url, params)
         .then((res) => {
-          this.$store.commit('setLoadingShow', false)
+          this.$store.commit("setLoadingShow", false);
           if (res && res.data.length > 0) {
-            this.getCheckIconStatus = res;
-            this.filterCheckIconStatus(this.getCheckIconStatus);
-          } else {
-            this.getCheckIconStatus = GETCHECKICONSTATUS;
+            this.getCheckIconStatus =
+              typeof res.data[0] !== "object" ? GETCHECKICONSTATUS : res.data;
             this.filterCheckIconStatus(this.getCheckIconStatus);
           }
         })
         .catch((err) => {
           console.log(err);
-          this.getCheckIconStatus = GETCHECKICONSTATUS;
-          this.filterCheckIconStatus(this.getCheckIconStatus);
           this.$store.commit("setLoadingShow", false);
         });
     },
     photoMsg(data) {
-      this.msgList = [...data]
-      const photocheck = true
-      this.getuploadImgResults(photocheck)
+      this.msgList = [...data];
+      const photocheck = true;
+      this.getuploadImgResults(photocheck);
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
@@ -320,15 +324,15 @@ export default {
               ? item.popupinfoChecked
               : item.popupinfoUnchecked;
           }
-        })
-      })
-      const statusAll = []
-      data.map(items => {
-        statusAll.push(items.isCheck)
-      })
-      console.log(!statusAll.includes(false))
+        });
+      });
+      const statusAll = [];
+      data.map((items) => {
+        statusAll.push(items.isCheck);
+      });
+      console.log(!statusAll.includes(false));
       if (!statusAll.includes(false)) {
-        this.allPhotoIscheck = true
+        this.allPhotoIscheck = true;
       }
     },
     showDrawer() {
@@ -386,16 +390,25 @@ export default {
       this.$store.commit("setLoadingShow", true);
       axiosGet(url, params)
         .then((res) => {
-          if (res && res.msg) {
+          console.log(typeof res.msg);
+          if (res && res.msg && typeof res.msg === "string") {
             robotMsg.owner = "robot";
             robotMsg.msg[0].value = res.msg
               .replace(/\n\r/g, "<br/>")
               .replace(/\n/g, "<br/>");
+          } else if (
+            res &&
+            res.msg &&
+            typeof res.msg === "object" &&
+            res.msg.length > 0
+          ) {
+            robotMsg.msg = [];
+            robotMsg.msg = res.msg;
           }
           this.$nextTick(() => {
             this.msgList.push(robotMsg);
             this.msgList = [...this.msgList];
-            setTimeout(()=> {
+            setTimeout(() => {
               const div = document.getElementsByClassName("divScroll");
               div[0].scrollTop = div[0].scrollHeight;
             }, 0);
@@ -453,7 +466,11 @@ export default {
     },
     getInformation(item, index) {
       console.log(item.title, "---item");
-      this.quickClick(item.title); //点击图标时自动发送对应文字
+      this.quickClick(item.title); // 点击图标时自动发送对应文字
+      this.imgIcon.map((item) => {
+        item.zIndex = false;
+      });
+      this.imgIcon[index].zIndex = true;
       this.swipeToNum = index;
       this.$store.commit("setToppPointmodelShow", true);
     },
@@ -483,12 +500,13 @@ export default {
         this.newform.question &&
         this.newform.answer &&
         this.newform.source
-      )
+      );
     },
     ...mapState({
-      talkText: state => state.app.talkText,
-      LoadingShow: state => state.app.LoadingShow
-    })
+      robotSkeleton: (state) => state.app.robotSkeleton,
+      talkText: (state) => state.app.talkText,
+      LoadingShow: (state) => state.app.LoadingShow,
+    }),
   },
   created() {
     this.showDrawer();

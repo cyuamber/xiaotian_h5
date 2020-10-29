@@ -47,7 +47,6 @@
     background-image: linear-gradient(-74deg, #2c47bf 0%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#ffffff, #ffffff);
     color: rgb(255, 255, 255, 0.8);
     .title{
-      text-align: center;
       padding-top: 30px;
       margin: 0 0px 16px 75px;
       img{
@@ -119,6 +118,9 @@ export default {
       },
       set(val) {
         this.$store.commit('setToppPointmodelShow', false)
+        this.popupInfoImg.map(item => {
+          item.zIndex = false
+        })
       }
     }
   },

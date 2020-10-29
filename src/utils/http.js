@@ -11,7 +11,7 @@ const http = axios.create({
   baseURL: '',
   // withCredentials: true, // set cross-origin
   crossDomain: true,
-  timeout: 5000
+  timeout: 3000
 })
 
 axios.defaults.transformRequest = [function(data, config) {
