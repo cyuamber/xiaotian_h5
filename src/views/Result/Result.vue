@@ -29,13 +29,41 @@
                 </div>
             </div>
             <img class="complete-present" src="@/assets/images/present.png" />
-        </div> -->
+        </div>
+        -->
+        <div class="toolbars">
+            <div @click="resultRobotLogoShows()" style="height:100%">
+                <transition name="van-slide-right" :duration='{ enter: 800, leave: 800 }'>
+                    <img
+                    style="width:85%"
+                    :class="{'rotate':resultRobotLogoShow}"
+                    src="@/assets/images/result_robot.png"
+                    alt="小天机器人logo"
+                    v-if="resultRobotLogoShow"
+                    >
+                </transition>
+                <transition name="van-slide-right" :duration='{ enter: 800, leave: 800 }'>
+                    <img
+                    src="@/assets/images/result_robot_logo.png"
+                    alt="小天机器人logo"
+                    v-if="!resultRobotLogoShow"
+                    style="top:1px"
+                    >
+                </transition>
+            </div>
+            <span @click="formModelShow()"></span>
+        </div>
+        <ResultForm/>
     </div>
 </template>
 <script>
 import { GETPRESENT } from '../../const/constant'
+const ResultForm = () => import('./components/ResultForm')
 export default {
   name: 'Result',
+  components: {
+    ResultForm
+  },
   data() {
     return {
       name: 'xx',
@@ -43,6 +71,9 @@ export default {
       day: 'x',
       hour: 'x',
       min: 'x',
+      resultRobotLogoShow: true,
+      num: 3,
+      Timer: null,
       visitList: [
         {
           hour: 'X',
@@ -82,13 +113,32 @@ export default {
   },
   methods: {
     getBasicInfo() {
-        // 从后段获取month...
+      // 从后段获取month...
     },
     getName() {
-        // 从微信获取名字
+      // 从微信获取名字
     },
     backToRobot() {
       this.$router.replace({ path: '/robotpage' })
+    },
+    formModelShow() {
+      this.$store.commit('setFormModelShow', true)
+    },
+    resultRobotLogoShows() {
+      if (this.resultRobotLogoShow) {
+        this.resultRobotLogoShow = false
+        this.Timer = setInterval(() => {
+          this.num--
+          if (this.num < 0) {
+            this.resultRobotLogoShow = true
+            this.num = 3
+            clearInterval(this.Timer)
+          }
+        }, 1000)
+      } else {
+        clearInterval(this.Timer)
+        this.resultRobotLogoShow = true
+      }
     }
   }
 }
@@ -96,10 +146,41 @@ export default {
 <style lang="less" scoped>
 .result-container {
     position: relative;
+    .toolbars{
+        position: fixed;
+        top: 50%;
+        right: 0;
+        height: 120px;
+        width: 60px;
+        background-color: transparent;
+        z-index: 3;
+        margin-top: -25px;
+        img{
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .rotate{
+            transform: rotate(1deg);
+            transform-origin:0 450%;
+        }
+        span{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 25px;
+            background: transparent;
+            border: none;
+            display: inline-block;
+        }
+    }
     height: 100vh;
     width: 100%;
     background-color: #123199;
-    z-index: -2;
+    z-index: 2;
     .result-bg {
         position: absolute;
         top: 0;

@@ -1,7 +1,7 @@
 <template>
  <van-popup
           v-model="toppPointmodelShow"
-          :style="{ width: '90%', height: '342px', 'border-radius':'15px' }"
+          :style="{ width: '90%', height: '362px', 'border-radius':'15px' }"
         >
           <van-swipe
             class="my-swipe"
@@ -72,7 +72,6 @@
     }
     .info-content{
       width: 261px;
-      height: auto;
       margin: 10px auto;
       text-align: center;
       font-size: 17px;
