@@ -67,6 +67,7 @@ export default {
       hour: 'x',
       min: 'x',
       resultRobotLogoShow: true,
+      num: 3,
       visitList: [
         {
           hour: 'X',
@@ -118,9 +119,16 @@ export default {
       this.$store.commit('setFormModelShow', true)
     },
     resultRobotLogoShows() {
-      console.log(13246)
       if (this.resultRobotLogoShow) {
         this.resultRobotLogoShow = false
+        const Timer = setInterval(() => {
+          this.num--
+          if (this.num < 0) {
+            this.resultRobotLogoShow = true
+            this.num = 3
+            clearInterval(Timer)
+          }
+        }, 1000)
       } else {
         this.resultRobotLogoShow = true
       }
