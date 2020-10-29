@@ -33,17 +33,22 @@
         -->
         <div class="toolbars">
             <div @click="resultRobotLogoShows()" style="height:100%">
-                <transition name="van-slide-right">
+                <transition name="van-slide-right" :duration='{ enter: 800, leave: 800 }'>
                     <img
-                    style="width:90%"
+                    style="width:85%"
                     :class="{'rotate':resultRobotLogoShow}"
                     src="@/assets/images/result_robot.png"
                     alt="小天机器人logo"
                     v-if="resultRobotLogoShow"
                     >
                 </transition>
-                <transition name="van-slide-right">
-                    <img  src="@/assets/images/result_robot_logo.png" alt="小天机器人logo" v-if="!resultRobotLogoShow"  >
+                <transition name="van-slide-right" :duration='{ enter: 800, leave: 800 }'>
+                    <img
+                    src="@/assets/images/result_robot_logo.png"
+                    alt="小天机器人logo"
+                    v-if="!resultRobotLogoShow"
+                    style="top:1px"
+                    >
                 </transition>
             </div>
             <span @click="formModelShow()"></span>
@@ -122,14 +127,14 @@ export default {
     resultRobotLogoShows() {
       if (this.resultRobotLogoShow) {
         this.resultRobotLogoShow = false
-        this.Timer = setInterval(() => {
-          this.num--
-          if (this.num < 0) {
-            this.resultRobotLogoShow = true
-            this.num = 3
-            clearInterval(this.Timer)
-          }
-        }, 1000)
+        // this.Timer = setInterval(() => {
+        //   this.num--
+        //   if (this.num < 0) {
+        //     this.resultRobotLogoShow = true
+        //     this.num = 3
+        //     clearInterval(this.Timer)
+        //   }
+        // }, 1000)
       } else {
         clearInterval(this.Timer)
         this.resultRobotLogoShow = true
@@ -159,7 +164,7 @@ export default {
         }
         .rotate{
             transform: rotate(1deg);
-            transform-origin:0 400%;
+            transform-origin:0 450%;
         }
         span{
             position: absolute;

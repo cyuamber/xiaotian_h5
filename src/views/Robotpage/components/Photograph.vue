@@ -75,8 +75,7 @@ export default {
       }
       axiosPost(url, params, formData, headers)
         .then((res) => {
-          console.log(res, 'res-----upload')
-          if (res && res.msg) {
+          if (res && res.data) {
             robotMsg.owner = 'robot'
             robotMsg.msg[0].code = res.code
             robotMsg.msg[0].value = res.msg
