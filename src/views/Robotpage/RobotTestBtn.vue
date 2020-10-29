@@ -68,7 +68,7 @@
   text-align: center;
   position: relative;
   .top-img {
-    width: 375px;
+    width: 100%;
     height: 126px;
     margin-top: -25px;
     position: absolute;

@@ -6,8 +6,9 @@
           <van-swipe
             class="my-swipe"
             indicator-color="#3F57F1"
-            style="height: 100%"
+            style="height: 100%; background: transparent;"
             ref="swipe"
+            :width="swipeWidth"
             :initial-swipe='swipeToNumber'
           >
             <van-swipe-item v-for="(item, index) in popupInfoImg" :key="index">
@@ -44,7 +45,7 @@
   .info{
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(-74deg, #2c47bf 1%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#ffffff, #ffffff);
+    background-image: linear-gradient(-74deg, #2c47bf 1%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#000, #000);
     color: rgb(255, 255, 255, 0.8);
     .title{
       padding-top: 30px;
@@ -106,6 +107,7 @@ export default {
   props: ['msgList', 'swipeToNum', 'allPhotoIscheck'],
   data() {
     return {
+      swipeWidth: 372,
       popupInfoImg: IMGICON,
       msgLists: this.msgList,
       swipeToNumber: this.swipeToNum,
@@ -124,6 +126,11 @@ export default {
         })
       }
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.swipeWidth = Math.floor(window.innerWidth * 0.9) + 1
+    })
   },
   watch: {
     swipeToNum(newVal, oldVal) {
