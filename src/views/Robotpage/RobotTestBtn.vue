@@ -241,7 +241,7 @@ export default {
     Chatbox,
     Popupinfo,
     Photograph,
-    Recorder: () => import("./components/Recorder"),
+    Recorder
   },
 
   data() {
@@ -286,9 +286,8 @@ export default {
       axiosGet(url, params)
         .then((res) => {
           this.$store.commit("setLoadingShow", false);
-          if (res && res.data.length > 0) {
-            this.getCheckIconStatus =
-              typeof res.data[0] !== "object" ? GETCHECKICONSTATUS : res.data;
+          if (res && res.data.length > 0 && typeof res.data[0] === "object") {
+            this.getCheckIconStatus = res.data
             this.filterCheckIconStatus(this.getCheckIconStatus);
           }
         })
@@ -318,7 +317,6 @@ export default {
       data.map((items) => {
         statusAll.push(items.isCheck);
       });
-      console.log(!statusAll.includes(false));
       if (!statusAll.includes(false)) {
         this.allPhotoIscheck = true;
       }

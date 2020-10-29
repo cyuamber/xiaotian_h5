@@ -28,12 +28,34 @@
             </div>
             <img class="complete-present" src="@/assets/images/present.png" />
         </div>
+        <div class="toolbars">
+            <div @click="resultRobotLogoShows()">
+                <transition name="van-slide-right">
+                    <img
+                    style="width:90%"
+                    :class="{'rotate':resultRobotLogoShow}"
+                    src="@/assets/images/result_robot.png"
+                    alt="小天机器人logo"
+                    v-if="resultRobotLogoShow"
+                    >
+                </transition>
+                <transition name="van-slide-right">
+                    <img  src="@/assets/images/result_robot_logo.png" alt="小天机器人logo" v-if="!resultRobotLogoShow"  >
+                </transition>
+            </div>
+            <span @click="formModelShow()"></span>
+        </div>
+        <ResultForm/>
     </div>
 </template>
 <script>
 import { GETPRESENT } from '../../const/constant'
+const ResultForm = () => import('./components/ResultForm')
 export default {
   name: 'Result',
+  components: {
+    ResultForm
+  },
   data() {
     return {
       name: 'xx',
@@ -41,6 +63,7 @@ export default {
       day: 'x',
       hour: 'x',
       min: 'x',
+      resultRobotLogoShow: true,
       visitList: [
         {
           hour: 'X',
@@ -80,13 +103,23 @@ export default {
   },
   methods: {
     getBasicInfo() {
-        // 从后段获取month...
+      // 从后段获取month...
     },
     getName() {
-        // 从微信获取名字
+      // 从微信获取名字
     },
     backToRobot() {
       this.$router.replace({ path: '/robotpage' })
+    },
+    formModelShow() {
+      this.$store.commit('setFormModelShow', true)
+    },
+    resultRobotLogoShows() {
+      if (this.resultRobotLogoShow) {
+        this.resultRobotLogoShow = false
+      } else {
+        this.resultRobotLogoShow = true
+      }
     }
   }
 }
@@ -94,6 +127,37 @@ export default {
 <style lang="less" scoped>
 .result-container {
     position: relative;
+    .toolbars{
+        position: fixed;
+        top: 50%;
+        right: 0;
+        height: 120px;
+        width: 60px;
+        background-color: transparent;
+        z-index: 3;
+        margin-top: -25px;
+        img{
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .rotate{
+            transform: rotate(1deg);
+            transform-origin:0 400%;
+        }
+        span{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 25px;
+            background: transparent;
+            border: none;
+            display: inline-block;
+        }
+    }
     .result-bg {
         height: 100vh;
         width: 100%;
