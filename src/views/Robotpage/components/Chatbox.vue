@@ -7,13 +7,28 @@
         </div>
         <div class="robotMsg">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
-            <div v-if="dialogue.type === 'text'">{{ dialogue.value }}</div>
-            <!-- <img
+            <div v-if="dialogue.type === 'text'">
+                {{ dialogue.value }}<br>
+                <span
+                v-if="dialogue.code === 402 || dialogue.code === 405"
+                class="hot-issue reclock-button"
+                >
+                  重新打卡
+                  <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
+                </span>
+                <span
+                v-if="dialogue.code === 200 && allPhotoIscheck"
+                class="hot-issue reclock-button"
+                @click="hrefRobotTestBtn()">
+                  立即查看「记忆界面」
+                </span>
+              </div>
+              <img
               v-else-if="dialogue.type === 'img'"
               @click="showImage(dialogue.value)"
               :src="dialogue.value"
               alt="小天机器人"
-            /> -->
+            />
           </div>
           <div v-if="msg.init">
             <span class="hot-issue" @click="quickClick()">如何打卡?</span>
@@ -42,11 +57,17 @@
 
 <script>
 import { ImagePreview } from 'vant'
+import Photograph from './Photograph'
 export default {
   name: 'Chatbox',
+  components: {
+    Photograph,
+  },
   props: {
     // eslint-disable-next-line vue/require-prop-type-constructor
-    msgList: ''
+    msgList: '',
+    // eslint-disable-next-line vue/require-prop-type-constructor
+    allPhotoIscheck: ''
   },
 
   data() {
@@ -75,6 +96,13 @@ export default {
       // this.picLink = img
       ImagePreview([img])
       console.log(img)
+    },
+    photoMsg(data) {
+      this.msgList = [...this.msgList]
+      this.$emit('photoMsgClose', this.msgList)
+    },
+    hrefRobotTestBtn() {
+      this.$router.replace({ path: '/result' })
     }
   }
 }
@@ -99,21 +127,27 @@ export default {
     }
     .robotMsg {
       float: left;
-      width: 60%;
+      width: 55%;
       max-width: 344px;
       background: white;
       border-radius: 0 24px 24px 24px;
-      padding: 13px 16px 13px 16px;
-      font-size: 12px;
+      padding: 15px 19px 15px 19px;
+      font-size: 17px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: 	#10164e;
-      line-height: 18px;
+      line-height: 24px;
       margin-bottom: 16px;
       .hot-issue {
-        color: #337dff;
+        color: #097de9;
         display: inline-block;
-        padding: 5px 10px 0 0;
+        padding: 20px 25px 0 0;
+      }
+      .reclock-button{
+        width: 100%;
+        display: inline-block;
+        padding: 5px 0;
+        position: relative;
       }
       img {
         width: 100%;
@@ -125,13 +159,13 @@ export default {
       max-width: 344px;
       background-image: linear-gradient(-74deg, #2c47bf 0%, #2e5acf 26%, #307eef 76%, #318fff 100%), linear-gradient(#1d1588, #1d1588);
       border-radius: 24px 0px 24px 24px;
-      padding: 13px 16px 13px 16px;
+      padding: 13px 19px 13px 19px;
       margin-right: 10px;
-      font-size: 12px;
+      font-size: 17px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #C3D3FF;
-      line-height: 18px;
+      line-height: 24px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }

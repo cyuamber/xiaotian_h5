@@ -25,8 +25,13 @@
                 </p>
                 <div class="check_button">
                   <img
+                  v-if="allPhotoIschecked"
+                  @click="hrefRobotTestBtn()"
+                  :src="require('../../../assets/images/viewResults.png')"
+                  alt="查看结果">
+                  <img
+                  v-if="!allPhotoIschecked"
                   :src="item.isCheck ?require('../../../assets/images/Popupinfo_button_checked.png'):require('../../../assets/images/Popupinfo_button_unchecked.png')"
-                  @click="clockInNow(item.isCheck)"
                   >
                   <Photograph v-if="!item.isCheck" :msgList="msgLists" @photoMsg='photoMsg'/>
                 </div>
@@ -42,19 +47,18 @@
     background-image: linear-gradient(-74deg, #2c47bf 0%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#ffffff, #ffffff);
     color: rgb(255, 255, 255, 0.8);
     .title{
-      margin: 0 auto;
       text-align: center;
       padding-top: 30px;
+      margin: 0 0px 16px 75px;
       img{
-        width: 80px;
+        width: 98px;
         position: absolute;
         top: 0;
-        left: 12px;
+        left: 0px;
         top: -8px;
       }
       .title-text{
         display: inline-block;
-        margin: 0 -30px 40px 40px;
         text-align: left;
         font-family: PingFangSC-Semibold;
         padding: 0 10px;
@@ -72,8 +76,10 @@
       height: auto;
       margin: 10px auto;
       text-align: center;
-      font-size: 14px;
-      line-height: 19px;
+      font-size: 17px;
+      line-height: 24px;
+      font-family: PingFangSC-Regular;
+      color: rgb(255, 255, 255, 0.8);
     }
     .check_button{
       width: 80%;
@@ -97,12 +103,13 @@ export default {
   components: {
     Photograph
   },
-  props: ['msgList', 'swipeToNum'],
+  props: ['msgList', 'swipeToNum', 'allPhotoIscheck'],
   data() {
     return {
       popupInfoImg: IMGICON,
       msgLists: this.msgList,
-      swipeToNumber: this.swipeToNum
+      swipeToNumber: this.swipeToNum,
+      allPhotoIschecked: this.allPhotoIscheck
     }
   },
   computed: {
@@ -118,12 +125,19 @@ export default {
   watch: {
     swipeToNum(newVal, oldVal) {
       this.swipeToNumber = newVal
+    },
+    allPhotoIscheck(newVal, oldVal) {
+      this.allPhotoIschecked = newVal
     }
   },
   methods: {
     photoMsg(data) {
       this.msgLists = [...this.msgLists]
       this.$emit('photoMsgClose', this.msgLists)
+    },
+    hrefRobotTestBtn() {
+      this.$store.commit('setToppPointmodelShow', false)
+      this.$router.replace({ path: '/result' })
     }
   }
 }

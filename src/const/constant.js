@@ -42,8 +42,8 @@ export const IMGICON = [
     checked: require('../assets/images/icon_C_checked.png'),
     popupinfoUnchecked: require('../assets/images/uncheck_c.png'),
     popupinfoChecked: require('../assets/images/check_c.png'),
-    src: '',
-    popupinfoIconSrc: '',
+    src: require('../assets/images/icon_C_unchecked.png'),
+    popupinfoIconSrc: require('../assets/images/uncheck_c.png'),
     popupinfoTitleEn: 'Customer',
     popupinfoTitleCH: '移动市场',
     infoContent: '中国移动推出“五新”业务，通过AI赋能AR/VR、视频剪辑、智能通话，实现“新看法、新听法、新玩法、新拍法、新用法”，让广大个人用户“畅享”沉浸娱乐新体验'
@@ -54,8 +54,8 @@ export const IMGICON = [
     checked: require('../assets/images/icon_H_checked.png'),
     popupinfoUnchecked: require('../assets/images/uncheck_h.png'),
     popupinfoChecked: require('../assets/images/check_h.png'),
-    src: '',
-    popupinfoIconSrc: '',
+    src: require('../assets/images/icon_H_unchecked.png'),
+    popupinfoIconSrc: require('../assets/images/uncheck_h.png'),
     popupinfoTitleEn: 'Home',
     popupinfoTitleCH: '家庭市场',
     infoContent: '中国移动推出智慧家庭、打造智慧社区，通过“极速+”“娱乐+”“智享+”“安全+”的“4+”智慧产品，让万亿家庭“畅美”智慧安居新生活'
@@ -66,8 +66,8 @@ export const IMGICON = [
     checked: require('../assets/images/icon_B_checked.png'),
     popupinfoUnchecked: require('../assets/images/uncheck_b.png'),
     popupinfoChecked: require('../assets/images/check_b.png'),
-    src: '',
-    popupinfoIconSrc: '',
+    src: require('../assets/images/icon_B_unchecked.png'),
+    popupinfoIconSrc: require('../assets/images/uncheck_b.png'),
     popupinfoTitleEn: 'Business',
     popupinfoTitleCH: '政企市场',
     infoContent: '中国移动通过构建新一代泛在智能基础设施，推出5G+AI行业智能化解决方案，赋能千行百业数字化智能化转型'
@@ -78,8 +78,8 @@ export const IMGICON = [
     checked: require('../assets/images/icon_N_checked.png'),
     popupinfoUnchecked: require('../assets/images/uncheck_n.png'),
     popupinfoChecked: require('../assets/images/check_n.png'),
-    src: '',
-    popupinfoIconSrc: '',
+    src: require('../assets/images/icon_N_unchecked.png'),
+    popupinfoIconSrc: require('../assets/images/uncheck_n.png'),
     popupinfoTitleEn: 'New',
     popupinfoTitleCH: '新兴市场',
     infoContent: '中国移动通过布局AI领域的产业投资促进智慧金融等新技术应用拓展新空间，“畅达”新未来'
@@ -99,7 +99,7 @@ export const GETCHECKICONSTATUS = [
   {
     key: '',
     title: 'N',
-    isCheck: true
+    isCheck: false
   },
   {
     key: '',

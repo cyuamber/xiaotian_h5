@@ -15,7 +15,7 @@
         </div>
       </van-sticky>
       <div class="bodyDialog divScroll">
-        <Chatbox :msgList="msgList" />
+        <Chatbox :msgList="msgList" :allPhotoIscheck='allPhotoIscheck' />
       </div>
       <div class="footer">
         <div class="common-question">
@@ -51,42 +51,10 @@
       </div>
     </div>
     <Loading v-if="LoadingShow" />
-    <Recorder @sendTalkMsg="sendTalkMsg" />
-    <Popupinfo
-      :msgList="msgList"
-      @photoMsgClose="photoMsg"
-      :swipeToNum="swipeToNum"
-    />
+    <Recorder @sendTalkMsg='sendTalkMsg'/>
+    <Popupinfo :msgList="msgList" @photoMsg='photoMsg' :swipeToNum='swipeToNum' :allPhotoIscheck='allPhotoIscheck' />
   </div>
 </template>
-
-<style>
-body {
-  -webkit-touch-callout: none; /*系统默认菜单被禁用*/
-  -webkit-user-select: none; /*webkit浏览器*/
-  -khtml-user-select: none; /*早起浏览器*/
-  -moz-user-select: none; /*火狐浏览器*/
-  -ms-user-select: none; /*IE浏览器*/
-  user-select: none; /*用户是否能够选中文本*/
-}
-input,
-select {
-  -webkit-user-select: auto;
-  user-select: auto;
-}
-/* img{
-   pointer-events:none;
-} */
-.ant-drawer-title {
-  text-align: left !important;
-  color: #fff;
-}
-.ant-drawer-close {
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-}
-</style>
 <style lang="less" scoped>
 .top {
   width: 100%;
@@ -180,6 +148,7 @@ select {
       border-radius: 25px;
       color: #10164e;
       opacity: 0.7;
+      font-size: 15px;
     }
   }
   .common-question::-webkit-scrollbar {
@@ -302,27 +271,26 @@ export default {
       countDownTimes: null,
       longPress: false,
       base64ImgData: null,
-      userName: localStorage.getItem("userName"),
-      userId: localStorage.getItem("userId"),
+      userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId'),
       swipeToNum: 0,
-    };
+      allPhotoIscheck: false
+    }
   },
   mounted() {
-    // this.getAllCheckIconStatus()
-    this.getuploadImgResults();
+    this.getuploadImgResults()
   },
   methods: {
-    getuploadImgResults() {
-      const url = API.port8085.getuploadImgResult;
+    getuploadImgResults(photocheck) {
+      const url = API.port8085.getuploadImgResult
       const params = {
         userId: this.userId,
       };
       this.$store.commit("setLoadingShow", true);
       axiosGet(url, params)
         .then((res) => {
-          this.$store.commit("setLoadingShow", false);
-          console.log(res, "---getuploadImgResults--res");
-          if (res && res.length > 0) {
+          this.$store.commit('setLoadingShow', false)
+          if (res && res.data.length > 0) {
             this.getCheckIconStatus = res;
             this.filterCheckIconStatus(this.getCheckIconStatus);
           } else {
@@ -338,9 +306,9 @@ export default {
         });
     },
     photoMsg(data) {
-      console.log(data, "----photoMsg");
-      this.msgList = [...data];
-      this.getuploadImgResults();
+      this.msgList = [...data]
+      const photocheck = true
+      this.getuploadImgResults(photocheck)
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
@@ -352,8 +320,16 @@ export default {
               ? item.popupinfoChecked
               : item.popupinfoUnchecked;
           }
-        });
-      });
+        })
+      })
+      const statusAll = []
+      data.map(items => {
+        statusAll.push(items.isCheck)
+      })
+      console.log(!statusAll.includes(false))
+      if (!statusAll.includes(false)) {
+        this.allPhotoIscheck = true
+      }
     },
     showDrawer() {
       this.msgList = [];
@@ -365,7 +341,7 @@ export default {
           {
             type: "text",
             value:
-              "您好，欢迎来到中国移动合作伙伴大会，我是移动“融智”战略下诞生的智能机器人小天。接下来请跟随我一起游览展台、拍照打卡、领取礼品、吧~见到我的立牌就拍照上传吧~",
+              "您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上次吧～",
           },
         ],
       };
@@ -419,7 +395,7 @@ export default {
           this.$nextTick(() => {
             this.msgList.push(robotMsg);
             this.msgList = [...this.msgList];
-            setTimeout(function () {
+            setTimeout(()=> {
               const div = document.getElementsByClassName("divScroll");
               div[0].scrollTop = div[0].scrollHeight;
             }, 0);
@@ -429,15 +405,6 @@ export default {
         .catch((err) => {
           console.log(err, "=====err");
           this.$store.commit("setLoadingShow", false);
-          robotMsg.msg = GETANSWERRES;
-          this.$nextTick(() => {
-            this.msgList.push(robotMsg);
-            setTimeout(function () {
-              const div = document.getElementsByClassName("divScroll");
-              div[0].scrollTop = div[0].scrollHeight;
-            }, 0);
-          });
-          // ------------------
         });
     },
     countDowns() {
@@ -516,17 +483,15 @@ export default {
         this.newform.question &&
         this.newform.answer &&
         this.newform.source
-      );
+      )
     },
     ...mapState({
-      talkText: (state) => state.app.talkText,
-      LoadingShow: (state) => state.app.LoadingShow,
-    }),
+      talkText: state => state.app.talkText,
+      LoadingShow: state => state.app.LoadingShow
+    })
   },
   created() {
     this.showDrawer();
-    // this.username = this.$route.query.username
-    // this.phonenum = this.$route.query.phonenum
   },
 };
 </script>
