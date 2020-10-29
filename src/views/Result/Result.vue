@@ -68,6 +68,7 @@ export default {
       min: 'x',
       resultRobotLogoShow: true,
       num: 3,
+      Timer: null,
       visitList: [
         {
           hour: 'X',
@@ -121,15 +122,16 @@ export default {
     resultRobotLogoShows() {
       if (this.resultRobotLogoShow) {
         this.resultRobotLogoShow = false
-        const Timer = setInterval(() => {
+        this.Timer = setInterval(() => {
           this.num--
           if (this.num < 0) {
             this.resultRobotLogoShow = true
             this.num = 3
-            clearInterval(Timer)
+            clearInterval(this.Timer)
           }
         }, 1000)
       } else {
+        clearInterval(this.Timer)
         this.resultRobotLogoShow = true
       }
     }
