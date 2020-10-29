@@ -25,12 +25,13 @@ function webS() {
   if (startWebsocket === 1) {
     if ('WebSocket' in window) {
       // 一次转写端口
-      websocket = new WebSocket('ws://172.31.232.108:5010')
+      websocket = new WebSocket('wss://172.31.201.38:443')
       // websocket.binaryType = "arraybuffer";
     } else {
-      websocket = new WebSocket('ws://172.31.232.108:5010')
+      websocket = new WebSocket('wss://172.31.201.38:443')
       // alert('当前浏览器 Not support websocket')
     }
+    console.log(123456)
     // 一次链接发生错误的回调ssss
     websocket.onerror = function() {
       console.log('WebSocket连接发生错误')
@@ -78,7 +79,7 @@ var recorder = function() {
       state = 2
     }
 
-    var messageObj = { 'uid': ID, 'state': state, 'chunk': n, 'audio': audio }
+    var messageObj = { 'uid': 'audioId', 'state': state, 'chunk': n, 'audio': audio }
     var messageJson = JSON.stringify(messageObj)
     websocket.send(messageJson)
     chunkSliceStart += 3200
@@ -89,10 +90,12 @@ var recorder = function() {
     setTimeout(recorder, 1000)
   } else {
     n += 1
-    var messageObj = { 'uid': ID, 'state': 3, 'chunk': n, 'audio': '' }
+    var messageObj = { 'uid': 'audioId', 'state': 3, 'chunk': n, 'audio': '' }
     var messageJson = JSON.stringify(messageObj)
-    websocket.send(messageJson)
-    clickContent()
+    setTimeout(() => {
+      websocket.send(messageJson)
+    }, 50)
+    // clickContent()
     return
   }
 }
@@ -198,6 +201,10 @@ export function HZRecorder(stream, config) {
 
   // 开始录音
   this.start = function() {
+    chunk = []
+    chunkData = []
+    chunkSliceStart = 0
+    chunkSliceStop = 3200
     audioInput.connect(recorder)
     recorder.connect(context.destination)
     startWebsocket = 1
