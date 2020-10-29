@@ -127,14 +127,14 @@ export default {
     resultRobotLogoShows() {
       if (this.resultRobotLogoShow) {
         this.resultRobotLogoShow = false
-        // this.Timer = setInterval(() => {
-        //   this.num--
-        //   if (this.num < 0) {
-        //     this.resultRobotLogoShow = true
-        //     this.num = 3
-        //     clearInterval(this.Timer)
-        //   }
-        // }, 1000)
+        this.Timer = setInterval(() => {
+          this.num--
+          if (this.num < 0) {
+            this.resultRobotLogoShow = true
+            this.num = 3
+            clearInterval(this.Timer)
+          }
+        }, 1000)
       } else {
         clearInterval(this.Timer)
         this.resultRobotLogoShow = true
