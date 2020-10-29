@@ -2,7 +2,7 @@
 <template>
    <van-popup
           v-model="formModelShow"
-          :style="{ width: '80%', height: '50%', 'border-radius':'15px', 'background-image': 'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))' }"
+          :style="{ width: '80%', height: '60%', top:'45%', 'border-radius':'15px', 'background-image': 'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))' }"
         >
 
   </van-popup>
