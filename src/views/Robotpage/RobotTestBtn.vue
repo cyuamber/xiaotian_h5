@@ -3,15 +3,16 @@
     <div class="drawerBody">
       <van-sticky class="top">
         <img class="top-img" src="@/assets/images/robot_top.png">
-        <div>
+        <div class="top-block" v-for="(item, index) in imgIcon" :key="index" :class="{ 'z-index': item.zIndex }">
+          <div>
+            <img class="number-img" src="@/assets/images/fire.png">
+            <span class="number-text">{{item.number}}</span>
+          </div>
           <img
             class="top-point"
-            v-for="(item, index) in imgIcon"
-            :key="index"
             @click="() => getInformation(item, index)"
             :src="item.src"
             alt=""
-            :class="{ 'z-index': item.zIndex }"
           />
         </div>
       </van-sticky>
@@ -58,6 +59,7 @@
       @photoMsg="photoMsg"
       :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
+      @closePop="closePop"
     />
   </div>
 </template>
@@ -69,24 +71,32 @@
   position: relative;
   .top-img {
     width: 100%;
-    height: 126px;
-    margin-top: -25px;
+    height: 100px;
     position: absolute;
     top: 0;
     left: 0;
   }
-  .top-point {
+  .top-block {
     position:relative;
     display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 50%;
-    line-height: 1.5rem;
-    margin: 20px 10px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 0.35rem;
+    margin: 10px 15px;
     position: relative;
+    align-items: center;
+    .number-img {
+      height: 12px;
+      width: 12px;
+      display: inline-block;
+    }
+    .number-text {
+      font-size: 12px;
+      color: #DFE7EE;
+    }
+    .top-point {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      line-height: 75px;
+    }
   }
   .z-index {
     z-index: 100000;
@@ -286,13 +296,40 @@ export default {
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
       allPhotoIscheck: false,
+      countInterval: 60000,
+      timer: null,
       // questionStyle: ''
     }
   },
   mounted() {
     this.getuploadImgResults()
   },
+  beforeDestroy() {
+    this.endPoll()
+  },
   methods: {
+    closePop() {
+      console.log('guanbi2')
+      console.log(this.imgIcon)
+    },
+    startPoll() {
+      console.log('start')
+      this.timer = setInterval(this.getCount, this.countInterval)
+    },
+    endPoll() {
+      clearInterval(this.timer)
+    },
+    getCount() {
+      // const url = API.port8085.getCount
+      // axiosGet(url)
+      //   .then((res) => {
+      //     // 赋值给imgIcon
+      //   })
+      //   .catch((err) => {
+      //     console.log(err)
+      //     // 错误处理
+      //   })
+    },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
       const params = {
@@ -475,6 +512,7 @@ export default {
       this.imgIcon[index].zIndex = true
       this.swipeToNum = index
       this.$store.commit('setToppPointmodelShow', true)
+      console.log(this.imgIcon)
     },
 
     pressEnter(e) {
@@ -512,6 +550,7 @@ export default {
   },
   created() {
     this.showDrawer()
+    this.startPoll()
   }
 }
 </script>

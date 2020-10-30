@@ -8,7 +8,8 @@ export default {
     sendTextUrl: port8085 + '/dp_xiaotian/inference/text', // 文字发送接口
     uploadImgUrl: port8085 + '/dp_xiaotian/inference/pic', // 图片上传打卡
     getuploadImgResult: port8085 + '/dp_xiaotian/inference/getResult', // 打卡结果查询接口
-    getCheckIconStatus: port8085 + '/getCheckIconStatus'
+    getCheckIconStatus: port8085 + '/getCheckIconStatus',
+    getCount: port8085 + '/dp_xiaotian/inference/getCount'
   },
   port9101: {
     addUrl: port9101 + '/dangwu?op=add'
