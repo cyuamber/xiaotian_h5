@@ -19,6 +19,8 @@ import '@/assets/css/index.scss'
 import '@/assets/css/commonStyle.css'
 // 移动端适配
 import 'lib-flexible/flexible.js'
+// 300ms延迟插件
+import FastClick from 'fastclick'
 
 // filters
 import './filters'
