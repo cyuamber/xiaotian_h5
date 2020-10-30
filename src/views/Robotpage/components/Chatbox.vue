@@ -8,7 +8,7 @@
         <div class="robotMsg">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
             <div v-if="dialogue.type === 'text'">
-                {{ dialogue.value }}<br>
+                {{ dialogue.content }}<br>
                 <span
                 v-if="dialogue.code === 402 || dialogue.code === 405"
                 class="hot-issue reclock-button"
@@ -31,10 +31,10 @@
                 </span>
               </div>
               <img
-              v-else-if="dialogue.type === 'img'"
-              @click="showImage(dialogue.value)"
-              :src="dialogue.value"
-              alt="小天机器人"
+              v-else-if="dialogue.type === 'image'"
+              @click="showImage(dialogue.content)"
+              :src="dialogue.content"
+              alt=""
             />
           </div>
           <div v-if="msg.init">

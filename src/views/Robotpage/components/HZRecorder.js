@@ -48,11 +48,13 @@ function webS() {
     var z = 1
     var divFlage = 1
     // 一次数据
+    var date = ''
     websocket.onmessage = function(event) {
       // var ds = document.querySelector('.num_'+dataFlage);
-      var date = JSON.parse(event.data)
+      date = date + JSON.parse(event.data)
       console.log(date, 'websocket---date-----')
       if (date.end === 1) {
+        this.$store.commit('setTalkText', date)
         websocket.close()
       }
     }

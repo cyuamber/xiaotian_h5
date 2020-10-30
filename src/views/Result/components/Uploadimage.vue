@@ -1,101 +1,20 @@
 <!-- home -->
 <template>
-  <van-popup
-    v-model="formModelShow"
-    :closeable='!beforSubmit'
-    close-icon="close"
-    close-icon-position="bottom"
-    @closed="closed()"
-    :class="{'van-popup-background':!beforSubmit}"
-    :style="{
-      width: '85%',
-      height: '60%',
-      top: '45%',
-      'border-radius': '15px',
-      'background-image':'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))'
-    }"
-  >
-    <div class="content" v-if="beforSubmit">
-      <p class="title">标题</p>
-      <van-tabs
-        class="vans-tabs"
-        background="transparent"
-        color="#00F0FF"
-        title-inactive-color="#ffffff"
-        title-active-color="#00F0FF"
-      >
-        <van-tab title="手动录入">
-          <van-form @submit="onSubmit" class="form">
-            <van-field
-              class="van-field-box"
-              v-for="(item, index) in formInputs"
-              :key="index"
-              v-model="item.value"
-              :label='item.lable'
-              :name="item.name"
-              :type="item.type"
-              :center='true'
-              :border='false'
-              label-width='3em'
-              label-class='lable'
-              maxlength='20'
-              :rules="[{ required: true, validator:item.type === 'digit' ? telPhoneValidator: null, message: item.message }]"
-            >
-            <template #button>
-             <div class="dividing-line"></div>
-            </template>
-            </van-field>
-            <div class="submit">
-               <van-button type="info" native-type="submit" class="van-submit-button"></van-button>
-            </div>
-          </van-form>
-        </van-tab>
-        <van-tab title="名片上传" class="card-upload-content">
-          <div class="preview">
-            <img src="@/assets/images/uploadCard.png" alt="预览">
-          </div>
-          <div class="footer-button">
-            <div class="takephoto">
-              <img  :src="msgSrc" alt="拍照">
-              <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
-            </div>
-            <div class="uploadphoto">
-              <img  src="@/assets/images/upload-button.png" alt="上传">
-            </div>
-          </div>
-        </van-tab>
-      </van-tabs>
-      <p class="footer-text">
-        *可通过手动填写或上传名片来录入您的信息
-      </p>
-    </div>
-    <div class="submit-success" v-if="!beforSubmit">
-      <img src="@/assets/images/submit-success.png" alt="提交成功">
-    </div>
-    <Loading v-if="LoadingShow" />
-  </van-popup>
+  <div></div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { FORMINPUTS } from '../../../const/constant'
-import Loading from '../../../components/Loading'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
-const Photograph = () => import('../../Robotpage/components/Photograph')
 export default {
-  name: 'ResultForm',
+  name: 'Uploadimage',
   components: {
-    Loading,
-    Photograph
   },
   data() {
     return {
-      // userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
-      formInputs: FORMINPUTS,
-      msgSrc: require('../../../assets/images/takePhoto.png'),
-      phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
+      beforSubmit: true
     }
   },
   computed: {
@@ -108,8 +27,7 @@ export default {
       }
     },
     ...mapState({
-      LoadingShow: (state) => state.app.LoadingShow,
-      beforSubmit: (state) => state.app.beforSubmit
+      LoadingShow: (state) => state.app.LoadingShow
     })
   },
   mounted() {},
@@ -131,7 +49,7 @@ export default {
             })
           }
           this.$nextTick(() => {
-            this.$store.commit('setBeforSubmit', false)
+            this.beforSubmit = false
             this.$store.commit('setLoadingShow', false)
           })
         })
@@ -158,10 +76,7 @@ export default {
       return validatorResult
     },
     closed() {
-      this.$store.commit('setBeforSubmit', true)
-    },
-    photoMsg(baseSrc) {
-      console.log(baseSrc)
+      this.beforSubmit = true
     }
   },
   beforeDestroy() {
@@ -175,7 +90,7 @@ export default {
   height: 50%!important;
   /deep/ .van-icon{
     left: 45%;
-    bottom: 12%;
+    bottom: 25%;
   }
 }
 .content {
@@ -245,21 +160,7 @@ export default {
         text-align: center;
         margin-left: -9px;
         .takephoto,.uploadphoto{
-          position: relative;
           width: 50%;
-          display: inline-block;
-          img{
-            width: 100%;
-          }
-        }
-        .takephoto input[type="file"] {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 90%;
-          height: 70%;
-          z-index: 9;
-          opacity: 0;
         }
       }
     }

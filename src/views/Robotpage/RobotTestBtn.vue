@@ -351,7 +351,7 @@ export default {
         msg: [
           {
             type: 'text',
-            value:
+            content:
               '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上次吧～'
           }
         ]
@@ -379,6 +379,7 @@ export default {
     },
     getAnswer(questions) {
       const params = {
+        userId: this.userId,
         text: questions.oldform.question
       }
       const url = API.port8085.sendTextUrl
@@ -389,7 +390,7 @@ export default {
         msg: [
           {
             type: 'text',
-            value: ''
+            content: ''
           }
         ]
       }
@@ -397,16 +398,20 @@ export default {
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
-          if (res && res.data && typeof res.data === 'string' && res.data.length > 0) {
+          if (res &&
+            res.data &&
+            typeof res.data === 'object' &&
+            res.data.length === 1
+          ) {
             robotMsg.owner = 'robot'
-            robotMsg.msg[0].value = res.data
+            robotMsg.msg[0].content = res.data[0].content
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           } else if (
             res &&
             res.data &&
             typeof res.data === 'object' &&
-            res.data.length > 0
+            res.data.length > 1
           ) {
             robotMsg.msg = []
             robotMsg.msg = res.data

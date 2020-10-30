@@ -20,12 +20,13 @@ export default {
   data() {
     return {
       msgLists: this.msgList,
+      msgSrcs: this.msgSrc,
       base64ImgData: null,
       userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId')
     }
   },
-  props: ['msgList'],
+  props: ['msgList', 'msgSrc'],
   computed: {
     robotId() {
       return this.$store.state.robotInfo.robotId
@@ -48,36 +49,59 @@ export default {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
       }
-      const url = API.port8085.uploadImgUrl
+      let url = ''
+      const params = {
+        userId: this.userId,
+        username: this.userName
+      }
+      const userMsg = {}
+      const robotMsg = {}
       this.$store.commit('setLoadingShow', true)
-      const userMsg = {
+      if (this.msgList !== undefined) {
+        url = API.port8085.uploadImgUrl
+        this.checkPhoto(userMsg, robotMsg, url, params, formData, headers)
+      } else {
+        url = API.port8085.saveUserInfo
+        this.msgSrcs = this.base64ImgData
+        this.$emit('photoMsg', this.msgSrcs)
+        this.reaultUploadPhoto(url, params, formData, headers)
+      }
+    },
+    /**
+     * 返回用户拍照图片的base64
+     */
+    FileReader(FileInfo) {
+      const reader = new FileReader()
+      reader.readAsDataURL(FileInfo)
+      // 监听读取操作结束
+      /* eslint-disable */
+      return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
+    },
+     checkPhoto(userMsg, robotMsg, url, params, formData, headers) {
+      userMsg = {
         type: 'user',
         imgUrl: this.base64ImgData,
         updateold: false
       }
       this.msgLists.push(userMsg)
       this.$emit('photoMsg', this.msgLists)
-      const params = {
-        userId: this.userId,
-        username: this.userName
-      }
-      const robotMsg = {
+      robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
         msg: [
           {
             type: 'text',
-            value: '',
+            content: '',
             code: null
           }
         ]
       }
       axiosPost(url, params, formData, headers)
         .then((res) => {
-          if (res && res.data) {
+          if (res && res.msg.length>0 ) {
             robotMsg.owner = 'robot'
             robotMsg.msg[0].code = res.code
-            robotMsg.msg[0].value = res.msg
+            robotMsg.msg[0].content = res.msg
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
@@ -96,17 +120,9 @@ export default {
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })
-      // 获取图片base64 代码，并存放到 base64ImgData 中
     },
-    /**
-     * 返回用户拍照图片的base64
-     */
-    FileReader(FileInfo) {
-      const reader = new FileReader()
-      reader.readAsDataURL(FileInfo)
-      // 监听读取操作结束
-      /* eslint-disable */
-      return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
+    reaultUploadPhoto(url, params, formData, headers) {
+
     }
   },
   components: { }
