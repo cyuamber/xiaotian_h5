@@ -14,7 +14,6 @@
 </style>
 <script>
 import API from '../../../utils/api'
-import { GETCHECKICONSTATUS } from '../../../const/constant'
 import { axiosPost } from '../../../utils/http.js'
 export default {
   name: 'Photograph',

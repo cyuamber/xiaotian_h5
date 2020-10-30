@@ -59,6 +59,8 @@
       @photoMsg="photoMsg"
       :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
+      :imgIcon="imgIcon"
+      @swipeLoop='swipeLoop'
     />
   </div>
 </template>
@@ -349,6 +351,9 @@ export default {
       const photocheck = true
       this.getuploadImgResults(photocheck)
     },
+    swipeLoop(data) {
+      this.imgIcon = [...data]
+    },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {
@@ -455,6 +460,7 @@ export default {
         })
     },
     countDowns() {
+      this.count = 10
       this.count--
       if (this.count <= 0 && this.longPress === true) {
         clearInterval(this.countDownTimes)

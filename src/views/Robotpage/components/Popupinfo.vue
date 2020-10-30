@@ -12,6 +12,7 @@
             ref="swipe"
             :width="swipeWidth"
             :initial-swipe='swipeToNumber'
+            @change="onChange"
           >
             <van-swipe-item v-for="(item, index) in popupInfoImg" :key="index">
               <div class="info">
@@ -109,14 +110,15 @@ export default {
   components: {
     Photograph
   },
-  props: ['msgList', 'swipeToNum', 'allPhotoIscheck'],
+  props: ['msgList', 'swipeToNum', 'allPhotoIscheck', 'imgIcon'],
   data() {
     return {
       swipeWidth: 372,
       popupInfoImg: IMGICON,
       msgLists: this.msgList,
       swipeToNumber: this.swipeToNum,
-      allPhotoIschecked: this.allPhotoIscheck
+      allPhotoIschecked: this.allPhotoIscheck,
+      imgIcons: this.imgIcon
     }
   },
   computed: {
@@ -126,9 +128,10 @@ export default {
       },
       set(val) {
         this.$store.commit('setToppPointmodelShow', false)
-        this.popupInfoImg.map(item => {
+        this.imgIcons.map(item => {
           item.zIndex = false
         })
+        this.$emit('swipeLoop', this.imgIcons)
       }
     }
   },
@@ -153,6 +156,13 @@ export default {
     hrefRobotTestBtn() {
       this.$store.commit('setToppPointmodelShow', false)
       this.$router.replace({ path: '/result' })
+    },
+    onChange(index) {
+      this.imgIcons.map(item => {
+        item.zIndex = false
+      })
+      this.imgIcons[index].zIndex = true
+      this.$emit('swipeLoop', this.imgIcons)
     }
   }
 }

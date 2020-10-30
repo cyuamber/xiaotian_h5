@@ -1,16 +1,96 @@
 <!-- home -->
 <template>
-   <van-popup
-          v-model="formModelShow"
-          :style="{ width: '80%', height: '60%', top:'45%', 'border-radius':'15px', 'background-image': 'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))' }"
-        >
-
+  <van-popup
+    v-model="formModelShow"
+    :closeable='!beforSubmit'
+    close-icon="close"
+    close-icon-position="bottom"
+    @closed="closed()"
+    :class="{'van-popup-background':!beforSubmit}"
+    :style="{
+      width: '85%',
+      height: '60%',
+      top: '45%',
+      'border-radius': '15px',
+      'background-image':'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))'
+    }"
+  >
+    <div class="content" v-if="beforSubmit">
+      <p class="title">标题</p>
+      <van-tabs
+        class="vans-tabs"
+        background="transparent"
+        color="#00F0FF"
+        title-inactive-color="#ffffff"
+        title-active-color="#00F0FF"
+      >
+        <van-tab title="手动录入">
+          <van-form @submit="onSubmit" class="form">
+            <van-field
+              class="van-field-box"
+              v-for="(item, index) in formInputs"
+              :key="index"
+              v-model="item.value"
+              :label='item.lable'
+              :name="item.name"
+              :type="item.type"
+              :center='true'
+              :border='false'
+              label-width='3em'
+              label-class='lable'
+              maxlength='20'
+              :rules="[{ required: true, validator:item.type === 'digit' ? telPhoneValidator: null, message: item.message }]"
+            >
+            <template #button>
+             <div class="dividing-line"></div>
+            </template>
+            </van-field>
+            <div class="submit">
+               <van-button type="info" native-type="submit" class="van-submit-button"></van-button>
+            </div>
+          </van-form>
+        </van-tab>
+        <van-tab title="名片上传" class="card-upload-content">
+          <div class="preview">
+            <img src="@/assets/images/uploadCard.png" alt="预览">
+          </div>
+          <div class="footer-button">
+            <img class="takephoto" src="@/assets/images/takePhoto.png" alt="拍照">
+            <img class="uploadphoto" src="@/assets/images/upload-button.png" alt="上传">
+          </div>
+        </van-tab>
+      </van-tabs>
+      <p class="footer-text">
+        *可通过手动填写或上传名片来录入您的信息
+      </p>
+    </div>
+    <div class="submit-success" v-if="!beforSubmit">
+      <img src="@/assets/images/submit-success.png" alt="提交成功">
+    </div>
+    <Loading v-if="LoadingShow" />
   </van-popup>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { FORMINPUTS } from '../../../const/constant'
+import Loading from '../../../components/Loading'
+import API from '../../../utils/api'
+import { axiosPost } from '../../../utils/http.js'
 export default {
   name: 'ResultForm',
+  components: {
+    Loading
+  },
+  data() {
+    return {
+      // userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId'),
+      formInputs: FORMINPUTS,
+      beforSubmit: true,
+      phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
+    }
+  },
   computed: {
     formModelShow: {
       get() {
@@ -19,14 +99,160 @@ export default {
       set(val) {
         this.$store.commit('setFormModelShow', false)
       }
+    },
+    ...mapState({
+      LoadingShow: (state) => state.app.LoadingShow
+    })
+  },
+  mounted() {},
+  methods: {
+    onSubmit(values) {
+      console.log('-------submit-values', values)
+      const url = API.port8085.saveUserInfo
+      let params = {
+        userId: this.userId
+      }
+      params = Object.assign(params, values)
+      this.$store.commit('setLoadingShow', true)
+      axiosPost(url, params, params)
+        .then((res) => {
+          console.log(res)
+          if (res && res.code === 200) {
+            this.formInputs.map(item => {
+              item.value = null
+            })
+          }
+          this.$nextTick(() => {
+            this.beforSubmit = false
+            this.$store.commit('setLoadingShow', false)
+          })
+        })
+        .catch(() => {
+          this.formInputs.map(item => {
+            item.value = null
+          })
+          this.$store.commit('setLoadingShow', false)
+        })
+    },
+    postSend() {
+
+    },
+    telPhoneValidator(val) {
+      const validatorResult = this.phoneValidator.test(val)
+      if (!validatorResult) {
+        this.formInputs.map(item => {
+          if (item.name === 'phoneNumber') {
+            item.value = null
+            item.message = '请输入正确的手机号'
+          }
+        })
+      }
+      return validatorResult
+    },
+    closed() {
+      this.beforSubmit = true
     }
   },
-  mounted() {
-  },
-  methods: {
+  beforeDestroy() {
   }
 }
 </script>
-<style lang="scss" scoped>
-
+<style lang="less" scoped>
+.van-popup-background{
+  background: transparent!important;
+  top:50%!important;
+  height: 50%!important;
+  /deep/ .van-icon{
+    left: 45%;
+    bottom: 25%;
+  }
+}
+.content {
+  color: #fff;
+  width: 80%;
+  height: 95%;
+  margin: 0 auto;
+  p.title {
+    width: 100%;
+    text-align: center;
+    margin: 15px auto;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .vans-tabs {
+    color: #fff;
+    .form{
+      margin: 10px auto;
+      .van-field-box{
+        width: 100%;
+        color: #fff!important;
+        background: transparent;
+        border-radius: 10px;
+        margin: 15px auto;
+        border:1px solid #cfe3ff;
+        /deep/ .van-field__label, /deep/ .van-field__control{
+          color: #fff!important;
+        }
+        /deep/ .van-field__error-message{
+          position: absolute;
+          top:0;
+          z-index: -1;
+        }
+        .dividing-line{
+          width: 1px;
+          height: 100%;
+          border-right:1px solid #cfe3ff;
+          position: absolute;
+          left: -13%;
+          top: 0;
+        }
+      }
+      .submit{
+        .van-submit-button{
+          background: url('../../../assets/images/formSubmit.png') no-repeat;
+          background-size: cover;
+          width: 108%;
+          border:none;
+          margin-left: -10px;
+        }
+        /deep/ .van-button::before{
+          background: transparent;
+        }
+      }
+    }
+    .card-upload-content{
+      .preview{
+        width: 100%;
+        height: auto;
+        margin: 10px auto;
+        img{
+          width: 100%;
+        }
+      }
+      .footer-button{
+        width: 108%;
+        text-align: center;
+        margin-left: -9px;
+        .takephoto,.uploadphoto{
+          width: 50%;
+        }
+      }
+    }
+  }
+  .footer-text{
+    color: #7FA2E9;
+    width: 100%;
+    margin: 10px auto;
+    font-size: 12px;
+  }
+}
+.submit-success{
+  width: 80%;
+  height: auto;
+  text-align: center;
+  margin: 0 auto;
+  img{
+    width: 100%;
+  }
+}
 </style>

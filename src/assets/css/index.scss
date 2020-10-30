@@ -12,3 +12,11 @@ body .app {
 .app-container {
   padding-bottom: 50px;
 }
+van-field{
+.van-cell__value.van-field__value{
+  .van-field__error-message{
+    position: absolute!important;
+    top:0!important
+  }
+}
+}

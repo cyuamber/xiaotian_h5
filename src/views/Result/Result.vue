@@ -58,7 +58,9 @@
 </template>
 <script>
 import { GETPRESENT } from '../../const/constant'
-const ResultForm = () => import('./components/ResultForm')
+import ResultForm from './components/ResultForm'
+
+// const ResultForm = () => import('./components/ResultForm')
 export default {
   name: 'Result',
   components: {

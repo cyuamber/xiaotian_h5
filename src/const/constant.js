@@ -116,3 +116,27 @@ export const GETPRESENT = [
   '快去中移九天展区领取我为你准备的礼物吧',
   '期待与你下次的相遇AI\'ll be waiting for you'
 ]
+
+export const FORMINPUTS = [
+  {
+    type: 'text',
+    lable: '姓名',
+    name: 'username',
+    message: '请输入姓名',
+    value: null
+  },
+  {
+    type: 'text',
+    lable: '公司',
+    name: 'company',
+    message: '请输入公司',
+    value: null
+  },
+  {
+    type: 'digit',
+    lable: '手机',
+    name: 'phone',
+    message: '请输入手机号',
+    value: null
+  }
+]
