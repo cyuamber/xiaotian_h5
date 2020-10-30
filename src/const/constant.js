@@ -117,7 +117,7 @@ export const FORMINPUTS = [
   {
     type: 'text',
     lable: '姓名',
-    name: 'userName',
+    name: 'username',
     message: '请输入姓名',
     value: null
   },
@@ -131,7 +131,7 @@ export const FORMINPUTS = [
   {
     type: 'digit',
     lable: '手机',
-    name: 'phoneNumber',
+    name: 'phone',
     message: '请输入手机号',
     value: null
   }

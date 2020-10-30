@@ -2,16 +2,20 @@
 <template>
   <van-popup
     v-model="formModelShow"
+    :closeable='!beforSubmit'
+    close-icon="close"
+    close-icon-position="bottom"
+    @closed="closed()"
+    :class="{'van-popup-background':!beforSubmit}"
     :style="{
       width: '85%',
       height: '60%',
       top: '45%',
       'border-radius': '15px',
-      'background-image':
-        'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))'
+      'background-image':'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))'
     }"
   >
-    <div class="content">
+    <div class="content" v-if="beforSubmit">
       <p class="title">标题</p>
       <van-tabs
         class="vans-tabs"
@@ -60,16 +64,30 @@
         *可通过手动填写或上传名片来录入您的信息
       </p>
     </div>
+    <div class="submit-success" v-if="!beforSubmit">
+      <img src="@/assets/images/submit-success.png" alt="提交成功">
+    </div>
+    <Loading v-if="LoadingShow" />
   </van-popup>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { FORMINPUTS } from '../../../const/constant'
+import Loading from '../../../components/Loading'
+import API from '../../../utils/api'
+import { axiosPost } from '../../../utils/http.js'
 export default {
   name: 'ResultForm',
+  components: {
+    Loading
+  },
   data() {
     return {
+      // userName: localStorage.getItem('userName'),
+      userId: localStorage.getItem('userId'),
       formInputs: FORMINPUTS,
+      beforSubmit: true,
       phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
     }
   },
@@ -81,12 +99,43 @@ export default {
       set(val) {
         this.$store.commit('setFormModelShow', false)
       }
-    }
+    },
+    ...mapState({
+      LoadingShow: (state) => state.app.LoadingShow
+    })
   },
   mounted() {},
   methods: {
     onSubmit(values) {
       console.log('-------submit-values', values)
+      const url = API.port8085.saveUserInfo
+      let params = {
+        userId: this.userId
+      }
+      params = Object.assign(params, values)
+      this.$store.commit('setLoadingShow', true)
+      axiosPost(url, params, params)
+        .then((res) => {
+          console.log(res)
+          if (res && res.code === 200) {
+            this.formInputs.map(item => {
+              item.value = null
+            })
+          }
+          this.$nextTick(() => {
+            this.beforSubmit = false
+            this.$store.commit('setLoadingShow', false)
+          })
+        })
+        .catch(() => {
+          this.formInputs.map(item => {
+            item.value = null
+          })
+          this.$store.commit('setLoadingShow', false)
+        })
+    },
+    postSend() {
+
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
@@ -99,11 +148,25 @@ export default {
         })
       }
       return validatorResult
+    },
+    closed() {
+      this.beforSubmit = true
     }
+  },
+  beforeDestroy() {
   }
 }
 </script>
 <style lang="less" scoped>
+.van-popup-background{
+  background: transparent!important;
+  top:50%!important;
+  height: 50%!important;
+  /deep/ .van-icon{
+    left: 45%;
+    bottom: 25%;
+  }
+}
 .content {
   color: #fff;
   width: 80%;
@@ -181,6 +244,15 @@ export default {
     width: 100%;
     margin: 10px auto;
     font-size: 12px;
+  }
+}
+.submit-success{
+  width: 80%;
+  height: auto;
+  text-align: center;
+  margin: 0 auto;
+  img{
+    width: 100%;
   }
 }
 </style>
