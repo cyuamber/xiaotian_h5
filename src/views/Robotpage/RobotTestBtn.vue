@@ -418,6 +418,7 @@ export default {
         })
     },
     countDowns() {
+      this.count = 10
       this.count--
       if (this.count <= 0 && this.longPress === true) {
         clearInterval(this.countDownTimes)
