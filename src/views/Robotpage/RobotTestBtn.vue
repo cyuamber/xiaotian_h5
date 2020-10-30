@@ -59,7 +59,6 @@
       @photoMsg="photoMsg"
       :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
-      @closePop="closePop"
     />
   </div>
 </template>
@@ -308,10 +307,6 @@ export default {
     this.endPoll()
   },
   methods: {
-    closePop() {
-      console.log('guanbi2')
-      console.log(this.imgIcon)
-    },
     startPoll() {
       console.log('start')
       this.timer = setInterval(this.getCount, this.countInterval)

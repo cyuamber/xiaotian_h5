@@ -2,7 +2,6 @@
  <van-popup
           v-model="toppPointmodelShow"
           :style="{ width: '90%', height: '364px', 'border-radius':'15px', 'background':'transparent', 'position': 'absolute', 'left': '50%', 'transform': 'translate(-50%)'}"
-          @close="closePop"
           position="top"
           class="popup"
         >
@@ -154,10 +153,6 @@ export default {
     hrefRobotTestBtn() {
       this.$store.commit('setToppPointmodelShow', false)
       this.$router.replace({ path: '/result' })
-    },
-    closePop() {
-      console.log('guanbi')
-      this.$emit('closePop')
     }
   }
 }
