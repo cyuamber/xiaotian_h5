@@ -45,7 +45,7 @@ export const IMGICON = [
     src: require('../assets/images/icon_C_unchecked.png'),
     popupinfoIconSrc: require('../assets/images/uncheck_c.png'),
     popupinfoTitleEn: 'Customer',
-    popupinfoTitleCH: '移动市场',
+    popupinfoTitleCH: '个人市场',
     infoContent: '中国移动推出“五新”业务，通过AI赋能AR/VR、视频剪辑、智能通话，实现“新看法、新听法、新玩法、新拍法、新用法”，让广大个人用户“畅享”沉浸娱乐新体验'
   },
   {

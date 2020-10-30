@@ -69,7 +69,7 @@ export default {
       talkMsgs: {
         talkMsg: '前端mock数据',
         audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
-      },
+      }
       // audio :document.createElement('audio'),
       // voicetext:null,
       // audio :document.querySelector('.progress_bar_audio')
@@ -354,9 +354,10 @@ export default {
   }
   .talking {
     width: 100%;
+    text-align: center;
     .talking-img {
-      width: 375px;
-      height: 165px;
+      width: 200px;
+      height: 75px;
   }
   }
   .recorder-img{

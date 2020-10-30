@@ -1,13 +1,14 @@
 <template>
  <van-popup
           v-model="toppPointmodelShow"
-          :style="{ width: '80%', height: '50%', 'border-radius':'15px' }"
+          :style="{ width: '90%', height: '362px', 'border-radius':'15px' }"
         >
           <van-swipe
             class="my-swipe"
             indicator-color="#3F57F1"
-            style="height: 100%"
+            style="height: 100%; background: transparent;"
             ref="swipe"
+            :width="swipeWidth"
             :initial-swipe='swipeToNumber'
           >
             <van-swipe-item v-for="(item, index) in popupInfoImg" :key="index">
@@ -44,13 +45,14 @@
   .info{
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(-74deg, #2c47bf 0%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#ffffff, #ffffff);
+    background-image: linear-gradient(-74deg, #2c47bf 1%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#000, #000);
     color: rgb(255, 255, 255, 0.8);
     .title{
       padding-top: 30px;
-      margin: 0 0px 16px 75px;
+      margin: 0 0px 16px 93px;
       img{
-        width: 98px;
+        width: 101px;
+        height: 129px;
         position: absolute;
         top: 0;
         left: 0px;
@@ -60,8 +62,7 @@
         display: inline-block;
         text-align: left;
         font-family: PingFangSC-Semibold;
-        padding: 0 10px;
-        line-height: 0.6rem;
+        line-height: 29px;
         .title-eng {
           font-size: 26px;
         }
@@ -71,22 +72,23 @@
       }
     }
     .info-content{
-      width: 80%;
-      height: auto;
+      width: 261px;
       margin: 10px auto;
       text-align: center;
       font-size: 17px;
       line-height: 24px;
       font-family: PingFangSC-Regular;
-      color: rgb(255, 255, 255, 0.8);
+      font-weight: normal;
+      font-stretch: normal;
+      color: rgba(255, 255, 255, 0.8);
     }
     .check_button{
-      width: 80%;
-      height: auto;
+      width: 241px;
+      height: 44px;
       position: absolute;
-      bottom: 18%;
+      bottom: 52px;
       left: 50%;
-      margin-left: -40%;
+      transform: translate(-50%);
       img{
         width: 100%;
         height: auto;
@@ -105,6 +107,7 @@ export default {
   props: ['msgList', 'swipeToNum', 'allPhotoIscheck'],
   data() {
     return {
+      swipeWidth: 372,
       popupInfoImg: IMGICON,
       msgLists: this.msgList,
       swipeToNumber: this.swipeToNum,
@@ -123,6 +126,11 @@ export default {
         })
       }
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.swipeWidth = Math.floor(window.innerWidth * 0.9) + 1
+    })
   },
   watch: {
     swipeToNum(newVal, oldVal) {

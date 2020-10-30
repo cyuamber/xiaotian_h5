@@ -134,8 +134,7 @@ export default {
     }
     .robotMsg {
       float: left;
-      width: 55%;
-      max-width: 344px;
+      max-width: 213px;
       background: white;
       border-radius: 0 24px 24px 24px;
       padding: 15px 19px 15px 19px;
