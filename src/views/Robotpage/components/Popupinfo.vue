@@ -1,11 +1,12 @@
 <template>
  <van-popup
           v-model="toppPointmodelShow"
-          :style="{ width: '90%', height: '362px', 'border-radius':'15px' }"
+          :style="{ width: '90%', height: '50%', 'border-radius':'15px','margin-top':'-15%', 'background':'transparent'}"
+          closeable
         >
           <van-swipe
             class="my-swipe"
-            indicator-color="#3F57F1"
+            indicator-color="#ffffff"
             style="height: 100%; background: transparent;"
             ref="swipe"
             :width="swipeWidth"
