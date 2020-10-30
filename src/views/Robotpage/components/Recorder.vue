@@ -4,15 +4,6 @@
       <div class="talking">
         <img class="talking-img" src="@/assets/images/talking.gif">
       </div>
-      <div class="canvas" id="canvas">
-        <canvas class="visualizer" width="100" height="0"></canvas>
-        <canvas
-          class="visualizers"
-          width="100"
-          height="0"
-          style="transform: rotateX(180deg);"
-        ></canvas>
-      </div>
       <input type="hidden" id="visual" value="frequencybars" />
       <div class="recorder-img">
         <p>松手即可发送10秒内语音</p>
@@ -40,12 +31,7 @@ export default {
       gainNode: null,
       biquadFilter: null,
       convolver: null,
-      canvas: null,
-      canvaT: null,
-      canvasCtx: null,
-      canvasCtxT: null,
-      visualSelect: null,
-      drawVisual: null,
+      Visual: null,
       savecount: 0,
       time: new Date('2019/1/10').getTime(),
       timeD: null,
@@ -64,8 +50,6 @@ export default {
       file_num: 1,
       end: null,
       reader: null,
-      canvasWidth: 100,
-      canvasHeight: 40,
       talkMsgs: {
         talkMsg: '前端mock数据',
         audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
@@ -159,19 +143,6 @@ export default {
         return
       }
 
-      this.canvas = document.querySelector('.visualizer')
-      this.canvaT = document.querySelector('.visualizers')
-      this.canvasCtx = this.canvas.getContext('2d')
-      this.canvasCtxT = this.canvaT.getContext('2d')
-
-      this.canvas.setAttribute('width', 100)
-      this.canvaT.setAttribute('width', 100)
-
-      this.visualSelect = document.getElementById('visual')
-
-      // var drawVisual
-      // var sendWav
-
       this.savecount = 0
       this.time = new Date('2019/1/10').getTime()
       this.timeD = new Date().getTime() - this.time
@@ -180,7 +151,6 @@ export default {
       this.minute = new Date(this.time).getMinutes()
       this.hour = new Date(this.time).getHours()
       this.file_num_current = 0 // 二次转写数据当前位置
-      // this.int
       this.z = false
       // this.recorder = null
       this.key = 1
@@ -219,24 +189,14 @@ export default {
     },
     startRecorder() {
       localStorage.setItem('start', 1)
-      // this.clearCanvas()
-      this.canvas = document.querySelector('.visualizer')
-      this.canvaT = document.querySelector('.visualizers')
-      this.canvasCtx = this.canvas.getContext('2d')
-      this.canvasCtxT = this.canvaT.getContext('2d')
-      // this.savecount = 0
-      // this.canvas.setAttribute('width', 100)
-      // this.canvaT.setAttribute('width', 100)
-      this.canvas.setAttribute('height', 40)
-      this.canvaT.setAttribute('height', 40)
-      // startRecord(true);
+      this.savecount = 0
       HZRecorder.get(
         (rec, stream) => {
-          console.log(rec, '----rec')
+          console.log(rec, '----HZRecorder--rec')
           this.recorder = rec
           this.recorder.start()
           this.beginRecord(stream)
-          this.visualize()
+          // this.visualize()
         },
         {
           sampleBits: 16,
@@ -244,19 +204,14 @@ export default {
         }
       )
 
-      // document.getElementById('stop').disabled = false
       var full_stop = 0
       var file_keys = 1
       var keys = 1
       var recorder_key = 1
     },
     stopRecorder() {
-      // function stop() {
       this.end = 'end'
-      this.disvisualize()
       this.recorder.stop()
-      this.canvas.setAttribute('height', 0)
-      this.canvaT.setAttribute('height', 0)
       this.start = 0
       var recorderFlage = 0
       localStorage.setItem('start', this.start)
@@ -281,58 +236,6 @@ export default {
       this.biquadFilter.connect(this.convolver)
       this.convolver.connect(this.gainNode)
       this.gainNode.connect(this.audioContext.destination)
-    },
-    // canvas 音波
-    visualize() {
-      this.canvasWidth = 100
-      this.canvasHeight = 40
-      var visualSetting = this.visualSelect.value
-      console.log(visualSetting)
-      if (visualSetting === 'frequencybars') {
-        // this.analyser.fftSize = 256;
-        this.analyser.fftSize = 2048
-        var bufferLengthAlt = this.analyser.frequencyBinCount
-        console.log('bufferLengthAlt ' + bufferLengthAlt)
-        var dataArrayAlt = new Uint8Array(bufferLengthAlt)
-
-        this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-        this.canvasCtxT.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-
-        var drawAlt = () => {
-          this.drawVisual = requestAnimationFrame(drawAlt)
-          this.analyser.getByteFrequencyData(dataArrayAlt)
-          this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-          this.canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)' // 'rgb(57, 201, 238)';
-          this.canvasCtx.fillRect(10, 10, this.canvasWidth, this.canvasHeight)
-          this.canvasCtxT.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-          this.canvasCtxT.fillStyle = 'rgba(0, 0, 0, 0)' // 'rgb(57, 201, 238)';
-          this.canvasCtxT.fillRect(10, 10, this.canvasWidth, this.canvasHeight)
-
-          var barWidth = (this.canvasWidth / bufferLengthAlt) * 10.5
-          var barHeight
-          var x = 0
-
-          for (var i = 0; i < bufferLengthAlt; i++) {
-            barHeight = dataArrayAlt[i]
-            this.canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',255,255)' // 'rgb(255,255,255)';//'rgb(' + (barHeight+100) + ',255,255)';
-            this.canvasCtx.fillRect(x, this.canvasHeight - barHeight / 4, barWidth, barHeight / 4)
-            this.canvasCtxT.fillStyle = 'rgb(' + (barHeight + 100) + ',255,255)' // 'rgb(255,255,255)';//'rgb(' + (barHeight+100) + ',255,255)';
-            this.canvasCtxT.fillRect(x, this.canvasHeight - barHeight / 4, barWidth, barHeight / 4)
-
-            x += barWidth + 3
-          }
-        }
-        drawAlt()
-      }
-    },
-    disvisualize() {
-      this.canvasWidth = 400 // canvas.width;
-      this.canvasHeight = 100 // canvas.height;
-
-      // var visualSetting = this.visualSelect.value
-      this.analyser.fftSize = 2048
-      this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-      this.canvasCtxT.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
     }
 
   }
