@@ -20,13 +20,13 @@
       </div>
       <div class="footer">
         <div class="common-question">
-          <span
+          <a
             v-for="(question, index) in commonQuestion"
             :key="index"
             @click="quickClick()"
-          >
+            >
             {{ question }}
-          </span>
+          </a>
         </div>
         <div class="bodyInput">
           <div class="footer-icon">
@@ -147,7 +147,7 @@
     overflow-x: scroll;
     overflow-y: hidden;
     margin: 13px 0 13px 0;
-    span {
+    a {
       display: inline-block;
       padding: 9px;
       margin: 0 5px 0px 5px;
@@ -156,6 +156,11 @@
       color: #10164e;
       opacity: 0.7;
       font-size: 15px;
+      border: solid 1px #ffffff;
+    }
+    a:active {
+      border: solid 1px #097de9;
+      color: #097de9;
     }
   }
   .common-question::-webkit-scrollbar {
@@ -280,7 +285,8 @@ export default {
       userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
-      allPhotoIscheck: false
+      allPhotoIscheck: false,
+      // questionStyle: ''
     }
   },
   mounted() {
