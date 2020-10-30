@@ -58,6 +58,8 @@
       @photoMsg="photoMsg"
       :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
+      :imgIcon="imgIcon"
+      @swipeLoop='swipeLoop'
     />
   </div>
 </template>
@@ -285,7 +287,7 @@ export default {
       userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
-      allPhotoIscheck: false,
+      allPhotoIscheck: false
       // questionStyle: ''
     }
   },
@@ -316,6 +318,9 @@ export default {
       this.msgList = [...data]
       const photocheck = true
       this.getuploadImgResults(photocheck)
+    },
+    swipeLoop(data) {
+      this.imgIcon = [...data]
     },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
