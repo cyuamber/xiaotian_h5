@@ -20,8 +20,7 @@ import '@/assets/css/commonStyle.css'
 // 移动端适配
 import 'lib-flexible/flexible.js'
 // 300ms延迟插件
-import FastClick from 'fastclick'
-
+import FastClick from '@/utils/fastclick.js'
 // filters
 import './filters'
 
@@ -46,7 +45,7 @@ Vue.use(Uploader)
 Vue.use(audio)
 Vue.config.productionTip = false
 
-// FastClick.attach(document.body)
+FastClick.attach(document.body)
 new Vue({
   el: '#app',
   router,

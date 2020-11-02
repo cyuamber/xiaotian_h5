@@ -302,7 +302,7 @@ export default {
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
       allPhotoIscheck: false,
-      countInterval: 600000,
+      countInterval: 60000,
       timer: null
       // questionStyle: ''
     }
