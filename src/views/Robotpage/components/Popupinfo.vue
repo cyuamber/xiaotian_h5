@@ -46,7 +46,7 @@
 </template>
 <style lang="less" scoped>
   .popup {
-    top: 100px;
+    top: 116px;
   }
   .info{
     width: 100%;

@@ -3,8 +3,15 @@
   <div class="index-container">
     <div class="warpper">
       <img class="index-img" src="@/assets/images/home-background.png"  />
-      <div class="dashboard-button" @click="hrefRobotTestBtn">
-        <img src="@/assets/images/dashboard-button.png" alt="">
+      <div class="index-content">
+        <div class="index-rules">
+          <div class="rule-item" v-for="(item, index) in checkRules" :key=index>
+            {{index+1}}.{{item}}
+          </div>
+        </div>
+        <div class="dashboard-button" @click="hrefRobotTestBtn">
+          <img src="@/assets/images/dashboard-button.png" alt="">
+        </div>
       </div>
     </div>
   </div>
@@ -12,7 +19,13 @@
 
 <script>
 import { get_UserName } from '../../utils/index.js'
+import { CHECKRULES } from '../../const/constant.js'
 export default {
+  data() {
+    return {
+      checkRules: CHECKRULES
+    }
+  },
   mounted() {
     console.log(localStorage.getItem('userName'), localStorage.getItem('userId'))
     if (localStorage.getItem('userName') === null) {
@@ -50,19 +63,30 @@ export default {
         top:0;
         left: 0;
     }
-    .dashboard-button{
-      width: 80%;
-      height: 53px;
-      position: absolute;
-      top: 710px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      img {
-        width: 100%;
-        height: auto;
-        display: inline-block;
-    }
+    .index-content {
+        position: absolute;
+        top: 515px;
+        z-index: 2;
+        .index-rules {
+          font-size: 14px;
+          line-height: 18px;
+          text-align: left;
+          color: rgb(151,207,250);
+          margin: 0 22px 2px 22px;
+          .rule-item {
+            margin-bottom: 14px;
+          }
+      }
+        .dashboard-button{
+          width: 80%;
+          height: 53px;
+          margin: 0 auto;
+          img {
+            width: 100%;
+            height: auto;
+            display: inline-block;
+          }
+      }
     }
   }
 }

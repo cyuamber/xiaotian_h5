@@ -45,6 +45,7 @@ Vue.use(Tabs)
 Vue.use(audio)
 Vue.config.productionTip = false
 
+// FastClick.attach(document.body)
 new Vue({
   el: '#app',
   router,
