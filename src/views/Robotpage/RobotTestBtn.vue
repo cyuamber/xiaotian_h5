@@ -44,6 +44,8 @@
             v-model="inputContent"
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
+            contenteditable="true"
+            style="-webkit-user-select: auto;"
           />
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
@@ -72,7 +74,7 @@
   position: relative;
   .top-img {
     width: 100%;
-    height: 100px;
+    height: 116px;
     position: absolute;
     top: 0;
     left: 0;
@@ -80,23 +82,25 @@
   .top-block {
     position:relative;
     display: inline-block;
-    margin: 10px 15px;
+    margin: 18px 15px 0 15px;
     position: relative;
     align-items: center;
     .number-img {
-      height: 12px;
-      width: 12px;
+      height: 11px;
+      width: 11px;
       display: inline-block;
+      margin-right: 3px;
     }
     .number-text {
       font-size: 12px;
-      color: #DFE7EE;
+      color: rgb(181,196,252);
     }
     .top-point {
-      width: 62px;
-      height: 62px;
+      width: 63px;
+      height: 63px;
       border-radius: 50%;
       line-height: 75px;
+      margin-top: 6px;
     }
   }
   .z-index {
@@ -142,11 +146,12 @@
 }
 .bodyDialog {
   width: 100%;
-  height: calc(100% - 255px);
+  height: calc(100% - 251px);
   padding: 20px 20px 0px 0;
   display: flex;
   flex-flow: column;
   overflow: auto;
+  overflow-x:hidden;
 }
 .footer {
   width: 100%;
@@ -311,22 +316,33 @@ export default {
   },
   methods: {
     startPoll() {
-      console.log('start')
+      this.getCount()
       this.timer = setInterval(this.getCount, this.countInterval)
     },
     endPoll() {
       clearInterval(this.timer)
     },
     getCount() {
-      // const url = API.port8085.getCount
-      // axiosGet(url)
-      //   .then((res) => {
-      //     // 赋值给imgIcon
-      //   })
-      //   .catch((err) => {
-      //     console.log(err)
-      //     // 错误处理
-      //   })
+      const url = API.port8085.getCount
+      axiosGet(url)
+        .then((res) => {
+          if (res.code === 200 && res.data !== undefined) {
+            const info = res.data
+            for (const infoKey in info) {
+              for (const checkItem of this.imgIcon) {
+                if (checkItem.key === infoKey) {
+                  checkItem.number = info[infoKey]
+                }
+              }
+            }
+          } else {
+            console.log(res.msg) // 报错
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          // 错误处理
+        })
     },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
