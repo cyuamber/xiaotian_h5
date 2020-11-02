@@ -9,7 +9,9 @@ export default {
     getuploadImgResult: port8085 + '/dp_xiaotian/inference/getResult', // 打卡结果查询接口
     getCheckIconStatus: port8085 + '/getCheckIconStatus',
     getCount: port8085 + '/dp_xiaotian/inference/getCount',
-    saveUserInfo: port8085 + '/dp_xiaotian/inference/saveUserInfo' // result页 用户信息录入
+    saveUserInfo: port8085 + '/dp_xiaotian/inference/saveUserInfo', // result页 用户信息录入
+    recorderUpload: port8085 + '/dp_xiaotian/inference/upload', // 音频上传
+    recorderDownload: port8085 + '/dp_xiaotian/inference/download' // 音频下载
   },
   port9101: {
     addUrl: port9101 + '/dangwu?op=add'

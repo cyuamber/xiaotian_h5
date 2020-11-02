@@ -1,4 +1,6 @@
-
+import { axiosPost } from '../../../utils/http.js'
+import API from '../../../utils/api'
+import { get_UserName } from '../../../utils/index.js'
 // 兼容
 window.URL = window.URL || window.webkitURL
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
@@ -197,12 +199,12 @@ export function HZRecorder(stream, config) {
       chunk = view
       chunkData = view.slice(starts, stops)
       var blob = new Blob([chunkData], { type: 'audio/wav' })
+      // console.log(buffer, view, '----blob')
       receive_key += 1
       starts += 10880
       stops += 10880
     }
   }
-
   // 开始录音
   this.start = function() {
     chunk = []
@@ -229,36 +231,39 @@ export function HZRecorder(stream, config) {
     recorder.disconnect()
     webSocstate = 1
     // recorderAudioData();
-  }
-  function recorderAudioData() {
-    console.log('chunkData.length::::::', chunkData.length)
-    var date = new FormData()
-    chunkData = chunk.slice(starts, stops)
-    if (chunkData.length < 10880) {
-      console.log('chunkData.lengthchunkData.length：', chunkData.length)
-      end = 'end'
+    // recorderUpload(blob) {
+    // var data = new DataView(audioData.buffer)
+    const recorderFile = new Int8Array(audioData.buffer)
+    var blob = new Blob([audioData.buffer], { type: 'audio/wav' })
+    console.log(blob, '----buffer')
+    const url = API.port8085.recorderUpload
+    const headers = {
+      'Content-Type': 'multipart/formdata;charset=utf-8',
+      'X-CSRF-Token': window.localStorage.getItem('token')
     }
-    // console.log('splicechunkData.length::::', chunkData.length);
-    receive_key += 1
-    var blob = new Blob([chunkData], { type: 'audio/wav' })
-    date.append('userfile', chunkData)
-    date.append('blob', blob)
-    date.append('end', end)
-    date.append('id', ID)
-    date.append('receive_key', receive_key)
-    var req = new XMLHttpRequest()
-    var async = true
-    req.open('POST', '../test/receive', async)
-    res = req.send(date)
-    // console.log('chunk::::::', chunk);
-    // console.log('chunk.length::::::', chunk.length);
-    // console.log('start::::::', starts);
-    // console.log('stops::::::', stops);
-    if (stops < chunk.length) {
-      starts += 10880
-      stops += 10880
-      setTimeout(recorderAudioData, 10)
+    const params = {
+      userId: localStorage.getItem('userId')
     }
+    const blobName = get_UserName(32)
+    const formData = new FormData()
+    formData.append('audio', blob, blobName)
+    console.log(formData.get('audio'), '------formData----audio')
+    localStorage.setItem('recorderUpload', 'begain')
+    axiosPost(url, params, formData, headers)
+      .then((res) => {
+        console.log(res, 'res----recorderUpload')
+        if (res.code === 200) {
+          localStorage.setItem('recorderUploadName', formData.get('audio').name)
+          localStorage.setItem('recorderUpload', 'success')
+        } else {
+          localStorage.setItem('recorderUpload', 'faild')
+        }
+      })
+      .catch((err) => {
+        localStorage.setItem('recorderUpload', 'faild')
+        console.log(err, '---err--recorderUpload')
+      })
+    // }
   }
   // 获取音频文件
   this.getBlob = function() {

@@ -221,16 +221,18 @@ export default {
       localStorage.setItem('start', this.start)
       localStorage.setItem('recorderFlage', recorderFlage)
       this.setTalkIsloading()
+      this.timer = setInterval(() => {
+        this.setTalkIsloading()
+      }, 500)
     },
     setTalkIsloading() {
-      // clearInterval(this.timer)
       if (localStorage.getItem('setTalkIsloading') === 'false') {
+        if (this.timer !== null) {
+          clearInterval(this.timer)
+          this.timer = null
+        }
         this.talkMsgs.talkMsg = localStorage.getItem('setTalkText')
         this.$emit('sendTalkMsg', this.talkMsgs)
-      } else {
-        setTimeout(() => {
-          this.setTalkIsloading()
-        }, 500)
       }
     },
     beginRecord(mediaStream) {
