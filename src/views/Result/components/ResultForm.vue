@@ -52,11 +52,18 @@
         </van-tab>
         <van-tab title="名片上传" class="card-upload-content">
           <div class="preview">
-            <img src="@/assets/images/uploadCard.png" alt="预览">
+            <img :src="msgSrc" alt="预览" :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
           </div>
           <div class="footer-button">
-            <img class="takephoto" src="@/assets/images/takePhoto.png" alt="拍照">
-            <img class="uploadphoto" src="@/assets/images/upload-button.png" alt="上传">
+            <div class="takephoto">
+              <img  src="@/assets/images/takePhoto.png" alt="拍照">
+              <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
+            </div>
+            <div class="uploadphoto">
+              <van-uploader :after-read="afterRead" :max-count="1">
+                <img  src="@/assets/images/upload-button.png" alt="上传">
+              </van-uploader>
+            </div>
           </div>
         </van-tab>
       </van-tabs>
@@ -77,17 +84,19 @@ import { FORMINPUTS } from '../../../const/constant'
 import Loading from '../../../components/Loading'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
+const Photograph = () => import('../../Robotpage/components/Photograph')
 export default {
   name: 'ResultForm',
   components: {
-    Loading
+    Loading,
+    Photograph
   },
   data() {
     return {
       // userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       formInputs: FORMINPUTS,
-      beforSubmit: true,
+      msgSrc: require('../../../assets/images/uploadCard.png'),
       phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
     }
   },
@@ -101,13 +110,13 @@ export default {
       }
     },
     ...mapState({
-      LoadingShow: (state) => state.app.LoadingShow
+      LoadingShow: (state) => state.app.LoadingShow,
+      beforSubmit: (state) => state.app.beforSubmit
     })
   },
   mounted() {},
   methods: {
     onSubmit(values) {
-      console.log('-------submit-values', values)
       const url = API.port8085.saveUserInfo
       let params = {
         userId: this.userId
@@ -123,7 +132,7 @@ export default {
             })
           }
           this.$nextTick(() => {
-            this.beforSubmit = false
+            this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })
         })
@@ -150,7 +159,48 @@ export default {
       return validatorResult
     },
     closed() {
-      this.beforSubmit = true
+      this.$store.commit('setBeforSubmit', true)
+    },
+    photoMsg(baseSrc) {
+      console.log(baseSrc)
+      this.msgSrc = baseSrc.msgPreviewSrc
+      this.afterRead(baseSrc)
+      this.$store.commit('setLoadingShow', false)
+    },
+    afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      let imgFile = null
+      if (file.takePhoto && file.takePhoto === true) {
+        imgFile = file.imgFile
+      } else {
+        this.msgSrc = file.content
+        imgFile = file.file
+      }
+      const formData = new FormData()
+      formData.append('image', imgFile)
+      const headers = {
+        'Content-Type': 'multipart/formdata;charset=utf-8',
+        'X-CSRF-Token': window.localStorage.getItem('token')
+      }
+      const params = {
+        userId: this.userId,
+        username: this.userName
+      }
+      const url = API.port8085.saveUserInfo
+      axiosPost(url, params, formData, headers)
+        .then((res) => {
+          if (res && res.code === 200) {
+            this.msgSrc = require('../../../assets/images/uploadCard.png')
+          }
+          this.$nextTick(() => {
+            this.$store.commit('setBeforSubmit', false)
+            this.$store.commit('setLoadingShow', false)
+          })
+        })
+        .catch(() => {
+          this.$store.commit('setBeforSubmit', false)
+          this.$store.commit('setLoadingShow', false)
+        })
     }
   },
   beforeDestroy() {
@@ -164,7 +214,7 @@ export default {
   height: 50%!important;
   /deep/ .van-icon{
     left: 45%;
-    bottom: 25%;
+    bottom: 12%;
   }
 }
 .content {
@@ -225,8 +275,12 @@ export default {
         width: 100%;
         height: auto;
         margin: 10px auto;
+        text-align: center;
         img{
           width: 100%;
+        }
+        .img-preview{
+          width: 35%;
         }
       }
       .footer-button{
@@ -234,7 +288,21 @@ export default {
         text-align: center;
         margin-left: -9px;
         .takephoto,.uploadphoto{
+          position: relative;
           width: 50%;
+          display: inline-block;
+          img{
+            width: 100%;
+          }
+        }
+        .takephoto input[type="file"] {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 90%;
+          height: 70%;
+          z-index: 9;
+          opacity: 0;
         }
       }
     }
