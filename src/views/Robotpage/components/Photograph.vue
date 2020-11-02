@@ -41,7 +41,6 @@ export default {
      */
     async Photograph() {
       const imgFile = this.$refs.photoref.files[0]
-      console.log(imgFile, '----imgFile')
       this.base64ImgData = await this.FileReader(imgFile)
       const formData = new FormData()
       formData.append('image', imgFile)
@@ -59,12 +58,16 @@ export default {
       this.$store.commit('setLoadingShow', true)
       if (this.msgList !== undefined) {
         url = API.port8085.uploadImgUrl
-        this.checkPhoto(userMsg, robotMsg, url, params, formData, headers)
+        this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
       } else {
         url = API.port8085.saveUserInfo
         this.msgSrcs = this.base64ImgData
-        this.$emit('photoMsg', this.msgSrcs)
-        this.reaultUploadPhoto(url, params, formData, headers)
+        this.uploadUserInfo = {
+          msgPreviewSrc: this.base64ImgData,
+          imgFile: imgFile,
+          takePhoto: true
+        }
+        this.$emit('photoMsg', this.uploadUserInfo)
       }
     },
     /**
@@ -77,7 +80,7 @@ export default {
       /* eslint-disable */
       return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
     },
-     checkPhoto(userMsg, robotMsg, url, params, formData, headers) {
+     checkPhoto(url, params, formData, headers, userMsg, robotMsg ) {
       userMsg = {
         type: 'user',
         imgUrl: this.base64ImgData,
@@ -120,9 +123,6 @@ export default {
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
         })
-    },
-    reaultUploadPhoto(url, params, formData, headers) {
-
     }
   },
   components: { }

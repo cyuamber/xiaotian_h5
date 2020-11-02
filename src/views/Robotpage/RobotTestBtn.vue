@@ -298,7 +298,7 @@ export default {
       swipeToNum: 0,
       allPhotoIscheck: false,
       countInterval: 60000,
-      timer: null,
+      timer: null
       // questionStyle: ''
     }
   },
@@ -337,7 +337,8 @@ export default {
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
-            this.getCheckIconStatus = res.data
+            this.getCheckIconStatus = [{ 'title': 'C', 'isCheck': true }, { 'title': 'H', 'isCheck': true }, { 'title': 'B', 'isCheck': true }, { 'title': 'N', 'isCheck': true }] || res.data
+
             this.filterCheckIconStatus(this.getCheckIconStatus)
           }
         })
