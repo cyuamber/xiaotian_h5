@@ -50,8 +50,9 @@ export default {
       file_num: 1,
       end: null,
       reader: null,
+      timer: null,
       talkMsgs: {
-        talkMsg: '前端mock数据',
+        talkMsg: '',
         audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
       }
       // audio :document.createElement('audio'),
@@ -188,6 +189,9 @@ export default {
       // var audio = document.querySelector('.progress_bar_audio')
     },
     startRecorder() {
+      localStorage.setItem('setTalkText', '')
+      localStorage.setItem('setTalkIsloading', true)
+      // localStorage.setItem('recorderFlage', 1)
       localStorage.setItem('start', 1)
       this.savecount = 0
       HZRecorder.get(
@@ -216,8 +220,18 @@ export default {
       var recorderFlage = 0
       localStorage.setItem('start', this.start)
       localStorage.setItem('recorderFlage', recorderFlage)
-      // this.$store.commit('setTalkText', '')
-      this.$emit('sendTalkMsg', this.talkMsgs)
+      this.setTalkIsloading()
+    },
+    setTalkIsloading() {
+      // clearInterval(this.timer)
+      if (localStorage.getItem('setTalkIsloading') === 'false') {
+        this.talkMsgs.talkMsg = localStorage.getItem('setTalkText')
+        this.$emit('sendTalkMsg', this.talkMsgs)
+      } else {
+        setTimeout(() => {
+          this.setTalkIsloading()
+        }, 500)
+      }
     },
     beginRecord(mediaStream) {
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)()

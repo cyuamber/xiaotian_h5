@@ -48,13 +48,17 @@ function webS() {
     var z = 1
     var divFlage = 1
     // 一次数据
-    var date = ''
+    var date = null
+    var setTalkText = ''
     websocket.onmessage = function(event) {
       // var ds = document.querySelector('.num_'+dataFlage);
-      date = date + JSON.parse(event.data)
+      date = JSON.parse(event.data)
+      setTalkText = setTalkText + date.audio_text
       console.log(date, 'websocket---date-----')
       if (date.end === 1) {
-        this.$store.commit('setTalkText', date)
+        console.log('websocket.end-------')
+        localStorage.setItem('setTalkText', setTalkText)
+        localStorage.setItem('setTalkIsloading', false)
         websocket.close()
       }
     }
@@ -62,9 +66,7 @@ function webS() {
     setTimeout(webS, 100)
   }
 }
-webS()
 var recorder = function() {
-  // console.log(111111);
   var _this = this
   var flage = Number(localStorage.getItem('recorderFlage'))
   if (chunkSliceStop < chunk.length) {
@@ -210,6 +212,7 @@ export function HZRecorder(stream, config) {
     audioInput.connect(recorder)
     recorder.connect(context.destination)
     startWebsocket = 1
+    webS()
   }
 
   // 暂停

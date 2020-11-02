@@ -482,6 +482,9 @@ export default {
         this.longPress = false
         clearInterval(this.countDownTimes)
         this.$store.commit('setMaskShow', false)
+        if (localStorage.getItem('setTalkIsloading') === 'fasle') {
+          this.$store.commit('setLoadingShow', true)
+        }
       }
       return false
     },
@@ -507,11 +510,10 @@ export default {
         voiceUrl: talkMsgs.audioUrl,
         updateold: false
       }
-      this.msgList.push(userMsg)
+      // this.msgList.push(userMsg)
       this.getAnswer(userMsg)
     },
     getInformation(item, index) {
-      console.log(item.title, '---item')
       this.quickClick(item.title) // 点击图标时自动发送对应文字
       this.imgIcon.map((item) => {
         item.zIndex = false
@@ -519,7 +521,6 @@ export default {
       this.imgIcon[index].zIndex = true
       this.swipeToNum = index
       this.$store.commit('setToppPointmodelShow', true)
-      console.log(this.imgIcon)
     },
 
     pressEnter(e) {
