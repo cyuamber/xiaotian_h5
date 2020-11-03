@@ -253,6 +253,7 @@
 import { mapState } from 'vuex'
 import { axiosGet } from '../../utils/http.js'
 import API from '../../utils/api'
+import { get_UserName } from '../../utils/index.js'
 import {
   POINTINFO,
   COMMONQUESTION,
@@ -309,6 +310,10 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.getItem('userName') === null) {
+      localStorage.setItem('userName', get_UserName(32))
+      localStorage.setItem('userId', get_UserName(32))
+    }
     this.getuploadImgResults()
   },
   beforeDestroy() {
