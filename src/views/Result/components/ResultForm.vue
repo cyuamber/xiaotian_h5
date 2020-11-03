@@ -156,57 +156,65 @@ export default {
       const validatorResult = this.phoneValidator.test(val)
       if (!validatorResult) {
         this.formInputs.map(item => {
-          if (item.name === 'phoneNumber') {
-            item.value = null
+          if (item.name === 'phone') {
             item.message = '请输入正确的手机号'
+            item.value = null
           }
         })
+        return false
       }
-      return validatorResult
     },
     closed() {
       this.$store.commit('setBeforSubmit', true)
     },
-    photoMsg(baseSrc) {
-      console.log(baseSrc)
-      this.msgSrc = baseSrc.msgPreviewSrc
-      this.afterRead(baseSrc)
-      this.$store.commit('setLoadingShow', false)
+    photoMsg(uploadUserInfo) {
+      console.log(uploadUserInfo)
+      this.uploadUserInfo = uploadUserInfo
+      this.msgSrc = uploadUserInfo.msgPreviewSrc
+      // this.afterRead(uploadUserInfo)
     },
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
-      let imgFile = null
-      if (file.takePhoto && file.takePhoto === true) {
-        imgFile = file.imgFile
-      } else {
-        this.msgSrc = file.content
-        imgFile = file.file
-      }
-      const formData = new FormData()
-      formData.append('image', imgFile)
-      const headers = {
-        'Content-Type': 'multipart/formdata;charset=utf-8',
-        'X-CSRF-Token': window.localStorage.getItem('token')
-      }
-      const params = {
-        userId: this.userId,
-        username: this.userName
-      }
-      const url = API.port8085.saveUserInfo
-      axiosPost(url, params, formData, headers)
-        .then((res) => {
-          if (res && res.code === 200) {
-            this.msgSrc = require('../../../assets/images/uploadCard.png')
-          }
-          this.$nextTick(() => {
+      if (this.uploadUserInfo !== null) {
+        const imgFile = file.imgFile
+        const formData = new FormData()
+        formData.append('image', imgFile)
+        const headers = {
+          'Content-Type': 'multipart/formdata;charset=utf-8',
+          'X-CSRF-Token': window.localStorage.getItem('token')
+        }
+        const params = {
+          userId: this.userId,
+          username: this.userName
+        } 
+        const url = API.port8085.saveUserInfo
+        this.$store.commit('setLoadingShow', true)
+        axiosPost(url, params, formData, headers)
+          .then((res) => {
+            if (res && res.code === 200) {
+              this.clearUploadData()
+            }
+            this.$nextTick(() => {
+              this.$store.commit('setBeforSubmit', false)
+              this.$store.commit('setLoadingShow', false)
+            })
+          })
+          .catch(() => {
             this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })
-        })
-        .catch(() => {
-          this.$store.commit('setBeforSubmit', false)
-          this.$store.commit('setLoadingShow', false)
-        })
+      } else {
+        console.log('请先拍照，再上传照片')
+      }
+    },
+    showImage(img) {
+      ImagePreview([img])
+    },
+    clearUploadData() {
+      this.formInputs.map(item => {
+        item.value = null
+      })
+      this.msgSrc = require('../../../assets/images/uploadCard.png')
     }
   },
   beforeDestroy() {
