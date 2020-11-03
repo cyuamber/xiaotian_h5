@@ -63,6 +63,7 @@
       :allPhotoIscheck="allPhotoIscheck"
       :imgIcon="imgIcon"
       @swipeLoop='swipeLoop'
+      @popupinfophotoMsg='popupinfophotoMsg'
     />
   </div>
 </template>
@@ -377,9 +378,9 @@ export default {
     swipeLoop(data) {
       this.imgIcon = [...data]
     },
-    // photoMsgClose() {
-
-    // },
+    popupinfophotoMsg() {
+      this.getuploadImgResults()
+    },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {

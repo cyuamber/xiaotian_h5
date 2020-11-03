@@ -253,7 +253,7 @@ export function HZRecorder(stream, config) {
     formData.append('audio', this.getBlob(), blobName)
     console.log(formData.get('audio'), '------formData----audio')
     localStorage.setItem('recorderUpload', 'begain')
-    if (localStorage.getItem('websocketStatus') !== 'error') {
+    // if (localStorage.getItem('websocketStatus') !== 'error') {
       axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res----recorderUpload')
@@ -268,7 +268,7 @@ export function HZRecorder(stream, config) {
           localStorage.setItem('recorderUpload', 'faild')
           console.log(err, '---err--recorderUpload')
         })
-    }
+    // }
     // }
   }
   // 获取音频文件
