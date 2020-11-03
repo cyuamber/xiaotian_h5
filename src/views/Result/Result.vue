@@ -6,13 +6,17 @@
     </div>
     <div class="result-greet">
       <div class="greet-text">
-        <div>{{ receivedData[0] }}</div>
+        <div v-for="(item, index) in greetText" :key=index>{{item}}</div>
       </div>
     </div>
     <div class="result-visit">
       <div class="visit-title">你对这里充满了好奇</div>
-      <div>
-        {{ receivedData[1] }}
+      <div class="visit-text">
+        <div class="visit-item" v-for="(item, index) in visitText" :key=index>
+          <div class="visit-line" v-for="(line, index) in item" :key=index>
+            {{line}}
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div class="result-complete">
@@ -71,6 +75,8 @@ export default {
   data() {
     return {
       receivedData: [],
+      greetText: [],
+      visitText: [],
       name: "xx",
       month: "x",
       day: "x",
@@ -117,6 +123,16 @@ export default {
     this.getName();
   },
   methods: {
+    handleGreetText() {
+      this.greetText= this.receivedData[0].split('\n')
+    },
+    handleVisitText() {      
+      let text = this.receivedData[1].split('\n')
+      for(let i = 0, len = text.length; i < len; i += 2){
+　　　　this.visitText.push(text.slice(i, i+2));
+　　   }
+      console.log('af', this.visitText)
+    },
     getBasicInfo() {
       // 从后段获取month...
       const url = API.port8085.getGift;
@@ -124,8 +140,9 @@ export default {
       axiosGet(url, { userId: userId })
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
-            this.receivedData = res.data;
-            console.log(this.receivedData);
+            this.receivedData = res.data
+            this.handleGreetText()
+            this.handleVisitText()
           } else {
             console.log(res.msg); // 报错
           }
