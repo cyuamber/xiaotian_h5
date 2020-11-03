@@ -208,10 +208,10 @@ export default {
         }
       )
 
-      var full_stop = 0
-      var file_keys = 1
-      var keys = 1
-      var recorder_key = 1
+      // var full_stop = 0
+      // var file_keys = 1
+      // var keys = 1
+      // var recorder_key = 1
     },
     stopRecorder() {
       this.end = 'end'
@@ -272,6 +272,8 @@ export default {
   .talking {
     width: 100%;
     text-align: center;
+    position: absolute;
+    top: 266px;
     .talking-img {
       width: 200px;
       height: 75px;

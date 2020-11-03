@@ -11,12 +11,12 @@
 
 <script>
 export default {
-  name: "AppLayout",
+  name: 'AppLayout',
   data() {
-    return {};
+    return {}
   },
-  methods: {},
-};
+  methods: {}
+}
 </script>
 <style>
 *{
@@ -36,6 +36,5 @@ export default {
   overflow: auto;
   /* background: url('../../assets/images/dashboard.jpg') no-repeat center;
   background-size: cover; */
-  
 }
 </style>

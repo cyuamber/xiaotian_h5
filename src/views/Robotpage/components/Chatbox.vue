@@ -68,7 +68,7 @@ import Photograph from './Photograph'
 export default {
   name: 'Chatbox',
   components: {
-    Photograph,
+    Photograph
   },
   props: {
     // eslint-disable-next-line vue/require-prop-type-constructor
