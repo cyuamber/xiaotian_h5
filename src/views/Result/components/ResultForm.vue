@@ -171,9 +171,9 @@ export default {
       this.uploadUserInfo = uploadUserInfo
       this.msgSrc = uploadUserInfo.msgPreviewSrc
     },
-    afterRead(file) {
+    afterRead() {
       if (this.uploadUserInfo !== null) {
-        const imgFile = file.imgFile
+        const imgFile = this.uploadUserInfo.imgFile
         const formData = new FormData()
         formData.append('image', imgFile)
         const headers = {
@@ -189,15 +189,15 @@ export default {
         axiosPost(url, params, formData, headers)
           .then((res) => {
             if (res && res.code === 200) {
-              this.clearUploadData()
+              this.$store.commit('setBeforSubmit', false)
             }
             this.$nextTick(() => {
-              this.$store.commit('setBeforSubmit', false)
+              this.clearUploadData()
               this.$store.commit('setLoadingShow', false)
             })
           })
           .catch(() => {
-            this.$store.commit('setBeforSubmit', false)
+            // this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })
       } else {

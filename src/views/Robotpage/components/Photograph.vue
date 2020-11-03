@@ -55,8 +55,8 @@ export default {
       }
       const userMsg = {}
       const robotMsg = {}
-      this.$store.commit('setLoadingShow', true)
       if (this.msgList !== undefined) {
+        this.$store.commit('setLoadingShow', true)
         url = API.port8085.uploadImgUrl
         this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
       } else {
