@@ -251,7 +251,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { axiosGet, axiosPost } from '../../utils/http.js'
+import { axiosGet } from '../../utils/http.js'
 import API from '../../utils/api'
 import {
   POINTINFO,

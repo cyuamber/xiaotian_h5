@@ -190,6 +190,7 @@ export default {
     },
     startRecorder() {
       localStorage.setItem('setTalkText', '')
+      localStorage.setItem('websocketStatus', '')
       localStorage.setItem('setTalkIsloading', true)
       // localStorage.setItem('recorderFlage', 1)
       localStorage.setItem('start', 1)
@@ -204,14 +205,14 @@ export default {
         },
         {
           sampleBits: 16,
-          sampleRate: 16000
+          sampleRate: 8000
         }
       )
 
-      var full_stop = 0
-      var file_keys = 1
-      var keys = 1
-      var recorder_key = 1
+      // var full_stop = 0
+      // var file_keys = 1
+      // var keys = 1
+      // var recorder_key = 1
     },
     stopRecorder() {
       this.end = 'end'
