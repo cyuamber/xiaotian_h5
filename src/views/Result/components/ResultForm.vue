@@ -175,7 +175,7 @@ export default {
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
       if (this.uploadUserInfo !== null) {
-        const imgFile = file.imgFile
+        const imgFile = this.uploadUserInfo.imgFile
         const formData = new FormData()
         formData.append('image', imgFile)
         const headers = {
@@ -215,6 +215,7 @@ export default {
       this.formInputs.map(item => {
         item.value = null
       })
+      this.uploadUserInfo = null
       this.msgSrc = require('../../../assets/images/uploadCard.png')
     }
   },

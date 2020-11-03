@@ -372,6 +372,9 @@ export default {
     swipeLoop(data) {
       this.imgIcon = [...data]
     },
+    // photoMsgClose() {
+
+    // },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {
