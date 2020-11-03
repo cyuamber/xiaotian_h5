@@ -185,7 +185,7 @@ export default {
         const params = {
           userId: this.userId,
           username: this.userName
-        }
+        } 
         const url = API.port8085.saveUserInfo
         this.$store.commit('setLoadingShow', true)
         axiosPost(url, params, formData, headers)
