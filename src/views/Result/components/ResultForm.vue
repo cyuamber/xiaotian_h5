@@ -171,7 +171,6 @@ export default {
       console.log(uploadUserInfo)
       this.uploadUserInfo = uploadUserInfo
       this.msgSrc = uploadUserInfo.msgPreviewSrc
-      // this.afterRead(uploadUserInfo)
     },
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
@@ -208,7 +207,9 @@ export default {
       }
     },
     showImage(img) {
-      ImagePreview([img])
+      if (this.uploadUserInfo !== null) {
+        ImagePreview([img])
+      }
     },
     clearUploadData() {
       this.formInputs.map(item => {
