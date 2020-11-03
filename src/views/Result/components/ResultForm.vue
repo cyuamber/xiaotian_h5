@@ -168,10 +168,8 @@ export default {
       this.$store.commit('setBeforSubmit', true)
     },
     photoMsg(uploadUserInfo) {
-      console.log(uploadUserInfo)
       this.uploadUserInfo = uploadUserInfo
       this.msgSrc = uploadUserInfo.msgPreviewSrc
-      // this.afterRead(uploadUserInfo)
     },
     afterRead(file) {
       if (this.uploadUserInfo !== null) {
@@ -207,12 +205,15 @@ export default {
       }
     },
     showImage(img) {
-      ImagePreview([img])
+      if(uploadUserInfo !== null){
+        ImagePreview([img])
+      }      
     },
     clearUploadData() {
       this.formInputs.map(item => {
         item.value = null
       })
+      this.uploadUserInfo = null
       this.msgSrc = require('../../../assets/images/uploadCard.png')
     }
   },
