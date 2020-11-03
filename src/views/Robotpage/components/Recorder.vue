@@ -275,6 +275,8 @@ export default {
   .talking {
     width: 100%;
     text-align: center;
+    position: absolute;
+    top: 266px;
     .talking-img {
       width: 200px;
       height: 75px;
