@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-unused-vars */
 import { axiosPost } from '../../../utils/http.js'
 import API from '../../../utils/api'
 import { get_UserName } from '../../../utils/index.js'
@@ -7,10 +9,23 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 var chunk = []; var chunkData = []; var chunkSlice = []
 var chunkSliceStart = 0; var chunkSliceStop = 3200
 var view
+// eslint-disable-next-line no-unused-vars
+var end
+var v2
 var websocket = null
+var ws = null
 var startWebsocket = 0
+var webSocstate = 0
 var n = 1
 var state = 0
+var dataFlage = 1
+var wsEnd = 0
+var saveSecondkey = 0
+var frameList = []
+var ark_key = 0
+var forbid_key = 1
+var forbid
+var saveContent = ''
 function webS() {
   if (startWebsocket === 1) {
     if ('WebSocket' in window) {
@@ -37,8 +52,8 @@ function webS() {
     websocket.onclose = function(e) {
       console.log('websocket连接已关闭:::', e)
     }
-    // var z = 1
-    // var divFlage = 1
+    var z = 1
+    var divFlage = 1
     // 一次数据
     var date = null
     var setTalkText = ''
@@ -59,6 +74,7 @@ function webS() {
   }
 }
 var recorder = function() {
+  var _this = this
   var flage = Number(localStorage.getItem('recorderFlage'))
   if (chunkSliceStop < chunk.length) {
     chunkSlice = chunk.slice(chunkSliceStart, chunkSliceStop)
@@ -85,8 +101,8 @@ var recorder = function() {
     setTimeout(recorder, 1000)
   } else {
     n += 1
-    messageObj = { 'uid': 'audioId', 'state': 3, 'chunk': n, 'audio': '' }
-    messageJson = JSON.stringify(messageObj)
+    var messageObj = { 'uid': 'audioId', 'state': 3, 'chunk': n, 'audio': '' }
+    var messageJson = JSON.stringify(messageObj)
     setTimeout(() => {
       websocket.send(messageJson)
     }, 50)
@@ -95,7 +111,7 @@ var recorder = function() {
   }
 }
 // 播放转写对应音频
-// var wav_key
+var wav_key
 // function clickContent() {
 //   $('#text div').on('click', function() {
 //     wav_key = Number(this.dataset.key)
@@ -113,8 +129,8 @@ var recorder = function() {
 //   })
 // }
 export function HZRecorder(stream, config) {
+  var _this = this
   var starts = 0; var stops = 10880
-  // eslint-disable-next-line no-unused-vars
   var receive_key = 0
   config = config || {}
   config.sampleBits = config.sampleBits || 8 // 采样数位 8, 16
@@ -157,17 +173,14 @@ export function HZRecorder(stream, config) {
       return result
     },
     encodeWAV: function() {
-      // eslint-disable-next-line no-unused-vars
       var sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate)
       var sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits)
       var bytes = this.compress()
       var dataLength = bytes.length * (sampleBits / 8)
       var buffer = new ArrayBuffer(dataLength)
       var data = new DataView(buffer)
-      // eslint-disable-next-line no-unused-vars
       var channelCount = 1// 单声道
       var offset = 0
-      // eslint-disable-next-line no-unused-vars
       var writeString = function(str) {
         for (var i = 0; i < str.length; i++) {
           data.setUint8(offset + i, str.charCodeAt(i))
@@ -182,15 +195,14 @@ export function HZRecorder(stream, config) {
           data.setInt8(offset, val, true)
         }
       } else {
-        for (var a = 0; a < bytes.length; a++, offset += 2) {
-          var g = Math.max(-1, Math.min(1, bytes[a]))
-          data.setInt16(offset, g < 0 ? g * 0x8000 : g * 0x7FFF, true)
+        for (var i = 0; i < bytes.length; i++, offset += 2) {
+          var s = Math.max(-1, Math.min(1, bytes[i]))
+          data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true)
         }
       }
       view = new Int8Array(data.buffer)
       chunk = view
       chunkData = view.slice(starts, stops)
-      // eslint-disable-next-line no-unused-vars
       var blob = new Blob([chunkData], { type: 'audio/wav' })
       // console.log(buffer, view, '----blob')
       receive_key += 1
@@ -222,12 +234,10 @@ export function HZRecorder(stream, config) {
   // 停止
   this.stop = function() {
     recorder.disconnect()
-    // eslint-disable-next-line no-undef
     webSocstate = 1
     // recorderAudioData();
     // recorderUpload(blob) {
     // var data = new DataView(audioData.buffer)
-    // eslint-disable-next-line no-unused-vars
     const recorderFile = new Int8Array(audioData.buffer)
     var blob = new Blob([audioData.buffer], { type: 'audio/wav' })
     console.log(blob, '----buffer')
@@ -244,21 +254,22 @@ export function HZRecorder(stream, config) {
     formData.append('audio', blob, blobName)
     console.log(formData.get('audio'), '------formData----audio')
     localStorage.setItem('recorderUpload', 'begain')
-    // if (localStorage.getItem('websocketStatus') !== 'error') {
-    axiosPost(url, params, formData, headers)
-      .then((res) => {
-        console.log(res, 'res----recorderUpload')
-        if (res.code === 200) {
-          localStorage.setItem('recorderUploadName', formData.get('audio').name)
-          localStorage.setItem('recorderUpload', 'success')
-        } else {
+    if (localStorage.getItem('websocketStatus') !== 'error') {
+      axiosPost(url, params, formData, headers)
+        .then((res) => {
+          console.log(res, 'res----recorderUpload')
+          if (res.code === 200) {
+            localStorage.setItem('recorderUploadName', formData.get('audio').name)
+            localStorage.setItem('recorderUpload', 'success')
+          } else {
+            localStorage.setItem('recorderUpload', 'faild')
+          }
+        })
+        .catch((err) => {
           localStorage.setItem('recorderUpload', 'faild')
-        }
-      })
-      .catch((err) => {
-        localStorage.setItem('recorderUpload', 'faild')
-        console.log(err, '---err--recorderUpload')
-      })
+          console.log(err, '---err--recorderUpload')
+        })
+    }
     // }
   }
   // 获取音频文件
