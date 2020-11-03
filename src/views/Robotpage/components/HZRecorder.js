@@ -203,11 +203,12 @@ export function HZRecorder(stream, config) {
       view = new Int8Array(data.buffer)
       chunk = view
       chunkData = view.slice(starts, stops)
-      var blob = new Blob([chunkData], { type: 'audio/wav' })
+      // var blob = new Blob([chunkData], { type: 'audio/wav' })
       // console.log(buffer, view, '----blob')
       receive_key += 1
       starts += 10880
       stops += 10880
+      return new Blob([data], { type: 'audio/wav' })
     }
   }
   // 开始录音
@@ -233,14 +234,12 @@ export function HZRecorder(stream, config) {
 
   // 停止
   this.stop = function() {
+    console.log(this.getBlob(), '----------stop')
     recorder.disconnect()
     webSocstate = 1
-    // recorderAudioData();
-    // recorderUpload(blob) {
-    // var data = new DataView(audioData.buffer)
-    const recorderFile = new Int8Array(audioData.buffer)
-    var blob = new Blob([audioData.buffer], { type: 'audio/wav' })
-    console.log(blob, '----buffer')
+    // const recorderFile = new Int8Array(audioData.buffer)
+    // var blob = new Blob([recorderFile], { type: 'audio/wav' })
+    // console.log(blob, '----buffer')
     const url = API.port8085.recorderUpload
     const headers = {
       'Content-Type': 'multipart/formdata;charset=utf-8',
@@ -251,7 +250,7 @@ export function HZRecorder(stream, config) {
     }
     const blobName = get_UserName(32)
     const formData = new FormData()
-    formData.append('audio', blob, blobName)
+    formData.append('audio', this.getBlob(), blobName)
     console.log(formData.get('audio'), '------formData----audio')
     localStorage.setItem('recorderUpload', 'begain')
     if (localStorage.getItem('websocketStatus') !== 'error') {

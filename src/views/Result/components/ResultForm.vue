@@ -23,6 +23,7 @@
         color="#00F0FF"
         title-inactive-color="#ffffff"
         title-active-color="#00F0FF"
+        @change="tabsOnChange"
       >
         <van-tab title="手动录入">
           <van-form @submit="onSubmit" class="form">
@@ -39,7 +40,7 @@
               label-width='3em'
               label-class='lable'
               maxlength='20'
-              :rules="[{ required: true, validator:item.type === 'digit' ? telPhoneValidator: null, message: item.message }]"
+              :rules="[{ required: true, validator:item.type === 'digit' && item.value!==null ? telPhoneValidator: null, message: item.message }]"
             >
             <template #button>
              <div class="dividing-line"></div>
@@ -52,7 +53,11 @@
         </van-tab>
         <van-tab title="名片上传" class="card-upload-content">
           <div class="preview">
-            <img :src="msgSrc" alt="预览" :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
+            <img
+            :src="msgSrc"
+            alt="预览"
+            @click="showImage(msgSrc)"
+            :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
           </div>
           <div class="footer-button">
             <div class="takephoto">
@@ -60,9 +65,7 @@
               <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
             </div>
             <div class="uploadphoto">
-              <van-uploader :after-read="afterRead" :max-count="1">
-                <img  src="@/assets/images/upload-button.png" alt="上传">
-              </van-uploader>
+              <img src="@/assets/images/upload-button.png" alt="上传" @click="afterRead()">
             </div>
           </div>
         </van-tab>
@@ -82,6 +85,7 @@
 import { mapState } from 'vuex'
 import { FORMINPUTS } from '../../../const/constant'
 import Loading from '../../../components/Loading'
+import { ImagePreview } from 'vant'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
 const Photograph = () => import('../../Robotpage/components/Photograph')
@@ -97,6 +101,7 @@ export default {
       userId: localStorage.getItem('userId'),
       formInputs: FORMINPUTS,
       msgSrc: require('../../../assets/images/uploadCard.png'),
+      uploadUserInfo: null,
       phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
     }
   },
@@ -107,6 +112,7 @@ export default {
       },
       set(val) {
         this.$store.commit('setFormModelShow', false)
+        this.clearUploadData()
       }
     },
     ...mapState({
@@ -116,6 +122,9 @@ export default {
   },
   mounted() {},
   methods: {
+    tabsOnChange() {
+      this.clearUploadData()
+    },
     onSubmit(values) {
       const url = API.port8085.saveUserInfo
       let params = {
@@ -127,9 +136,7 @@ export default {
         .then((res) => {
           console.log(res)
           if (res && res.code === 200) {
-            this.formInputs.map(item => {
-              item.value = null
-            })
+            this.clearUploadData()
           }
           this.$nextTick(() => {
             this.$store.commit('setBeforSubmit', false)
@@ -143,64 +150,70 @@ export default {
           this.$store.commit('setLoadingShow', false)
         })
     },
-    postSend() {
-
-    },
     telPhoneValidator(val) {
+      console.log(val, val === null)
       const validatorResult = this.phoneValidator.test(val)
       if (!validatorResult) {
         this.formInputs.map(item => {
-          if (item.name === 'phoneNumber') {
-            item.value = null
+          if (item.name === 'phone') {
             item.message = '请输入正确的手机号'
+            item.value = null
           }
         })
+        return false
       }
-      return validatorResult
+      // return validatorResult
     },
     closed() {
       this.$store.commit('setBeforSubmit', true)
     },
-    photoMsg(baseSrc) {
-      console.log(baseSrc)
-      this.msgSrc = baseSrc.msgPreviewSrc
-      this.afterRead(baseSrc)
-      this.$store.commit('setLoadingShow', false)
+    photoMsg(uploadUserInfo) {
+      console.log(uploadUserInfo)
+      this.uploadUserInfo = uploadUserInfo
+      this.msgSrc = uploadUserInfo.msgPreviewSrc
+      this.afterRead(uploadUserInfo)
     },
     afterRead(file) {
-      // 此时可以自行将文件上传至服务器
-      let imgFile = null
-      if (file.takePhoto && file.takePhoto === true) {
-        imgFile = file.imgFile
-      } else {
-        this.msgSrc = file.content
-        imgFile = file.file
-      }
-      const formData = new FormData()
-      formData.append('image', imgFile)
-      const headers = {
-        'Content-Type': 'multipart/formdata;charset=utf-8',
-        'X-CSRF-Token': window.localStorage.getItem('token')
-      }
-      const params = {
-        userId: this.userId,
-        username: this.userName
-      }
-      const url = API.port8085.saveUserInfo
-      axiosPost(url, params, formData, headers)
-        .then((res) => {
-          if (res && res.code === 200) {
-            this.msgSrc = require('../../../assets/images/uploadCard.png')
-          }
-          this.$nextTick(() => {
+      if (this.uploadUserInfo !== null) {
+        const imgFile = file.imgFile
+        const formData = new FormData()
+        formData.append('image', imgFile)
+        const headers = {
+          'Content-Type': 'multipart/formdata;charset=utf-8',
+          'X-CSRF-Token': window.localStorage.getItem('token')
+        }
+        const params = {
+          userId: this.userId,
+          username: this.userName
+        }
+        const url = API.port8085.saveUserInfo
+        this.$store.commit('setLoadingShow', true)
+        axiosPost(url, params, formData, headers)
+          .then((res) => {
+            if (res && res.code === 200) {
+              this.clearUploadData()
+            }
+            this.$nextTick(() => {
+              this.$store.commit('setBeforSubmit', false)
+              this.$store.commit('setLoadingShow', false)
+            })
+          })
+          .catch(() => {
             this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })
-        })
-        .catch(() => {
-          this.$store.commit('setBeforSubmit', false)
-          this.$store.commit('setLoadingShow', false)
-        })
+      } else {
+        console.log('请先拍照，再上传照片')
+      }
+    },
+    showImage(img) {
+      ImagePreview([img])
+    },
+    clearUploadData() {
+      this.formInputs.map(item => {
+        item.value = null
+      })
+      this.msgSrc = require('../../../assets/images/uploadCard.png')
     }
   },
   beforeDestroy() {
@@ -291,6 +304,7 @@ export default {
           position: relative;
           width: 50%;
           display: inline-block;
+          text-align: center;
           img{
             width: 100%;
           }
@@ -299,8 +313,11 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
-          width: 90%;
-          height: 70%;
+          bottom: 23%;
+          right: 0;
+          margin: auto;
+          width: 80%;
+          height: 60%;
           z-index: 9;
           opacity: 0;
         }
