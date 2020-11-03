@@ -171,7 +171,7 @@ export default {
       console.log(uploadUserInfo)
       this.uploadUserInfo = uploadUserInfo
       this.msgSrc = uploadUserInfo.msgPreviewSrc
-      this.afterRead(uploadUserInfo)
+      // this.afterRead(uploadUserInfo)
     },
     afterRead(file) {
       if (this.uploadUserInfo !== null) {
