@@ -1,10 +1,15 @@
-
+/* eslint-disable no-redeclare */
+/* eslint-disable no-unused-vars */
+import { axiosPost } from '../../../utils/http.js'
+import API from '../../../utils/api'
+import { get_UserName } from '../../../utils/index.js'
 // 兼容
 window.URL = window.URL || window.webkitURL
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
 var chunk = []; var chunkData = []; var chunkSlice = []
 var chunkSliceStart = 0; var chunkSliceStop = 3200
 var view
+// eslint-disable-next-line no-unused-vars
 var end
 var v2
 var websocket = null
@@ -34,6 +39,8 @@ function webS() {
     console.log(123456)
     // 一次链接发生错误的回调ssss
     websocket.onerror = function() {
+      // alert('语音功能连接发生错误')
+      localStorage.setItem('websocketStatus', 'error')
       console.log('WebSocket连接发生错误')
     }
 
@@ -77,7 +84,7 @@ var recorder = function() {
       binary += String.fromCharCode(bytes[i])
     }
     var audio = window.btoa(binary)
-    if (n == 1) {
+    if (n === 1) {
       state = 1
     } else {
       state = 2
@@ -105,22 +112,22 @@ var recorder = function() {
 }
 // 播放转写对应音频
 var wav_key
-function clickContent() {
-  $('#text div').on('click', function() {
-    wav_key = Number(this.dataset.key)
-    if (wav_key !== 0) {
-      wav_key = wav_key - 1
-    }
-    console.log(wav_key)
-    var params = {
-      'id': ID,
-      'wav_key': wav_key
-    }
-    $.post('../transfer-realtime/click-content-audio-wav', params, function(dataAjax) {
-      $('.progress_bar_audio').attr('src', dataAjax.path)
-    }, 'json')
-  })
-}
+// function clickContent() {
+//   $('#text div').on('click', function() {
+//     wav_key = Number(this.dataset.key)
+//     if (wav_key !== 0) {
+//       wav_key = wav_key - 1
+//     }
+//     console.log(wav_key)
+//     var params = {
+//       'id': ID,
+//       'wav_key': wav_key
+//     }
+//     $.post('../transfer-realtime/click-content-audio-wav', params, function(dataAjax) {
+//       $('.progress_bar_audio').attr('src', dataAjax.path)
+//     }, 'json')
+//   })
+// }
 export function HZRecorder(stream, config) {
   var _this = this
   var starts = 0; var stops = 10880
@@ -196,13 +203,14 @@ export function HZRecorder(stream, config) {
       view = new Int8Array(data.buffer)
       chunk = view
       chunkData = view.slice(starts, stops)
-      var blob = new Blob([chunkData], { type: 'audio/wav' })
+      // var blob = new Blob([chunkData], { type: 'audio/wav' })
+      // console.log(buffer, view, '----blob')
       receive_key += 1
       starts += 10880
       stops += 10880
+      return new Blob([data], { type: 'audio/wav' })
     }
   }
-
   // 开始录音
   this.start = function() {
     chunk = []
@@ -226,39 +234,42 @@ export function HZRecorder(stream, config) {
 
   // 停止
   this.stop = function() {
+    console.log(this.getBlob(), '----------stop')
     recorder.disconnect()
     webSocstate = 1
-    // recorderAudioData();
-  }
-  function recorderAudioData() {
-    console.log('chunkData.length::::::', chunkData.length)
-    var date = new FormData()
-    chunkData = chunk.slice(starts, stops)
-    if (chunkData.length < 10880) {
-      console.log('chunkData.lengthchunkData.length：', chunkData.length)
-      end = 'end'
+    // const recorderFile = new Int8Array(audioData.buffer)
+    // var blob = new Blob([recorderFile], { type: 'audio/wav' })
+    // console.log(blob, '----buffer')
+    const url = API.port8085.recorderUpload
+    const headers = {
+      'Content-Type': 'multipart/formdata;charset=utf-8',
+      'X-CSRF-Token': window.localStorage.getItem('token')
     }
-    // console.log('splicechunkData.length::::', chunkData.length);
-    receive_key += 1
-    var blob = new Blob([chunkData], { type: 'audio/wav' })
-    date.append('userfile', chunkData)
-    date.append('blob', blob)
-    date.append('end', end)
-    date.append('id', ID)
-    date.append('receive_key', receive_key)
-    var req = new XMLHttpRequest()
-    var async = true
-    req.open('POST', '../test/receive', async)
-    res = req.send(date)
-    // console.log('chunk::::::', chunk);
-    // console.log('chunk.length::::::', chunk.length);
-    // console.log('start::::::', starts);
-    // console.log('stops::::::', stops);
-    if (stops < chunk.length) {
-      starts += 10880
-      stops += 10880
-      setTimeout(recorderAudioData, 10)
+    const params = {
+      userId: localStorage.getItem('userId')
     }
+    const blobName = get_UserName(32)
+    const formData = new FormData()
+    formData.append('audio', this.getBlob(), blobName)
+    console.log(formData.get('audio'), '------formData----audio')
+    localStorage.setItem('recorderUpload', 'begain')
+    if (localStorage.getItem('websocketStatus') !== 'error') {
+      axiosPost(url, params, formData, headers)
+        .then((res) => {
+          console.log(res, 'res----recorderUpload')
+          if (res.code === 200) {
+            localStorage.setItem('recorderUploadName', formData.get('audio').name)
+            localStorage.setItem('recorderUpload', 'success')
+          } else {
+            localStorage.setItem('recorderUpload', 'faild')
+          }
+        })
+        .catch((err) => {
+          localStorage.setItem('recorderUpload', 'faild')
+          console.log(err, '---err--recorderUpload')
+        })
+    }
+    // }
   }
   // 获取音频文件
   this.getBlob = function() {
@@ -286,6 +297,7 @@ HZRecorder.throwError = function(message) {
 HZRecorder.canRecording = (navigator.getUserMedia != null)
 // 获取录音机
 HZRecorder.get = function(callback, config) {
+  console.log(config, '------config')
   if (callback) {
     if (navigator.getUserMedia) {
       navigator.getUserMedia(

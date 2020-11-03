@@ -24,6 +24,7 @@
           color="#00F0FF"
           title-inactive-color="#ffffff"
           title-active-color="#00F0FF"
+           @change="tabsOnChange"
         >
           <van-tab title="手动录入">
             <van-form @submit="onSubmit" class="form">
@@ -53,18 +54,20 @@
           </van-tab>
           <van-tab title="名片上传" class="card-upload-content">
             <div class="preview">
-              <img :src="msgSrc" alt="预览" :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
+               <img
+              :src="msgSrc"
+              alt="预览"
+              @click="showImage(msgSrc)"
+              :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
             </div>
             <div class="footer-button">
               <div class="takephoto">
                 <img  src="@/assets/images/takePhoto.png" alt="拍照">
                 <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
               </div>
-              <div class="uploadphoto">
-                <van-uploader :after-read="afterRead" :max-count="1">
-                  <img  src="@/assets/images/upload-button.png" alt="上传">
-                </van-uploader>
-              </div>
+            <div class="uploadphoto">
+              <img src="@/assets/images/upload-button.png" alt="上传" @click="afterRead()">
+            </div>
             </div>
           </van-tab>
         </van-tabs>
@@ -84,6 +87,7 @@
 import { mapState } from 'vuex'
 import { FORMINPUTS } from '../../../const/constant'
 import Loading from '../../../components/Loading'
+import { ImagePreview } from 'vant'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
 const Photograph = () => import('../../Robotpage/components/Photograph')
@@ -99,6 +103,7 @@ export default {
       userId: localStorage.getItem('userId'),
       formInputs: FORMINPUTS,
       msgSrc: require('../../../assets/images/uploadCard.png'),
+      uploadUserInfo: null,
       phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/
     }
   },
@@ -109,6 +114,7 @@ export default {
       },
       set(val) {
         this.$store.commit('setFormModelShow', false)
+        this.clearUploadData()
       }
     },
     ...mapState({
@@ -116,7 +122,11 @@ export default {
       beforSubmit: (state) => state.app.beforSubmit
     })
   },
+  mounted() {},
   methods: {
+    tabsOnChange() {
+      this.clearUploadData()
+    },
     onSubmit(values) {
       const url = API.port8085.saveUserInfo
       let params = {
@@ -128,9 +138,7 @@ export default {
         .then((res) => {
           console.log(res)
           if (res && res.code === 200) {
-            this.formInputs.map(item => {
-              item.value = null
-            })
+            this.clearUploadData()
           }
           this.$nextTick(() => {
             this.$store.commit('setBeforSubmit', false)
@@ -143,9 +151,6 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-    },
-    postSend() {
-
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)

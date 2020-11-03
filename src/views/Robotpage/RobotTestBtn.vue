@@ -252,6 +252,7 @@
 <script>
 import { mapState } from 'vuex'
 import { axiosGet } from '../../utils/http.js'
+import API from '../../utils/api'
 import {
   POINTINFO,
   COMMONQUESTION,
@@ -264,7 +265,6 @@ const Recorder = () => import('./components/Recorder')
 const Popupinfo = () => import('./components/Popupinfo')
 const Photograph = () => import('./components/Photograph')
 
-import API from '../../utils/api'
 export default {
   name: 'RobotTestBtn',
   components: {
@@ -303,7 +303,8 @@ export default {
       swipeToNum: 0,
       allPhotoIscheck: false,
       countInterval: 60000,
-      timer: null
+      timer: null,
+      getRecorderTimer: null
       // questionStyle: ''
     }
   },
@@ -353,7 +354,7 @@ export default {
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
-            this.getCheckIconStatus = [{ 'title': 'C', 'isCheck': true }, { 'title': 'H', 'isCheck': true }, { 'title': 'B', 'isCheck': true }, { 'title': 'N', 'isCheck': true }] || res.data
+            this.getCheckIconStatus = res.data
 
             this.filterCheckIconStatus(this.getCheckIconStatus)
           }
@@ -526,8 +527,38 @@ export default {
         voiceUrl: talkMsgs.audioUrl,
         updateold: false
       }
-      // this.msgList.push(userMsg)
       this.getAnswer(userMsg)
+      this.getRecorderUrl(userMsg)
+    },
+    getRecorderUrl(userMsg) {
+      if (localStorage.getItem('recorderUpload') === 'success') {
+        clearInterval(this.getRecorderTimer)
+        this.getRecorderDownload(userMsg)
+      } else if (localStorage.getItem('recorderUpload') === 'faild') {
+        clearInterval(this.getRecorderTimer)
+        console.log('音频上传失败')
+      }
+    },
+    getRecorderDownload(userMsg) {
+      const url = API.port8085.recorderDownload
+      const params = {
+        fileName: localStorage.getItem('recorderUploadName')
+      }
+      axiosGet(url, params)
+        .then((res) => {
+          console.log(res, '-----getRecorderDownload')
+          if (res && res.code === 200) {
+            this.msgList.map(item => {
+              if (item.oldform.question === userMsg.oldform.question) {
+                item.voiceUrl = res.data
+              }
+            })
+            this.msgList = [...this.msgList]
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     getInformation(item, index) {
       this.quickClick(item.title) // 点击图标时自动发送对应文字
