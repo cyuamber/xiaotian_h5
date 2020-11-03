@@ -76,7 +76,7 @@
         <img src="@/assets/images/submit-success.png" alt="提交成功">
       </div>
       <Loading v-if="LoadingShow" />
-      <p class="footer-text">
+      <p class="footer-text" v-if="beforSubmit">
         *可通过手动填写或上传名片来录入您的信息
       </p>
     </van-popup>
