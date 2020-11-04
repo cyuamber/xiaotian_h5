@@ -1,5 +1,4 @@
-const port8085 = "https://172.31.201.38:8081";
-const port9101 = "/port9101";
+const port8085 = "http://172.31.201.38:8081";
 
 export default {
   port8085: {
@@ -12,8 +11,5 @@ export default {
     saveUserInfo: port8085 + "/dp_xiaotian/inference/saveUserInfo", // result页 用户信息录入
     recorderUpload: port8085 + "/dp_xiaotian/inference/upload", // 音频上传
     recorderDownload: port8085 + "/dp_xiaotian/inference/download" // 音频下载
-  },
-  port9101: {
-    addUrl: port9101 + "/dangwu?op=add"
   }
 };

@@ -48,8 +48,7 @@
           <img src="@/assets/images/useravator.png" alt="用户头像" />
         </div>
         <div class="userMsg" :class="{'userMsg_width': msg.imgUrl !=undefined }">
-          <span v-if="msg.oldform !=undefined && msg.voiceUrl === undefined">{{ msg.oldform.question }}</span>
-          <m-audio v-if="msg.voiceUrl !=undefined" :src="msg.voiceUrl" text='' :showDuration='true'></m-audio>
+          <span v-if="msg.oldform !=undefined">{{ msg.oldform.question }}</span>
            <div class="preview" v-if="msg.imgUrl !=undefined">
             <img :src="msg.imgUrl" alt="" width="100%" @click="showImage(msg.imgUrl)"/>
           </div>
