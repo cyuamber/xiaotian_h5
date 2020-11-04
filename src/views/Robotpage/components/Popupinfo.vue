@@ -55,6 +55,11 @@
       left: 45%;
       bottom: 1%;
       font-size: 34px;
+      background: url("../../../assets/images/close.png") no-repeat;
+      background-size: 34px 34px;
+    }
+    .van-icon-close::before {
+      color: transparent;
     }
     .my-swipe {
       height: 342px;

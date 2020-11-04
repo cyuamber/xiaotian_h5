@@ -65,7 +65,7 @@ export default {
     }
     .index-content {
         position: absolute;
-        top: 515px;
+        top: 467px;
         z-index: 2;
         .index-rules {
           font-size: 14px;
