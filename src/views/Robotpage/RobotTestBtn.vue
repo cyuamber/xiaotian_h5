@@ -58,11 +58,11 @@
     <Recorder @sendTalkMsg="sendTalkMsg" />
     <Popupinfo
       :msgList="msgList"
+      @photoMsg="photoMsg"
       :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
       :imgIcon="imgIcon"
       @swipeLoop='swipeLoop'
-      @popupinfophotoMsg='photoMsg'
     />
   </div>
 </template>
@@ -350,7 +350,7 @@ export default {
           // 错误处理
         })
     },
-    getuploadImgResults() {
+    getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
       const params = {
         userId: this.userId
@@ -371,12 +371,20 @@ export default {
         })
     },
     photoMsg(data) {
-      this.msgList = [...data]
-      this.getuploadImgResults()
+      if(data.step1 !== undefined && data.step1){
+        this.msgList = [...data.msgLists]
+      } else {
+        this.msgList = [...data]
+        const photocheck = true
+        this.getuploadImgResults(photocheck)
+      }
     },
     swipeLoop(data) {
       this.imgIcon = [...data]
     },
+    // popupinfophotoMsg() {
+    //   this.getuploadImgResults()
+    // },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {
