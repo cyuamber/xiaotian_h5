@@ -361,8 +361,8 @@ export default {
           this.$store.commit('setLoadingShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
             this.getCheckIconStatus = res.data
-
             this.filterCheckIconStatus(this.getCheckIconStatus)
+            this.getCount()
           }
         })
         .catch((err) => {
@@ -372,6 +372,7 @@ export default {
     },
     photoMsg(data) {
       this.msgList = [...data]
+      console.log('he')
       this.getuploadImgResults()
     },
     swipeLoop(data) {
