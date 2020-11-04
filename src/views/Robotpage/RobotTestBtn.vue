@@ -115,6 +115,8 @@
   width: 100%;
   height: 100vh;
   background-color: #DFE7EE;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0px);
 }
 .drawerBody {
   overflow: hidden;
@@ -195,16 +197,14 @@
     }
   }
   .checkphotos {
-    width: 138px;
-    height: auto;
-    display: inline-block;
-    margin-top: -28px;
-    position: absolute;
-    right: 0;
-    top: -12px;
     img {
-      width: 100%;
+      width: 138px;
       height: auto;
+      display: inline-block;
+      margin-top: -28px;
+      position: absolute;
+      right: 0;
+      top: -12px;     
     }
     input[type="file"] {
       position: absolute;

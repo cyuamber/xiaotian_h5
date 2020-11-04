@@ -48,6 +48,7 @@ Vue.use(Icon)
 Vue.config.productionTip = false
 
 // FastClick.attach(document.body)
+
 new Vue({
   el: '#app',
   router,
