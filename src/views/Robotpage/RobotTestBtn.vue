@@ -345,6 +345,7 @@ export default {
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
             this.getCheckIconStatus = res.data
             this.filterCheckIconStatus(this.getCheckIconStatus)
+            this.getCount()
           }
         })
         .catch((err) => {
