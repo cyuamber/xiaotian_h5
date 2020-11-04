@@ -1,14 +1,17 @@
 <template>
  <van-popup
           v-model="toppPointmodelShow"
-          :style="{ width: '90%', height: '364px', 'border-radius':'15px', 'background':'transparent', 'position': 'absolute', 'left': '50%', 'transform': 'translate(-50%)'}"
+          :style="{ width: '90%', 'background':'transparent', 'position': 'absolute', 'left': '50%', 'transform': 'translate(-50%)'}"
           position="top"
           class="popup"
+          close-icon="close"
+          close-icon-position="bottom"
+          closeable
         >
           <van-swipe
             class="my-swipe"
             indicator-color="#ffffff"
-            style="height: 100%; background: transparent;"
+            style="background: transparent"
             ref="swipe"
             :width="swipeWidth"
             :initial-swipe='swipeToNumber'
@@ -47,6 +50,16 @@
 <style lang="less" scoped>
   .popup {
     top: 116px;
+    height: 388px;
+    /deep/ .van-icon{
+      left: 45%;
+      bottom: 1%;
+      font-size: 34px;
+    }
+    .my-swipe {
+      height: 342px;
+      border-radius: 15px;
+    }
   }
   .info{
     width: 100%;
