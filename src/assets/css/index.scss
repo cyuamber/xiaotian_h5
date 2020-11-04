@@ -8,7 +8,7 @@ body .app {
   font-family: Arial, Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, sans-serif;
   background-color: $background-color;
   font-size: 17px;
-  // touch-action: none;
+  touch-action: none;
 }
 .app-container {
   padding-bottom: 50px;

@@ -25,7 +25,7 @@
             @change="tabsOnChange"
           >
             <van-tab title="手动录入">
-              <van-form @submit="onSubmit" class="form">
+              <van-form @submit="onSubmit" class="form" validate-trigger='onSubmit'>
                 <van-field
                   class="van-field-box"
                   v-for="(item, index) in formInputs"
@@ -296,12 +296,14 @@ export default {
           margin: 15px auto;
           border:1px solid #cfe3ff;
           .van-field__label, .van-field__control{
+            position: relative;
             color: #ffffff!important;
+            z-index: 1;
           }
           .van-field__error-message{
             position: absolute;
             top:0;
-            z-index: -1;
+            z-index: 0;
           }
           .dividing-line{
             width: 1px;

@@ -356,6 +356,12 @@ export default {
     photoMsg(data) {
       if(data.step1 !== undefined && data.step1){
         this.msgList = [...data.msgLists]
+        this.$nextTick(() => {
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+          })
       } else {
         this.msgList = [...data]
         const photocheck = true
@@ -428,6 +434,12 @@ export default {
       }
       const url = API.port8085.sendTextUrl
       this.msgList.push(questions)
+      this.$nextTick(() => {
+            setTimeout(function() {
+              const div = document.getElementsByClassName('divScroll')
+              div[0].scrollTop = div[0].scrollHeight
+            }, 0)
+      })
       const robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
