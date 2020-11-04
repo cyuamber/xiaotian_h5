@@ -163,8 +163,7 @@ export default {
   },
   methods: {
     photoMsg(data) {
-      this.msgLists = [...this.msgLists]
-      this.$emit('popupinfophotoMsg', this.msgLists)
+      this.$emit('photoMsg', data)
     },
     hrefRobotTestBtn() {
       this.$store.commit('setToppPointmodelShow', false)
