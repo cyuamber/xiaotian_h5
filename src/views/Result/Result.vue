@@ -30,8 +30,8 @@
         </div>
         -->
     <div class="toolbars">
-      <div @click="resultRobotLogoShows()" style="height: 100%">
-        <transition
+      <div  style="height: 100%">
+        <!-- <transition
           name="van-slide-right"
           :duration="{ enter: 800, leave: 800 }"
         >
@@ -42,7 +42,7 @@
             alt="小天机器人logo"
             v-if="resultRobotLogoShow"
           />
-        </transition>
+        </transition> -->
         <transition
           name="van-slide-right"
           :duration="{ enter: 800, leave: 800 }"
@@ -50,7 +50,6 @@
           <img
             src="@/assets/images/result_robot_logo.png"
             alt="小天机器人logo"
-            v-if="!resultRobotLogoShow"
             style="top: 1px"
           />
         </transition>
@@ -64,6 +63,7 @@
 import ResultForm from "./components/ResultForm";
 import { axiosGet } from "../../utils/http.js";
 import API from "../../utils/api";
+import parseTime from "../../utils/index";
 
 // const ResultForm = () => import('./components/ResultForm')
 export default {
@@ -84,6 +84,7 @@ export default {
   created() {
     this.getBasicInfo();
     this.getName();
+    // console.log(parseTime(), 'parseTime')
   },
   methods: {
     handleGreetText() {
@@ -156,7 +157,7 @@ export default {
     z-index: 3;
     margin-top: -25px;
     img {
-      width: 100%;
+      width: 75px;
       height: auto;
       position: absolute;
       top: 0;
