@@ -65,7 +65,7 @@ function webS() {
       if (date.end === 1) {
         console.log('websocket.end-------')
         localStorage.setItem('setTalkText', setTalkText)
-        localStorage.setItem('setTalkIsloading', false)
+        localStorage.setItem('setTalkIsloading', 'false')
         websocket.close()
       }
     }
@@ -237,9 +237,6 @@ export function HZRecorder(stream, config) {
     console.log(this.getBlob(), '----------stop')
     recorder.disconnect()
     webSocstate = 1
-    // const recorderFile = new Int8Array(audioData.buffer)
-    // var blob = new Blob([recorderFile], { type: 'audio/wav' })
-    // console.log(blob, '----buffer')
     const url = API.port8085.recorderUpload
     const headers = {
       'Content-Type': 'multipart/formdata;charset=utf-8',
@@ -248,17 +245,15 @@ export function HZRecorder(stream, config) {
     const params = {
       userId: localStorage.getItem('userId')
     }
-    const blobName = get_UserName(32)
     const formData = new FormData()
-    formData.append('audio', this.getBlob(), blobName)
-    console.log(formData.get('audio'), '------formData----audio')
+    formData.append('audio', this.getBlob())
     localStorage.setItem('recorderUpload', 'begain')
     // if (localStorage.getItem('websocketStatus') !== 'error') {
       axiosPost(url, params, formData, headers)
         .then((res) => {
           console.log(res, 'res----recorderUpload')
           if (res.code === 200) {
-            localStorage.setItem('recorderUploadName', formData.get('audio').name)
+            localStorage.setItem('recorderUploadName', res.data)
             localStorage.setItem('recorderUpload', 'success')
           } else {
             localStorage.setItem('recorderUpload', 'faild')
@@ -268,7 +263,6 @@ export function HZRecorder(stream, config) {
           localStorage.setItem('recorderUpload', 'faild')
           console.log(err, '---err--recorderUpload')
         })
-    // }
     // }
   }
   // 获取音频文件

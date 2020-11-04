@@ -306,7 +306,8 @@ export default {
       allPhotoIscheck: false,
       countInterval: 60000,
       timer: null,
-      getRecorderTimer: null
+      getRecorderTimer: null,
+      setTalkTimer: null
       // questionStyle: ''
     }
   },
@@ -436,13 +437,15 @@ export default {
       this.getAnswer(userMsg)
       e.preventDefault()
     },
-    getAnswer(questions) {
+    getAnswer(questions, sendTalkMsg = false) {
       const params = {
         userId: this.userId,
         text: questions.oldform.question
       }
       const url = API.port8085.sendTextUrl
-      this.msgList.push(questions)
+      if (!sendTalkMsg) {
+        this.msgList.push(questions)
+      }
       const robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
@@ -531,16 +534,34 @@ export default {
         oldform: {
           question: talkMsgs.talkMsg,
           answer: '',
-          source: ''
+          source: '',
+          fileName: ''
         },
         voiceUrl: talkMsgs.audioUrl,
         updateold: false
       }
-      this.getAnswer(userMsg)
+      this.msgList.push(userMsg)
       this.getRecorderUrl(userMsg)
+      this.setTalkTimer = setInterval(() => {
+        this.setTalkIsloading(userMsg)
+      }, 500)
+    },
+    setTalkIsloading() {
+      if (localStorage.getItem('setTalkIsloading') === 'false') {
+        if (this.setTalkTimer !== null) {
+          clearInterval(this.setTalkTimer)
+          this.setTalkTimer = null
+        }
+        userMsg.oldform.question = localStorage.getItem('setTalkText')
+        this.getAnswer(userMsg, true)
+      }
     },
     getRecorderUrl(userMsg) {
-      if (localStorage.getItem('recorderUpload') === 'success') {
+      if (localStorage.getItem('recorderUpload') === 'begain') {
+        this.getRecorderTimer = setInterval(() => {
+          this.getRecorderUrl(userMsg)
+        }, 200)
+      } else if (localStorage.getItem('recorderUpload') === 'success') {
         clearInterval(this.getRecorderTimer)
         this.getRecorderDownload(userMsg)
       } else if (localStorage.getItem('recorderUpload') === 'faild') {
@@ -550,12 +571,12 @@ export default {
     },
     getRecorderDownload(userMsg) {
       const url = API.port8085.recorderDownload
+      userMsg.oldform.fileName = userMsg.oldform.fileName !== ''? userMsg.oldform.fileName:localStorage.getItem('recorderUploadName')
       const params = {
-        fileName: localStorage.getItem('recorderUploadName')
+        fileName: userMsg.oldform.fileName
       }
       axiosGet(url, params)
         .then((res) => {
-          console.log(res, '-----getRecorderDownload')
           if (res && res.code === 200) {
             this.msgList.map(item => {
               if (item.oldform.question === userMsg.oldform.question) {
