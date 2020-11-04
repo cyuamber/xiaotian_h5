@@ -246,7 +246,7 @@ import {
 } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
-
+import { Notify } from 'vant'
 const Popupinfo = () => import('./components/Popupinfo')
 const Photograph = () => import('./components/Photograph')
 
@@ -335,9 +335,11 @@ export default {
     },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
+      this.userId = this.userId === null ? localStorage.getItem('userId') : this.userId
       const params = {
         userId: this.userId
       }
+      console.log(this.userId, 'userId')
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
@@ -346,10 +348,13 @@ export default {
             this.getCheckIconStatus = res.data
             this.filterCheckIconStatus(this.getCheckIconStatus)
             this.getCount()
+          } else {
+            Notify('打卡数据返回失败');
           }
         })
         .catch((err) => {
           console.log(err)
+          Notify('打卡数据返回失败');
           this.$store.commit('setLoadingShow', false)
         })
     },

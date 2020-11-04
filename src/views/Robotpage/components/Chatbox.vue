@@ -175,7 +175,13 @@ export default {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
     .userMsg_width{
-      width: 20%;
+      width: 30%;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      img{
+        border-radius: 24px 0px 24px 24px;
+      }
     }
   }
   .users-box {
