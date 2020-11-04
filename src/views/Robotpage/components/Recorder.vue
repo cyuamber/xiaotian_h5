@@ -53,7 +53,8 @@ export default {
       timer: null,
       talkMsgs: {
         talkMsg: '',
-        audioUrl: 'http://sc1.111ttt.cn/2018/1/03/13/396131232171.mp3'
+        audioUrl: '',
+        talkUpload: true
       }
       // audio :document.createElement('audio'),
       // voicetext:null,
@@ -191,7 +192,8 @@ export default {
     startRecorder() {
       localStorage.setItem('setTalkText', '')
       localStorage.setItem('websocketStatus', '')
-      localStorage.setItem('setTalkIsloading', true)
+      localStorage.setItem('setTalkIsloading', 'true')
+       localStorage.setItem('recorderUpload', '')
       // localStorage.setItem('recorderFlage', 1)
       localStorage.setItem('start', 1)
       this.savecount = 0
@@ -205,7 +207,7 @@ export default {
         },
         {
           sampleBits: 16,
-          sampleRate: 8000
+          sampleRate: 16000
         }
       )
 
@@ -221,21 +223,20 @@ export default {
       var recorderFlage = 0
       localStorage.setItem('start', this.start)
       localStorage.setItem('recorderFlage', recorderFlage)
-      this.setTalkIsloading()
-      this.timer = setInterval(() => {
-        this.setTalkIsloading()
-      }, 500)
+      this.$emit('sendTalkMsg', this.talkMsgs)
+      // this.timer = setInterval(() => {
+      //   this.setTalkIsloading()
+      // }, 500)
     },
-    setTalkIsloading() {
-      if (localStorage.getItem('setTalkIsloading') === 'false') {
-        if (this.timer !== null) {
-          clearInterval(this.timer)
-          this.timer = null
-        }
-        this.talkMsgs.talkMsg = localStorage.getItem('setTalkText')
-        this.$emit('sendTalkMsg', this.talkMsgs)
-      }
-    },
+    // setTalkIsloading() {
+    //   if (localStorage.getItem('setTalkIsloading') === 'false') {
+    //     if (this.timer !== null) {
+    //       clearInterval(this.timer)
+    //       this.timer = null
+    //     }
+    //     this.talkMsgs.talkMsg = localStorage.getItem('setTalkText')
+    //   }
+    // },
     beginRecord(mediaStream) {
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
       this.analyser = this.audioContext.createAnalyser()

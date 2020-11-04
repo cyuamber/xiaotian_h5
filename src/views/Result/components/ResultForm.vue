@@ -151,7 +151,7 @@ export default {
           this.$store.commit('setLoadingShow', false)
         })
         // 为了测试提交成功界面，暂设置为只要提交就现实成功，后面将去除
-        this.$store.commit('setBeforSubmit', false)
+        // this.$store.commit('setBeforSubmit', false)
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
