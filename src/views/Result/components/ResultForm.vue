@@ -16,7 +16,6 @@
       <div :class="{'wrap':true, 'wrap-submit':!beforSubmit}">
         <div class="content" v-if="beforSubmit">
           <p class="title">标题</p>
-          <div class="tab-line"></div>
           <van-tabs
             class="vans-tabs"
             background="transparent"
@@ -152,7 +151,7 @@ export default {
           this.$store.commit('setLoadingShow', false)
         })
         // 为了测试提交成功界面，暂设置为只要提交就现实成功，后面将去除
-        // this.$store.commit('setBeforSubmit', false)
+        this.$store.commit('setBeforSubmit', false)
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
@@ -236,15 +235,12 @@ export default {
     height: 191px!important;
     width: 191px!important;
   }
-  .tab-line {
-    position: absolute;
-    top: 115px;
-    border-bottom: 1px solid white;
-    width: 286px;
-  }
   .van-tabs__line {
     width: 143px;
     height: 2px;
+  }
+  .van-tabs__line:after {
+    border-bottom: 1px solid #ffffff;
   }
   .van-tab {
     font-size: 17px!important;
@@ -254,7 +250,7 @@ export default {
     width: 330px;
     height: 494px;
     background: transparent;
-     /deep/ .van-icon{
+    .van-icon{
       left: 45%;
       bottom: 0;
       font-size: 34px;
@@ -291,20 +287,22 @@ export default {
     .vans-tabs {
       color: #fff;
       .form{
-        margin-top: 26px;
+        padding-top: 13px;
+        border-top: 1px solid #ffffff;
+        margin-top: -1px;
         .van-field-box{
           font-size: 17px;
           font-family: PingFangSC-Regular;
           width: 100%;
-          color: #fff!important;
+          color: #ffffff!important;
           background: transparent;
           border-radius: 10px;
           margin: 15px auto;
           border:1px solid #cfe3ff;
-          /deep/ .van-field__label, /deep/ .van-field__control{
-            color: #fff!important;
+          .van-field__label, .van-field__control{
+            color: #ffffff!important;
           }
-          /deep/ .van-field__error-message{
+          .van-field__error-message{
             position: absolute;
             top:0;
             z-index: -1;
@@ -327,7 +325,7 @@ export default {
             border:none;
             margin-left: -15px;
           }
-          /deep/ .van-button::before{
+          .van-button::before{
             background: transparent;
           }
         }
