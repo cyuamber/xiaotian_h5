@@ -5,7 +5,7 @@
         <div class="robot-img">
           <img src="@/assets/images/robotavator.png" alt="小天机器人" />
         </div>
-        <div class="robotMsg">
+        <div class="robotMsg" :class="{'singleImg': msg.msg.length ===1 && msg.msg[0].type === 'image'}">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
             <div v-if="dialogue.type === 'text'">
                 {{ dialogue.content }}<br>
@@ -31,7 +31,7 @@
                 </span>
               </div>
               <img
-              v-else-if="dialogue.type === 'image'"
+              v-if="dialogue.type === 'image'"
               @click="showImage(dialogue.content)"
               :src="dialogue.content"
               alt=""
@@ -135,7 +135,7 @@ export default {
       float: left;
       max-width: 213px;
       background: white;
-      border-radius: 0 24px 24px 24px;
+      border-radius: 0 30px 30px 30px;
       padding: 15px 19px 15px 19px;
       font-size: 17px;
       font-family: PingFangSC-Regular, PingFang SC;
@@ -158,12 +158,19 @@ export default {
         width: 100%;
       }
     }
+    .singleImg{
+      background: transparent;
+      padding: 0;
+      img{
+        border-radius: 0 30px 30px 30px;
+      }
+    }
     .userMsg {
       float: right;
       width: fit-content;
       max-width: 344px;
       background-image: linear-gradient(-74deg, #2c47bf 0%, #2e5acf 26%, #307eef 76%, #318fff 100%), linear-gradient(#1d1588, #1d1588);
-      border-radius: 24px 0px 24px 24px;
+      border-radius: 20px 0px 20px 20px;
       padding: 13px 19px 13px 19px;
       margin-right: 10px;
       font-size: 17px;
@@ -180,7 +187,7 @@ export default {
       background: transparent;
       box-shadow: none;
       img{
-        border-radius: 24px 0px 24px 24px;
+        border-radius: 20px 0px 20px 20px;
       }
     }
   }

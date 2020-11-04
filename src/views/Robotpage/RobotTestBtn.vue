@@ -148,6 +148,8 @@
   // background-color: #ffffff;
   color: #fff;
   height: 135px;
+  position: fixed;
+  bottom:0;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;

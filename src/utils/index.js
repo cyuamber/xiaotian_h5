@@ -8,10 +8,10 @@
  * @param {string} cFormat
  * @returns {string}
  */
-export function parseTime(time, cFormat) {
-  if (arguments.length === 0) {
-    return null
-  }
+export function parseTime() {
+  // if (arguments.length === 0) {
+  //   return null
+  // }
   const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
   let date
   if (typeof time === 'object') {
