@@ -195,12 +195,13 @@
     }
   }
   .checkphotos {
-    width: 95px;
+    width: 138px;
     height: auto;
     display: inline-block;
-    margin-top: -3px;
-    position: relative;
-    vertical-align: top;
+    margin-top: -28px;
+    position: absolute;
+    right: 0;
+    top: -12px;
     img {
       width: 100%;
       height: auto;
@@ -228,7 +229,7 @@
   padding: 0;
   border-style: none;
   box-shadow: none;
-  margin: 0 3%;
+  margin: 0 0 0 16px;
   height: 44px;
   line-height: 44px;
   border-radius: 25px;

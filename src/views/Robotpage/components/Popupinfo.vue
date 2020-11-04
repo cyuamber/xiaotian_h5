@@ -106,8 +106,8 @@
         color: rgba(255, 255, 255, 0.8);
       }
       .check_button{
-        width: 241px;
-        height: 44px;
+        width: 273px;
+        height: 50px;
         position: absolute;
         bottom: 52px;
         left: 50%;
