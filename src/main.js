@@ -28,7 +28,7 @@ import './filters'
 import audio from 'vue-mobile-audio'
 
 //  引入 vant组件
-import { Icon, Swipe, SwipeItem, Sticky, Popup, Loading, Overlay, Image, Form, Field, Tab, Tabs, Uploader } from 'vant'
+import { Icon, Swipe, SwipeItem, Sticky, Popup, Loading, Overlay, Image, Form, Field, Tab, Tabs, Uploader} from 'vant'
 Vue.use(Loading)
 Vue.use(Popup)
 Vue.use(Sticky)
@@ -43,6 +43,7 @@ Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(Uploader)
 Vue.use(audio)
+Vue.use(Icon)
 Vue.config.productionTip = false
 
 FastClick.attach(document.body)
