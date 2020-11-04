@@ -3,82 +3,81 @@
   <div class="result-form">
     <van-popup
       v-model="formModelShow"
-      :closeable='!beforSubmit'
+      closeable
       close-icon="close"
       close-icon-position="bottom"
       @closed="closed()"
       :class="{'popup':true, 'van-popup-background':!beforSubmit}"
       position="top"
       :style="{
-        'border-radius': '15px',
-        'background-image':'linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1))',
         'position': 'absolute', 'left': '50%', 'transform': 'translate(-50%)'
       }"
     >
-      <div class="content" v-if="beforSubmit">
-        <p class="title">标题</p>
-        <div class="tab-line"></div>
-        <van-tabs
-          class="vans-tabs"
-          background="transparent"
-          color="#00F0FF"
-          title-inactive-color="#ffffff"
-          title-active-color="#00F0FF"
-           @change="tabsOnChange"
-        >
-          <van-tab title="手动录入">
-            <van-form @submit="onSubmit" class="form">
-              <van-field
-                class="van-field-box"
-                v-for="(item, index) in formInputs"
-                :key="index"
-                v-model="item.value"
-                :label='item.lable'
-                :name="item.name"
-                :type="item.type"
-                :center='true'
-                :border='false'
-                label-width='3em'
-                label-class='lable'
-                maxlength='20'
-                :rules="[{ required: true, validator:item.type === 'digit' ? telPhoneValidator: null, message: item.message }]"
-              >
-              <template #button>
-              <div class="dividing-line"></div>
-              </template>
-              </van-field>
-              <div class="submit">
-                <van-button type="info" native-type="submit" class="van-submit-button"></van-button>
+      <div :class="{'wrap':true, 'wrap-submit':!beforSubmit}">
+        <div class="content" v-if="beforSubmit">
+          <p class="title">标题</p>
+          <van-tabs
+            class="vans-tabs"
+            background="transparent"
+            color="#00F0FF"
+            title-inactive-color="#ffffff"
+            title-active-color="#00F0FF"
+            @change="tabsOnChange"
+          >
+            <van-tab title="手动录入">
+              <van-form @submit="onSubmit" class="form">
+                <van-field
+                  class="van-field-box"
+                  v-for="(item, index) in formInputs"
+                  :key="index"
+                  v-model="item.value"
+                  :label='item.lable'
+                  :name="item.name"
+                  :type="item.type"
+                  :center='true'
+                  :border='false'
+                  label-width='3em'
+                  label-class='lable'
+                  maxlength='20'
+                  :rules="[{ required: true, validator:item.type === 'digit' ? telPhoneValidator: null, message: item.message }]"
+                >
+                <template #button>
+                <div class="dividing-line"></div>
+                </template>
+                </van-field>
+                <div class="submit">
+                  <van-button type="info" native-type="submit" class="van-submit-button"></van-button>
+                </div>
+              </van-form>
+            </van-tab>
+            <van-tab title="名片上传" class="card-upload-content">
+              <div class="preview">
+                <img
+                :src="msgSrc"
+                alt="预览"
+                @click="showImage(msgSrc)"
+                :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
               </div>
-            </van-form>
-          </van-tab>
-          <van-tab title="名片上传" class="card-upload-content">
-            <div class="preview">
-               <img
-              :src="msgSrc"
-              alt="预览"
-              @click="showImage(msgSrc)"
-              :class="{ 'img-preview':msgSrc !== require('../../../assets/images/uploadCard.png')}">
-            </div>
-            <div class="footer-button">
-              <div class="takephoto">
-                <img  src="@/assets/images/takePhoto.png" alt="拍照">
-                <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
+              <div class="footer-button">
+                <div class="takephoto">
+                  <img  src="@/assets/images/takePhoto.png" alt="拍照">
+                  <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
+                </div>
+              <div class="uploadphoto">
+                <img src="@/assets/images/upload-button.png" alt="上传" @click="afterRead()">
               </div>
-            <div class="uploadphoto">
-              <img src="@/assets/images/upload-button.png" alt="上传" @click="afterRead()">
-            </div>
-            </div>
-          </van-tab>
-        </van-tabs>
+              </div>
+            </van-tab>
+          </van-tabs>
+        </div>
+        <div class="submit-success" v-if="!beforSubmit">
+          <img src="@/assets/images/submit-success.png" alt="提交成功">
+        </div>
+        <Loading v-if="LoadingShow" />
+        <div class="footer-text" v-if="beforSubmit">
+          *可通过手动填写或上传名片来录入您的信息
+        </div>
       </div>
-      <div class="submit-success" v-if="!beforSubmit">
-        <img src="@/assets/images/submit-success.png" alt="提交成功">
-      </div>
-      <Loading v-if="LoadingShow" />
-      <p class="footer-text" v-if="beforSubmit">
-        *可通过手动填写或上传名片来录入您的信息
-      </p>
     </van-popup>
   </div>
 </template>
@@ -151,6 +150,8 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
+        // 为了测试提交成功界面，暂设置为只要提交就现实成功，后面将去除
+        // this.$store.commit('setBeforSubmit', false)
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
@@ -226,23 +227,20 @@ export default {
 <style lang="less">
 .result-form {
   .van-popup-background{
-    background: transparent!important;
-    top:50%!important;
-    height: 50%!important;
-    /deep/ .van-icon{
-      left: 45%;
-      bottom: 12%;
-    }
+    top: 175px!important;
+    height: 237px!important;
+    width: 191px!important;
   }
-  .tab-line {
-    position: absolute;
-    top: 115px;
-    border-bottom: 1px solid white;
-    width: 286px;
+  .wrap-submit {
+    height: 191px!important;
+    width: 191px!important;
   }
   .van-tabs__line {
     width: 143px;
     height: 2px;
+  }
+  .van-tabs__line:after {
+    border-bottom: 1px solid #ffffff;
   }
   .van-tab {
     font-size: 17px!important;
@@ -250,12 +248,26 @@ export default {
   .popup {
     top: 78px;
     width: 330px;
+    height: 494px;
+    background: transparent;
+    .van-icon{
+      left: 45%;
+      bottom: 0;
+      font-size: 34px;
+    }
+  }
+  .wrap {
+    width: 330px;
     height: 448px;
+    border-radius: 15px;
+    background-image: linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1));
+    position: absolute;
+    top: 0;
     .footer-text {
       color: #7FA2E9;
       width: 100%;
       position: absolute;
-      bottom: 15px;
+      bottom: 33px;
       font-size: 14px;
       text-align: center;
     }
@@ -275,20 +287,22 @@ export default {
     .vans-tabs {
       color: #fff;
       .form{
-        margin-top: 26px;
+        padding-top: 13px;
+        border-top: 1px solid #ffffff;
+        margin-top: -1px;
         .van-field-box{
           font-size: 17px;
           font-family: PingFangSC-Regular;
           width: 100%;
-          color: #fff!important;
+          color: #ffffff!important;
           background: transparent;
           border-radius: 10px;
           margin: 15px auto;
           border:1px solid #cfe3ff;
-          /deep/ .van-field__label, /deep/ .van-field__control{
-            color: #fff!important;
+          .van-field__label, .van-field__control{
+            color: #ffffff!important;
           }
-          /deep/ .van-field__error-message{
+          .van-field__error-message{
             position: absolute;
             top:0;
             z-index: -1;
@@ -311,7 +325,7 @@ export default {
             border:none;
             margin-left: -15px;
           }
-          /deep/ .van-button::before{
+          .van-button::before{
             background: transparent;
           }
         }
@@ -319,7 +333,7 @@ export default {
       .card-upload-content{
         .preview{
           width: 100%;
-          height: auto;
+          height: 163px;
           margin: 21px auto 10px auto;
           text-align: center;
           img{
@@ -355,7 +369,7 @@ export default {
     }
   }
   .submit-success{
-    width: 80%;
+    width: 100%;
     height: auto;
     text-align: center;
     margin: 0 auto;

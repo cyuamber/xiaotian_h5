@@ -61,7 +61,6 @@
   </div>
 </template>
 <script>
-import { GETPRESENT } from "../../const/constant";
 import ResultForm from "./components/ResultForm";
 import { axiosGet } from "../../utils/http.js";
 import API from "../../utils/api";
@@ -75,47 +74,11 @@ export default {
   data() {
     return {
       receivedData: [],
-      greetText: [],
-      visitText: [],
-      name: "xx",
-      month: "x",
-      day: "x",
-      hour: "x",
-      min: "x",
+      greetText: [ '亲爱的', '2020年11月03日10点02分你来到会场', '你知道，无论什么时候', '我都在等待与你相遇，一起去探索5G+AI的世界'],
+      visitText: [["10点02分", "我们到达了C区域，探寻了个人区域，感受到了个人魅力"], ["10点02分", "我们到达了H区域，探寻了家庭区域，感受到了家庭魅力"], ["10点02分", "我们到达了B区域，探寻了政企区域，感受到了政企魅力"], ["10点03分", "我们到达了N区域，探寻了新兴区域，感受到了新兴魅力"]],
       resultRobotLogoShow: true,
       num: 3,
       Timer: null,
-      visitList: [
-        {
-          hour: "X",
-          min: "X",
-          place: "X",
-          project: "XXXXXX",
-          feel: "XXX",
-        },
-        {
-          hour: "X",
-          min: "X",
-          place: "X",
-          project: "XXXXXX",
-          feel: "XXX",
-        },
-        {
-          hour: "X",
-          min: "X",
-          place: "XX",
-          project: "XXXXXX",
-          feel: "XXX",
-        },
-        {
-          hour: "X",
-          min: "X",
-          place: "XX",
-          project: "XXXXXX",
-          feel: "XXX",
-        },
-      ],
-      completeText: GETPRESENT,
     };
   },
   created() {
@@ -126,12 +89,12 @@ export default {
     handleGreetText() {
       this.greetText= this.receivedData[0].split('\n')
     },
-    handleVisitText() {      
+    handleVisitText() { 
+      this.visitText = []     
       let text = this.receivedData[1].split('\n')
       for(let i = 0, len = text.length; i < len; i += 2){
 　　　　this.visitText.push(text.slice(i, i+2));
 　　   }
-      console.log('af', this.visitText)
     },
     getBasicInfo() {
       // 从后段获取month...
@@ -185,7 +148,7 @@ export default {
   position: relative;
   .toolbars {
     position: fixed;
-    top: 50%;
+    top: 224px;
     right: 0;
     height: 120px;
     width: 60px;
@@ -261,7 +224,6 @@ export default {
       line-height: 20px;
       font-family: SourceHanSansCN-Regular;
       width: 272px;
-      height: 54px;
       margin-top: 15px;
     }
   }
