@@ -30,15 +30,6 @@
           </a>
         </div>
         <div class="bodyInput">
-          <div class="footer-icon">
-            <img
-              v-show="!textSwitch"
-              src="@/assets/images/talk-icon.png"
-              alt="语音"
-              @touchstart="talkStart"
-              @touchend="talkEndClear"
-            />
-          </div>
           <textarea
             class="inputArea"
             v-model="inputContent"
@@ -55,7 +46,6 @@
       </div>
     </div>
     <Loading v-if="LoadingShow" />
-    <Recorder @sendTalkMsg="sendTalkMsg" />
     <Popupinfo
       :msgList="msgList"
       @photoMsg="photoMsg"
@@ -224,8 +214,7 @@
     }
   }
 }
-.inputArea,
-.talk-button {
+.inputArea{
   resize: none;
   width: 240px;
   overflow: auto;
@@ -241,12 +230,8 @@
   height: 44px;
   line-height: 44px;
   border-radius: 25px;
-  text-indent: 1rem;
+  text-indent: 0.5rem;
 }
-// .inputArea{
-//   width: 56%;
-//   margin: 0 3% 0 16%;
-// }
 </style>
 
 <script>
@@ -262,7 +247,6 @@ import {
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
 
-const Recorder = () => import('./components/Recorder')
 const Popupinfo = () => import('./components/Popupinfo')
 const Photograph = () => import('./components/Photograph')
 
@@ -272,8 +256,7 @@ export default {
     Loading,
     Chatbox,
     Popupinfo,
-    Photograph,
-    Recorder
+    Photograph
   },
 
   data() {
@@ -311,7 +294,7 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.getItem('userName') === null) {
+    if (localStorage.getItem('userId') === null) {
       localStorage.setItem('userName', get_UserName(32))
       localStorage.setItem('userId', get_UserName(32))
     }
@@ -361,7 +344,6 @@ export default {
           this.$store.commit('setLoadingShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
             this.getCheckIconStatus = res.data
-
             this.filterCheckIconStatus(this.getCheckIconStatus)
           }
         })
@@ -382,9 +364,6 @@ export default {
     swipeLoop(data) {
       this.imgIcon = [...data]
     },
-    // popupinfophotoMsg() {
-    //   this.getuploadImgResults()
-    // },
     filterCheckIconStatus(data) {
       this.imgIcon.map((item, index) => {
         data.map((items, ind) => {
@@ -397,6 +376,7 @@ export default {
           }
         })
       })
+      this.imgIcon = [...this.imgIcon]
       const statusAll = []
       data.map((items) => {
         statusAll.push(items.isCheck)
@@ -440,15 +420,13 @@ export default {
       this.getAnswer(userMsg)
       e.preventDefault()
     },
-    getAnswer(questions, sendTalkMsg = false) {
+    getAnswer(questions) {
       const params = {
         userId: this.userId,
         text: questions.oldform.question
       }
       const url = API.port8085.sendTextUrl
-      if (!sendTalkMsg) {
-        this.msgList.push(questions)
-      }
+      this.msgList.push(questions)
       const robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
@@ -482,7 +460,7 @@ export default {
             robotMsg.msg = res.data
           }
           this.$nextTick(() => {
-            if (res.data.length > 0) {
+            if ( res && res.data && res.data.length > 0) {
               this.msgList.push(robotMsg)
             }
             setTimeout(() => {
@@ -504,94 +482,6 @@ export default {
         clearInterval(this.countDownTimes)
         this.$store.commit('setMaskShow', false)
       }
-    },
-    talkEndClear(e) {
-      e.stopPropagation()
-      clearTimeout(this.timeOutEvent)
-      if (this.timeOutEvent !== 0) {
-        console.log('你这是点击，不是长按')
-      } else {
-        this.longPress = false
-        clearInterval(this.countDownTimes)
-        this.$store.commit('setMaskShow', false)
-        if (localStorage.getItem('setTalkIsloading') === 'fasle') {
-          this.$store.commit('setLoadingShow', true)
-        }
-      }
-      return false
-    },
-    talkStart(e) {
-      e.stopPropagation()
-      this.timeOutEvent = setTimeout(() => {
-        this.timeOutEvent = 0
-        this.longPress = true
-        this.$store.commit('setMaskShow', true)
-        this.countDownTimes = setInterval(this.countDowns, 1000)
-      }, 500)
-      return false
-    },
-    sendTalkMsg(talkMsgs) {
-      console.log(talkMsgs, '---sendTalkMsg')
-      const userMsg = {
-        type: 'user',
-        oldform: {
-          question: talkMsgs.talkMsg,
-          answer: '',
-          source: '',
-          fileName: ''
-        },
-        voiceUrl: talkMsgs.audioUrl,
-        updateold: false
-      }
-      this.msgList.push(userMsg)
-      this.getRecorderUrl(userMsg)
-      this.setTalkTimer = setInterval(() => {
-        this.setTalkIsloading(userMsg)
-      }, 500)
-    },
-    setTalkIsloading() {
-      if (localStorage.getItem('setTalkIsloading') === 'false') {
-        if (this.setTalkTimer !== null) {
-          clearInterval(this.setTalkTimer)
-          this.setTalkTimer = null
-        }
-        userMsg.oldform.question = localStorage.getItem('setTalkText')
-        this.getAnswer(userMsg, true)
-      }
-    },
-    getRecorderUrl(userMsg) {
-      if (localStorage.getItem('recorderUpload') === 'begain') {
-        this.getRecorderTimer = setInterval(() => {
-          this.getRecorderUrl(userMsg)
-        }, 200)
-      } else if (localStorage.getItem('recorderUpload') === 'success') {
-        clearInterval(this.getRecorderTimer)
-        this.getRecorderDownload(userMsg)
-      } else if (localStorage.getItem('recorderUpload') === 'faild') {
-        clearInterval(this.getRecorderTimer)
-        console.log('音频上传失败')
-      }
-    },
-    getRecorderDownload(userMsg) {
-      const url = API.port8085.recorderDownload
-      userMsg.oldform.fileName = userMsg.oldform.fileName !== ''? userMsg.oldform.fileName:localStorage.getItem('recorderUploadName')
-      const params = {
-        fileName: userMsg.oldform.fileName
-      }
-      axiosGet(url, params)
-        .then((res) => {
-          if (res && res.code === 200) {
-            this.msgList.map(item => {
-              if (item.oldform.question === userMsg.oldform.question) {
-                item.voiceUrl = res.data
-              }
-            })
-            this.msgList = [...this.msgList]
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     },
     getInformation(item, index) {
       this.quickClick(item.title) // 点击图标时自动发送对应文字
