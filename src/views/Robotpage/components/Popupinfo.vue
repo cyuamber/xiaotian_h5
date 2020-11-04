@@ -47,11 +47,11 @@
           </van-swipe>
   </van-popup>
 </template>
-<style lang="less" scoped>
+<style lang="less">
   .popup {
     top: 116px;
     height: 388px;
-    /deep/ .van-icon{
+    .van-icon{
       left: 45%;
       bottom: 1%;
       font-size: 34px;
@@ -60,57 +60,57 @@
       height: 342px;
       border-radius: 15px;
     }
-  }
-  .info{
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(-74deg, #2c47bf 1%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#000, #000);
-    color: rgb(255, 255, 255, 0.8);
-    .title{
-      padding-top: 30px;
-      margin: 0 0px 16px 93px;
-      img{
-        width: 101px;
-        height: 129px;
+    .info{
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(-74deg, #2c47bf 1%, 	#2e5acf 26%, 	#307eef 76%, 	#318fff 100%), linear-gradient(	#000, #000);
+      color: rgb(255, 255, 255, 0.8);
+      .title{
+        padding-top: 30px;
+        margin: 0 0px 16px 93px;
+        img{
+          width: 101px;
+          height: 129px;
+          position: absolute;
+          top: 0;
+          left: 0px;
+          top: -8px;
+        }
+        .title-text{
+          display: inline-block;
+          text-align: left;
+          font-family: PingFangSC-Semibold;
+          line-height: 29px;
+          .title-eng {
+            font-size: 26px;
+          }
+          .title-ch {
+            font-size: 20px;
+          }
+        }
+      }
+      .info-content{
+        width: 261px;
+        margin: 10px auto;
+        text-align: center;
+        font-size: 17px;
+        line-height: 24px;
+        font-family: PingFangSC-Regular;
+        font-weight: normal;
+        font-stretch: normal;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .check_button{
+        width: 241px;
+        height: 44px;
         position: absolute;
-        top: 0;
-        left: 0px;
-        top: -8px;
-      }
-      .title-text{
-        display: inline-block;
-        text-align: left;
-        font-family: PingFangSC-Semibold;
-        line-height: 29px;
-        .title-eng {
-          font-size: 26px;
+        bottom: 52px;
+        left: 50%;
+        transform: translate(-50%);
+        img{
+          width: 100%;
+          height: auto;
         }
-        .title-ch {
-          font-size: 20px;
-        }
-      }
-    }
-    .info-content{
-      width: 261px;
-      margin: 10px auto;
-      text-align: center;
-      font-size: 17px;
-      line-height: 24px;
-      font-family: PingFangSC-Regular;
-      font-weight: normal;
-      font-stretch: normal;
-      color: rgba(255, 255, 255, 0.8);
-    }
-    .check_button{
-      width: 241px;
-      height: 44px;
-      position: absolute;
-      bottom: 52px;
-      left: 50%;
-      transform: translate(-50%);
-      img{
-        width: 100%;
-        height: auto;
       }
     }
   }
