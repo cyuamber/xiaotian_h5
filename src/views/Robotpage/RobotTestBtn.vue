@@ -335,9 +335,11 @@ export default {
     },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
+      this.userId = this.userId === null ? localStorage.getItem('userId') : this.userId
       const params = {
         userId: this.userId
       }
+      console.log(this.userId, 'userId')
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
