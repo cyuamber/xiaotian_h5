@@ -150,7 +150,6 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-        this.$store.commit('setBeforSubmit', false)
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
