@@ -30,7 +30,7 @@
                 <p class="info-content">
                   {{item.infoContent}}
                 </p>
-                <div class="check_button">
+                <div :class="{'check_button':true, 'checked_button':item.isCheck}">
                   <img
                   v-if="allPhotoIschecked"
                   @click="hrefRobotTestBtn()"
@@ -104,6 +104,10 @@
         font-weight: normal;
         font-stretch: normal;
         color: rgba(255, 255, 255, 0.8);
+      }
+      .checked_button {
+        width: 241px!important;
+        height: 44px!important;
       }
       .check_button{
         width: 273px;

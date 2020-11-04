@@ -19,9 +19,9 @@ select {
   user-select: auto;
 }
 
-img{
+/* img{
      pointer-events:none;
-  }
+  } */
 .ant-drawer-title {
   text-align: left !important;
   color: #fff;
