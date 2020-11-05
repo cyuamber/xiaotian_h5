@@ -139,11 +139,12 @@
 .bodyDialog {
   width: 100%;
   height: calc(100% - 251px);
-  padding: 20px 20px 0px 0;
+  padding: 0 20px 0px 0;
   display: flex;
   flex-flow: column;
   overflow: auto;
   overflow-x:hidden;
+  margin-top: 20px;
 }
 .footer {
   width: 100%;

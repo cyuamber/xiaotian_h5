@@ -116,6 +116,7 @@ export default {
 
 <style lang="less" scoped>
 .chatbox {
+  margin-top: 20px;
   .picHolder {
     width: 80%;
     display: flex;
