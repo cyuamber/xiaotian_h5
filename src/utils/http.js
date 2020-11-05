@@ -11,7 +11,7 @@ const http = axios.create({
   baseURL: '',
   // withCredentials: true, // set cross-origin
   crossDomain: true,
-  timeout: 30000
+  timeout: 3000
   // test code
 })
 

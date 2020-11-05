@@ -26,9 +26,7 @@ export default {
     }
   },
   mounted() {
-    console.log(localStorage.getItem('userName'), localStorage.getItem('userId'))
-    if (localStorage.getItem('userName') === null) {
-      localStorage.setItem('userName', get_UserName(32))
+    if (localStorage.getItem('userId') === undefined || localStorage.getItem('userId') === null) {
       localStorage.setItem('userId', get_UserName(32))
     }
     this.$nextTick(() => {

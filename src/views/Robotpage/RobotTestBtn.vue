@@ -5,7 +5,7 @@
         <img class="top-img" src="@/assets/images/robot_top.png">
         <div class="top-block" v-for="(item, index) in imgIcon" :key="index" :class="{ 'z-index': item.zIndex }">
           <div>
-            <img class="number-img" src="@/assets/images/fire.png">
+            <img class="number-img" :src="item.fireImgSrc">
             <span class="number-text">{{item.number}}</span>
           </div>
           <img
@@ -78,8 +78,8 @@
     align-items: center;
     z-index: 3;
     .number-img {
-      height: 11px;
-      width: 11px;
+      height: 12.5px;
+      width: 10px;
       display: inline-block;
       margin-right: 3px;
     }
@@ -88,8 +88,8 @@
       color: rgb(181,196,252);
     }
     .top-point {
-      width: 63px;
-      height: 63px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       line-height: 75px;
       margin-top: 6px;
@@ -203,10 +203,10 @@
     margin-top: -28px;
     position: absolute;
     right: 0;
-    top: -12px; 
+    top: -12px;
     img {   
       width: 138px;
-      height: auto; 
+      height: auto;
     }
     input[type="file"] {
       position: absolute;
@@ -247,7 +247,8 @@ import { get_UserName } from '../../utils/index.js'
 import {
   POINTINFO,
   COMMONQUESTION,
-  IMGICON
+  IMGICON,
+  FIREIMG
 } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
@@ -274,7 +275,6 @@ export default {
         answer: '',
         source: ''
       },
-      username: '',
       phonenum: '',
       commonQuestion: COMMONQUESTION,
       getCheckIconStatus: [],
@@ -287,7 +287,6 @@ export default {
       countDownTimes: null,
       longPress: false,
       base64ImgData: null,
-      userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
       allPhotoIscheck: false,
@@ -295,14 +294,14 @@ export default {
       timer: null,
       getRecorderTimer: null,
       setTalkTimer: null,
-      swipeHeight: 730
+      swipeHeight: 730,
+      firekeys: ['1','2','3','4']
       // questionStyle: ''
     }
   },
   mounted() {
-    if (localStorage.getItem('userId') === null) {
-      localStorage.setItem('userName', get_UserName(32))
-      localStorage.setItem('userId', get_UserName(32))
+    if (localStorage.getItem('userId') === undefined || localStorage.getItem('userId') === null) {
+      this.userId = localStorage.setItem('userId', get_UserName(32))
     }
     this.getuploadImgResults()
     this.$nextTick(() => {
@@ -327,13 +326,36 @@ export default {
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
             const info = res.data
-            for (const infoKey in info) {
-              for (const checkItem of this.imgIcon) {
-                if (checkItem.key === infoKey) {
-                  checkItem.number = info[infoKey]
-                }
+            let fireNumbers = []
+            this.firekeys.map(item => {
+              if (Object.keys(info).indexOf(item) > -1) {
+                fireNumbers.push({
+                  num: info[item],
+                  src: '',
+                  key: item
+                })
+              } else {
+                fireNumbers.push({
+                  num: 0,
+                  src: '',
+                  key: item
+                })
               }
-            }
+            })
+            fireNumbers = fireNumbers.sort(function(a,b){
+              return Number(a.num)-Number(b.num)
+            })
+            fireNumbers.map((item, index) => {
+              item.src = FIREIMG[index]
+            })
+            this.imgIcon.map((item, index) => {
+              fireNumbers.map(items => {
+                if(item.key === items.key){
+                  item.fireImgSrc = items.src,
+                  item.number = items.num
+                }
+              })
+            })
           } else {
             console.log(res.msg) // 报错
           }
@@ -345,7 +367,7 @@ export default {
     },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
-      this.userId = this.userId === null ? localStorage.getItem('userId') : this.userId
+      this.userId = this.userId === null || this.userId === undefined ? localStorage.getItem('userId') : this.userId
       const params = {
         userId: this.userId
       }

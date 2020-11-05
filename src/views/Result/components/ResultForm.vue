@@ -98,7 +98,6 @@ export default {
   },
   data() {
     return {
-      // userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       formInputs: FORMINPUTS,
       msgSrc: require('../../../assets/images/uploadCard.png'),
@@ -182,8 +181,7 @@ export default {
           'X-CSRF-Token': window.localStorage.getItem('token')
         }
         const params = {
-          userId: this.userId,
-          username: this.userName
+          userId: this.userId
         }
         const url = API.port8085.saveUserInfo
         this.$store.commit('setLoadingShow', true)
