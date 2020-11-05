@@ -395,6 +395,7 @@ export default {
             }, 0)
           })
       } else {
+        console.log(data, '----data')
         this.msgList = [...data]
         const photocheck = true
         this.getuploadImgResults(photocheck)
