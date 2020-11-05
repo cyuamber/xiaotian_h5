@@ -68,6 +68,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2;
   }
   .top-block {
     position:relative;
@@ -75,6 +76,7 @@
     margin: 18px 15px 0 15px;
     position: relative;
     align-items: center;
+    z-index: 3;
     .number-img {
       height: 11px;
       width: 11px;
@@ -139,12 +141,11 @@
 .bodyDialog {
   width: 100%;
   height: calc(100% - 251px);
-  padding: 0 20px 0px 0;
+  padding: 20px 20px 0px 0;
   display: flex;
   flex-flow: column;
   overflow: auto;
   overflow-x:hidden;
-  margin-top: 20px;
 }
 .footer {
   width: 100%;
