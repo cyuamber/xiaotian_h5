@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div class="index-container" :style="{'height': swipeHeight + 'px'}">
+  <div class="index-container">
     <div class="warpper">
       <div class="index-content">
         <div class="index-rules">
@@ -23,7 +23,6 @@ export default {
   data() {
     return {
       checkRules: CHECKRULES,
-      swipeHeight: 730
     }
   },
   mounted() {
@@ -34,7 +33,6 @@ export default {
     }
     this.$nextTick(() => {
       this.swipeHeight = window.innerHeight
-      console.log(this.swipeHeight)
     })
   },
   methods: {

@@ -1,65 +1,67 @@
 <template>
   <div class="result-container">
-    <img class="result-bg" src="@/assets/images/result-background.png" />
-    <div class="back-button" @click="backToRobot">
-      <img src="@/assets/images/back.png" />
-    </div>
-    <div class="result-greet">
-      <div class="greet-text">
-        <div v-for="(item, index) in greetText" :key=index>{{item}}</div>
+    <div class="result-wrap">
+      <!-- <img class="result-bg" src="@/assets/images/result-background.png" /> -->
+      <div class="back-button" @click="backToRobot">
+        <img src="@/assets/images/back.png" />
       </div>
-    </div>
-    <div class="result-visit">
-      <div class="visit-title">你对这里充满了好奇</div>
-      <div class="visit-text">
-        <div class="visit-item" v-for="(item, index) in visitText" :key=index>
-          <div class="visit-line" v-for="(line, index) in item" :key=index>
-            {{line}}
+      <div class="result-greet">
+        <div class="greet-text">
+          <div v-for="(item, index) in greetText" :key=index>{{item}}</div>
+        </div>
+      </div>
+      <div class="result-visit">
+        <div class="visit-title">你对这里充满了好奇</div>
+        <div class="visit-text">
+          <div class="visit-item" v-for="(item, index) in visitText" :key=index>
+            <div class="visit-line" v-for="(line, index) in item" :key=index>
+              {{line}}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="result-background_footer">
-        <img src="@/assets/images/result-background_footer.png" alt="探索完成">
-      </div>
-    </div>
-    <!-- <div class="result-complete">
-            <img class="complete-title" src="@/assets/images/complete.png">
-            <div class="complete-content">
-                <div class="complete-item" v-for="(item, index) in completeText" :key=index>
-                    {{item}}
-                </div>
-            </div>
-            <img class="complete-present" src="@/assets/images/present.png" />
+        <div class="result-background_footer">
+          <img src="@/assets/images/result-background_footer.png" alt="探索完成">
         </div>
-        -->
-    <div class="toolbars">
-      <div  style="height: 100%">
-        <!-- <transition
-          name="van-slide-right"
-          :duration="{ enter: 800, leave: 800 }"
-        >
-          <img
-            style="width: 85%"
-            :class="{ xiaotian: true, rotate: resultRobotLogoShow }"
-            src="@/assets/images/result_robot.png"
-            alt="小天机器人logo"
-            v-if="resultRobotLogoShow"
-          />
-        </transition> -->
-        <transition
-          name="van-slide-right"
-          :duration="{ enter: 800, leave: 800 }"
-        >
-          <img
-            src="@/assets/images/result_robot_logo.png"
-            alt="小天机器人logo"
-            style="top: 1px"
-          />
-        </transition>
       </div>
-      <span @click="formModelShow()"></span>
+      <!-- <div class="result-complete">
+              <img class="complete-title" src="@/assets/images/complete.png">
+              <div class="complete-content">
+                  <div class="complete-item" v-for="(item, index) in completeText" :key=index>
+                      {{item}}
+                  </div>
+              </div>
+              <img class="complete-present" src="@/assets/images/present.png" />
+          </div>
+          -->
+      <div class="toolbars">
+        <div  style="height: 100%">
+          <!-- <transition
+            name="van-slide-right"
+            :duration="{ enter: 800, leave: 800 }"
+          >
+            <img
+              style="width: 85%"
+              :class="{ xiaotian: true, rotate: resultRobotLogoShow }"
+              src="@/assets/images/result_robot.png"
+              alt="小天机器人logo"
+              v-if="resultRobotLogoShow"
+            />
+          </transition> -->
+          <transition
+            name="van-slide-right"
+            :duration="{ enter: 800, leave: 800 }"
+          >
+            <img
+              src="@/assets/images/result_robot_logo.png"
+              alt="小天机器人logo"
+              style="top: 1px"
+            />
+          </transition>
+        </div>
+        <span @click="formModelShow()"></span>
+      </div>
+      <ResultForm />
     </div>
-    <ResultForm />
   </div>
 </template>
 <script>
@@ -150,8 +152,15 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
+  height: 100vh;
+  width: 100%;
+  background-color: #063399;
   // background: url('../../assets/images/result-background.png') no-repeat;
   // background-size: contain;
+  .result-wrap {
+    background: url('../../assets/images/result-background.png') no-repeat;
+    background-size: 375px 728px;
+  }
   .toolbars {
     position: fixed;
     top: 224px;
@@ -183,9 +192,6 @@ export default {
       display: inline-block;
     }
   }
-  height: 100vh;
-  width: 100%;
-  background-color: #123199;
   z-index: 2;
   .result-bg {
     position: absolute;
