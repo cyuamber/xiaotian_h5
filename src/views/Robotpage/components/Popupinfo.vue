@@ -50,11 +50,11 @@
 <style lang="less">
   .popup {
     top: 116px;
-    height: 388px;
+    height: 404px;
     .van-icon{
       left: 45%;
       bottom: 1%;
-      font-size: 34px;
+      font-size: 50px;
       background: url("../../../assets/images/close.png") no-repeat;
       background-size: 34px 34px;
     }
