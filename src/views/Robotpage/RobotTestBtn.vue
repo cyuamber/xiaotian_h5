@@ -204,7 +204,6 @@
     position: absolute;
     right: 0;
     top: -12px;
-    z-index: -1; 
     img {   
       width: 138px;
       height: auto;
