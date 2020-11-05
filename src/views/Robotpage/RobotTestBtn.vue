@@ -206,7 +206,8 @@
       margin-top: -28px;
       position: absolute;
       right: 0;
-      top: -12px;     
+      top: -12px;
+      z-index: -1;     
     }
     input[type="file"] {
       position: absolute;
@@ -275,7 +276,6 @@ export default {
         answer: '',
         source: ''
       },
-      username: '',
       phonenum: '',
       commonQuestion: COMMONQUESTION,
       getCheckIconStatus: [],
@@ -288,7 +288,6 @@ export default {
       countDownTimes: null,
       longPress: false,
       base64ImgData: null,
-      userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId'),
       swipeToNum: 0,
       allPhotoIscheck: false,
@@ -300,9 +299,8 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.getItem('userId') === null) {
-      localStorage.setItem('userName', get_UserName(32))
-      localStorage.setItem('userId', get_UserName(32))
+    if (localStorage.getItem('userId') === undefined || localStorage.getItem('userId') === null) {
+      this.userId = localStorage.setItem('userId', get_UserName(32))
     }
     this.getuploadImgResults()
   },
@@ -356,7 +354,7 @@ export default {
     },
     getuploadImgResults(photocheck) {
       const url = API.port8085.getuploadImgResult
-      this.userId = this.userId === null ? localStorage.getItem('userId') : this.userId
+      this.userId = this.userId === null || this.userId === undefined ? localStorage.getItem('userId') : this.userId
       const params = {
         userId: this.userId
       }

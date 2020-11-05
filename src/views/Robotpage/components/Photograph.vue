@@ -22,7 +22,6 @@ export default {
       msgLists: this.msgList,
       msgSrcs: this.msgSrc,
       base64ImgData: null,
-      userName: localStorage.getItem('userName'),
       userId: localStorage.getItem('userId')
     }
   },
@@ -50,8 +49,7 @@ export default {
       }
       let url = ''
       const params = {
-        userId: this.userId,
-        username: this.userName
+        userId: this.userId
       }
       const userMsg = {}
       const robotMsg = {}

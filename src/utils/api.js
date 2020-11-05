@@ -1,4 +1,5 @@
-const port8085 = "http://172.31.201.38:8081";
+// const port8085 = "http://172.31.201.38:8081";
+const port8085 = "http://39.107.245.157:8081";
 
 export default {
   port8085: {
