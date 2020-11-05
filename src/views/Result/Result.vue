@@ -63,7 +63,7 @@
 import ResultForm from "./components/ResultForm";
 import { axiosGet } from "../../utils/http.js";
 import API from "../../utils/api";
-import parseTime from "../../utils/index";
+import { parseTime } from "../../utils/index";
 
 // const ResultForm = () => import('./components/ResultForm')
 export default {
@@ -84,7 +84,7 @@ export default {
   created() {
     this.getBasicInfo();
     this.getName();
-    // console.log(parseTime(), 'parseTime')
+    console.log(parseTime(), 'parseTime')
   },
   methods: {
     handleGreetText() {
@@ -169,7 +169,7 @@ export default {
     }
     span {
       position: absolute;
-      bottom: 0;
+      bottom: -15%;
       right: 0;
       width: 100%;
       height: 25px;
@@ -210,7 +210,7 @@ export default {
     }
   }
   .result-visit {
-    margin-top: 37px;
+    margin-top: 35px;
     margin-left: 34px;
     .visit-title {
       margin-bottom: 3px;

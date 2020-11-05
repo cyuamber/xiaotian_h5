@@ -308,6 +308,7 @@ export default {
             position: absolute;
             top:0;
             z-index: 0;
+            color: #fff;
           }
           .dividing-line{
             width: 1px;
