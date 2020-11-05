@@ -226,7 +226,7 @@ export default {
 .result-form {
   .van-popup-background{
     top: 175px!important;
-    height: 237px!important;
+    height: 253px!important;
     width: 191px!important;
   }
   .wrap-submit {
@@ -243,12 +243,12 @@ export default {
   .popup {
     top: 78px;
     width: 330px;
-    height: 494px;
+    height: 510px;
     background: transparent;
     .van-icon{
       left: 45%;
       bottom: 0;
-      font-size: 34px;
+      font-size: 50px;
       background: url("../../../assets/images/close.png") no-repeat;
       background-size: 34px 34px;
     }

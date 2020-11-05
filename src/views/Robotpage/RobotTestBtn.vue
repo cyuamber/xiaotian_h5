@@ -5,13 +5,13 @@
         <img class="top-img" src="@/assets/images/robot_top.png">
         <div class="top-block" v-for="(item, index) in imgIcon" :key="index" :class="{ 'z-index': item.zIndex }">
           <div>
-            <img class="number-img" :src="item.fireImgSrc">
+            <img class="number-img" src="@/assets/images/fire.png">
             <span class="number-text">{{item.number}}</span>
           </div>
           <img
             class="top-point"
             @click="() => getInformation(item, index)"
-            :src="item.isCheck && item.zIndex ? item.swipeShowChecked : item.src"
+            :src="item.src"
             alt=""
           />
         </div>
@@ -78,8 +78,8 @@
     align-items: center;
     z-index: 3;
     .number-img {
-      height: 12.5px;
-      width: 10px;
+      height: 11px;
+      width: 11px;
       display: inline-block;
       margin-right: 3px;
     }
@@ -88,8 +88,8 @@
       color: rgb(181,196,252);
     }
     .top-point {
-      width: 60px;
-      height: 60px;
+      width: 63px;
+      height: 63px;
       border-radius: 50%;
       line-height: 75px;
       margin-top: 6px;
@@ -199,21 +199,21 @@
     }
   }
   .checkphotos {
-    img {
+    display: inline-block;
+    margin-top: -28px;
+    position: absolute;
+    right: 0;
+    top: -12px; 
+    img {   
       width: 138px;
-      height: auto;
-      display: inline-block;
-      margin-top: -28px;
-      position: absolute;
-      right: 0;
-      top: -12px;     
+      height: auto; 
     }
     input[type="file"] {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
+      left: 28px;
+      top: 40px;
+      width: 95px;
+      height: 44px;
       z-index: 9;
       opacity: 0;
     }
@@ -247,8 +247,7 @@ import { get_UserName } from '../../utils/index.js'
 import {
   POINTINFO,
   COMMONQUESTION,
-  IMGICON,
-  FIREIMG
+  IMGICON
 } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
@@ -323,28 +322,13 @@ export default {
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
             const info = res.data
-            let fireNumbers = []
             for (const infoKey in info) {
-              fireNumbers.push({
-                num: info[infoKey],
-                src: '',
-                key: infoKey
-              })
-            }
-            fireNumbers = fireNumbers.sort(function(a,b){
-              return Number(a.num)-Number(b.num)
-            })
-            fireNumbers.map((item, index) => {
-              item.src = FIREIMG[index]
-            })
-            this.imgIcon.map((item, index) => {
-              fireNumbers.map(items => {
-                if(item.key === items.key){
-                  item.fireImgSrc = items.src,
-                  item.number = items.num
+              for (const checkItem of this.imgIcon) {
+                if (checkItem.key === infoKey) {
+                  checkItem.number = info[infoKey]
                 }
-              })
-            })
+              }
+            }
           } else {
             console.log(res.msg) // 报错
           }
