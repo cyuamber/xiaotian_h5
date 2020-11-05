@@ -19,6 +19,9 @@
         </div>
       </div>
     </div>
+    <!-- <div class="result-background_footer">
+      <img src="@/assets/images/result-background_footer.png" alt="探索完成">
+    </div> -->
     <!-- <div class="result-complete">
             <img class="complete-title" src="@/assets/images/complete.png">
             <div class="complete-content">
@@ -190,6 +193,16 @@ export default {
     left: 0;
     z-index: -1;
     width: 100%;
+  }
+  .result-background_footer{
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    img{
+      width: 80%;
+      height: auto;
+      margin: 0 auto;
+    }
   }
   .back-button {
     position: absolute;
