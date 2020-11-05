@@ -11,7 +11,7 @@
           <img
             class="top-point"
             @click="() => getInformation(item, index)"
-            :src="item.src"
+            :src="item.isCheck && item.zIndex ? item.swipeShowChecked : item.src"
             alt=""
           />
         </div>
