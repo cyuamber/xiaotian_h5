@@ -150,8 +150,7 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-        // 为了测试提交成功界面，暂设置为只要提交就现实成功，后面将去除
-        // this.$store.commit('setBeforSubmit', false)
+        this.$store.commit('setBeforSubmit', false)
     },
     telPhoneValidator(val) {
       const validatorResult = this.phoneValidator.test(val)
@@ -239,9 +238,6 @@ export default {
     width: 143px;
     height: 2px;
   }
-  .van-tabs__line:after {
-    border-bottom: 1px solid #ffffff;
-  }
   .van-tab {
     font-size: 17px!important;
   }
@@ -254,8 +250,13 @@ export default {
       left: 45%;
       bottom: 0;
       font-size: 34px;
+      background: url("../../../assets/images/close.png") no-repeat;
+      background-size: 34px 34px;
     }
   }
+    .van-icon-close::before {
+      color: transparent;
+    }
   .wrap {
     width: 330px;
     height: 448px;
@@ -288,7 +289,7 @@ export default {
       color: #fff;
       .form{
         padding-top: 13px;
-        border-top: 1px solid #ffffff;
+        border-top: 1px solid rgba(255, 255, 255, 0.4);
         margin-top: -1px;
         .van-field-box{
           font-size: 17px;
@@ -335,9 +336,13 @@ export default {
       }
       .card-upload-content{
         .preview{
+          box-sizing: content-box;
           width: 100%;
           height: 163px;
-          margin: 21px auto 10px auto;
+          padding-top: 21px;
+          padding-bottom: 10px;
+          margin: -1px auto 0 auto;
+          border-top: 1px solid rgba(255, 255, 255, 0.4);
           text-align: center;
           img{
             width: 100%;

@@ -37,7 +37,7 @@
         >
           <img
             style="width: 85%"
-            :class="{ rotate: resultRobotLogoShow }"
+            :class="{ xiaotian: true, rotate: resultRobotLogoShow }"
             src="@/assets/images/result_robot.png"
             alt="小天机器人logo"
             v-if="resultRobotLogoShow"

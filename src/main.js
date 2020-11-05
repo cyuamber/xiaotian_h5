@@ -44,6 +44,7 @@ Vue.use(Tabs)
 Vue.use(Uploader)
 Vue.use(Notify)
 Vue.use(audio)
+Vue.use(Icon)
 Vue.config.productionTip = false
 
 FastClick.attach(document.body)
