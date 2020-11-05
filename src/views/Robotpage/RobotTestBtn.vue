@@ -203,11 +203,11 @@
     margin-top: -28px;
     position: absolute;
     right: 0;
-    top: -12px; 
+    top: -12px;
+    z-index: -1; 
     img {   
       width: 138px;
       height: auto;
-      z-index: -1; 
     }
     input[type="file"] {
       position: absolute;
