@@ -18,10 +18,10 @@
           </div>
         </div>
       </div>
+      <div class="result-background_footer">
+        <img src="@/assets/images/result-background_footer.png" alt="探索完成">
+      </div>
     </div>
-    <!-- <div class="result-background_footer">
-      <img src="@/assets/images/result-background_footer.png" alt="探索完成">
-    </div> -->
     <!-- <div class="result-complete">
             <img class="complete-title" src="@/assets/images/complete.png">
             <div class="complete-content">
@@ -196,7 +196,8 @@ export default {
   }
   .result-background_footer{
     width: 100%;
-    margin: 0 auto;
+    margin-top: 20px;
+    margin-left: -16px;
     text-align: center;
     img{
       width: 80%;
@@ -227,6 +228,7 @@ export default {
   .result-visit {
     margin-top: 35px;
     margin-left: 34px;
+    // margin-bottom: 15px;
     .visit-title {
       margin-bottom: 3px;
       font-family: PingFangSC-Semibold;
