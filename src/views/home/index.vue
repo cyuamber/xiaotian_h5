@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div class="index-container">
+  <div class="index-container" :style="{'height': swipeHeight + 'px'}">
     <div class="warpper">
       <div class="index-content">
         <div class="index-rules">
@@ -22,7 +22,8 @@ import { CHECKRULES } from '../../const/constant.js'
 export default {
   data() {
     return {
-      checkRules: CHECKRULES
+      checkRules: CHECKRULES,
+      swipeHeight: 730
     }
   },
   mounted() {
@@ -31,6 +32,10 @@ export default {
       localStorage.setItem('userName', get_UserName(32))
       localStorage.setItem('userId', get_UserName(32))
     }
+    this.$nextTick(() => {
+      this.swipeHeight = window.innerHeight
+      console.log(this.swipeHeight)
+    })
   },
   methods: {
     hrefRobotTestBtn() {
