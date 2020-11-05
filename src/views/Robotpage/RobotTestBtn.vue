@@ -5,7 +5,7 @@
         <img class="top-img" src="@/assets/images/robot_top.png">
         <div class="top-block" v-for="(item, index) in imgIcon" :key="index" :class="{ 'z-index': item.zIndex }">
           <div>
-            <img class="number-img" src="@/assets/images/fire.png">
+            <img class="number-img" :src="item.fireImgSrc">
             <span class="number-text">{{item.number}}</span>
           </div>
           <img
@@ -76,8 +76,8 @@
     position: relative;
     align-items: center;
     .number-img {
-      height: 11px;
-      width: 11px;
+      height: 12.5px;
+      width: 10px;
       display: inline-block;
       margin-right: 3px;
     }
@@ -86,8 +86,8 @@
       color: rgb(181,196,252);
     }
     .top-point {
-      width: 63px;
-      height: 63px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       line-height: 75px;
       margin-top: 6px;
@@ -244,7 +244,8 @@ import { get_UserName } from '../../utils/index.js'
 import {
   POINTINFO,
   COMMONQUESTION,
-  IMGICON
+  IMGICON,
+  FIREIMG
 } from '../../const/constant'
 import Loading from '../../components/Loading'
 import Chatbox from './components/Chatbox'
@@ -319,13 +320,28 @@ export default {
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
             const info = res.data
+            let fireNumbers = []
             for (const infoKey in info) {
-              for (const checkItem of this.imgIcon) {
-                if (checkItem.key === infoKey) {
-                  checkItem.number = info[infoKey]
-                }
-              }
+              fireNumbers.push({
+                num: info[infoKey],
+                src: '',
+                key: infoKey
+              })
             }
+            fireNumbers = fireNumbers.sort(function(a,b){
+              return Number(a.num)-Number(b.num)
+            })
+            fireNumbers.map((item, index) => {
+              item.src = FIREIMG[index]
+            })
+            this.imgIcon.map((item, index) => {
+              fireNumbers.map(items => {
+                if(item.key === items.key){
+                  item.fireImgSrc = items.src,
+                  item.number = items.num
+                }
+              })
+            })
           } else {
             console.log(res.msg) // 报错
           }

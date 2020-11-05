@@ -147,6 +147,8 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
+  // background: url('../../assets/images/result-background.png') no-repeat;
+  // background-size: contain;
   .toolbars {
     position: fixed;
     top: 224px;

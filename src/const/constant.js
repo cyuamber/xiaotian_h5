@@ -48,7 +48,8 @@ export const IMGICON = [
     popupinfoTitleCH: '个人市场',
     infoContent: '中国移动推出“五新”业务，通过AI赋能AR/VR、视频剪辑、智能通话，实现“新看法、新听法、新玩法、新拍法、新用法”，让广大个人用户“畅享”沉浸娱乐新体验',
     number: 6780,
-    key: '1' // 后端的id
+    key: '1', // 后端的id
+    fireImgSrc:require('../assets/images/fire3.png')
   },
   {
     title: 'H',
@@ -62,7 +63,8 @@ export const IMGICON = [
     popupinfoTitleCH: '家庭市场',
     infoContent: '中国移动推出智慧家庭、打造智慧社区，通过“极速+”“娱乐+”“智享+”“安全+”的“4+”智慧产品，让万亿家庭“畅美”智慧安居新生活',
     number: 26089,
-    key: '2'
+    key: '2',
+    fireImgSrc:require('../assets/images/fire3.png')
 
   },
   {
@@ -77,7 +79,8 @@ export const IMGICON = [
     popupinfoTitleCH: '政企市场',
     infoContent: '中国移动通过构建新一代泛在智能基础设施，推出5G+AI行业智能化解决方案，赋能千行百业数字化智能化转型',
     number: 5633,
-    key: '3'
+    key: '3',
+    fireImgSrc:require('../assets/images/fire3.png')
   },
   {
     title: 'N',
@@ -91,7 +94,8 @@ export const IMGICON = [
     popupinfoTitleCH: '新兴市场',
     infoContent: '中国移动通过布局AI领域的产业投资促进智慧金融等新技术应用拓展新空间，“畅达”新未来',
     number: 1033,
-    key: '4'
+    key: '4',
+    fireImgSrc:require('../assets/images/fire3.png')
   }
 ]
 export const GETCHECKICONSTATUS = [
@@ -151,3 +155,11 @@ export const CHECKRULES = ['在大会现场找到中移九天公众号二维码�
   '集齐CHBN4个类别的打卡点，获取小天为您准备的大会“独家记忆',
   '凭本人“独家记忆”展示给工作人员，即可领取盲盒'
 ]
+
+export const FIREIMG = [
+  require('../assets/images/fire1.png'),
+  require('../assets/images/fire2.png'),
+  require('../assets/images/fire2.png'),
+  require('../assets/images/fire3.png'),
+]
+
