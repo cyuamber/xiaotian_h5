@@ -2,7 +2,6 @@
 <template>
   <div class="index-container">
     <div class="warpper">
-      <img class="index-img" src="@/assets/images/home-background.png"  />
       <div class="index-content">
         <div class="index-rules">
           <div class="rule-item" v-for="(item, index) in checkRules" :key=index>
@@ -54,15 +53,8 @@ export default {
     display:flex;
     align-items:center;
     justify-content:center;
-//  background: url('../../assets/images/dashboard.jpg') no-repeat center;
-//  background-size: cover;
-    .index-img {
-        width: 100%;
-        height: auto;
-        position: absolute;
-        top:0;
-        left: 0;
-    }
+    background: url('../../assets/images/home-background.png') no-repeat;
+    background-size: 375px 720px;
     .index-content {
         position: absolute;
         top: 467px;

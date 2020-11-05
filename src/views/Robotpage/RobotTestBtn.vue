@@ -68,6 +68,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2;
   }
   .top-block {
     position:relative;
@@ -75,6 +76,7 @@
     margin: 18px 15px 0 15px;
     position: relative;
     align-items: center;
+    z-index: 3;
     .number-img {
       height: 12.5px;
       width: 10px;
@@ -115,6 +117,8 @@
   width: 100%;
   height: 100vh;
   background-color: #DFE7EE;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0px);
 }
 .drawerBody {
   overflow: hidden;
@@ -195,15 +199,14 @@
     }
   }
   .checkphotos {
-    width: 95px;
-    height: auto;
-    display: inline-block;
-    margin-top: -3px;
-    position: relative;
-    vertical-align: top;
     img {
-      width: 100%;
+      width: 138px;
       height: auto;
+      display: inline-block;
+      margin-top: -28px;
+      position: absolute;
+      right: 0;
+      top: -12px;     
     }
     input[type="file"] {
       position: absolute;
@@ -228,7 +231,7 @@
   padding: 0;
   border-style: none;
   box-shadow: none;
-  margin: 0 3%;
+  margin: 0 0 0 16px;
   height: 44px;
   line-height: 44px;
   border-radius: 25px;
