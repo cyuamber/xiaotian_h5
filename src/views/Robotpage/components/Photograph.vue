@@ -89,7 +89,7 @@ export default {
         msgLists: this.msgLists,
         step1: true
       }
-      this.$emit('photoMsg', this.msgLists)
+      this.$emit('photoMsg', step1_add_userMsg)
       robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
