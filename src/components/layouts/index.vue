@@ -27,6 +27,7 @@ export default {
   user-select: none;
 }
 .app-container {
+  background-color: #063399;
   padding: 0 !important;
   position: fixed;
   top: 0;
