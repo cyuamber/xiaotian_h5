@@ -10,21 +10,21 @@
             <div v-if="dialogue.type === 'text'">
                 {{ dialogue.content }}<br>
                 <span
-                v-if="dialogue.code === 402 || dialogue.code === 405"
+                v-if="Number(dialogue.code) === 402 || Number(dialogue.code) === 405"
                 class="hot-issue reclock-button"
                 >
                   重新打卡
                   <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
                 </span>
                 <span
-                v-if="dialogue.code === 200 && !allPhotoIscheck"
+                v-if="Number(dialogue.code) === 200 && !allPhotoIscheck"
                 class="hot-issue reclock-button"
                 >
                   继续打卡
                   <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
                 </span>
                 <span
-                v-if="dialogue.code === 200 && allPhotoIscheck"
+                v-if="Number(dialogue.code) === 200 && allPhotoIscheck"
                 class="hot-issue reclock-button"
                 @click="hrefRobotTestBtn()">
                   立即查看「记忆界面」

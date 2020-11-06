@@ -101,7 +101,7 @@ export default {
         .then((res) => {
           if (res && res.msg.length>0 ) {
             robotMsg.owner = 'robot'
-            robotMsg.msg[0].code = res.code
+            robotMsg.msg[0].code = Number(res.code)
             robotMsg.msg[0].content = res.msg
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
