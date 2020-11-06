@@ -12,6 +12,7 @@ const http = axios.create({
   // withCredentials: true, // set cross-origin
   crossDomain: true,
   timeout: 3000
+  // test code
 })
 
 axios.defaults.transformRequest = [function(data, config) {

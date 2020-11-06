@@ -22,13 +22,16 @@ import { CHECKRULES } from '../../const/constant.js'
 export default {
   data() {
     return {
-      checkRules: CHECKRULES
+      checkRules: CHECKRULES,
     }
   },
   mounted() {
     if (localStorage.getItem('userId') === undefined || localStorage.getItem('userId') === null) {
       localStorage.setItem('userId', get_UserName(32))
     }
+    this.$nextTick(() => {
+      this.swipeHeight = window.innerHeight
+    })
   },
   methods: {
     hrefRobotTestBtn() {

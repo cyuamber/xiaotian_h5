@@ -48,6 +48,7 @@ Vue.use(Icon)
 Vue.config.productionTip = false
 
 // FastClick.attach(document.body)
+console.log(process.env.VUE_APP_API_URL)
 
 new Vue({
   el: '#app',

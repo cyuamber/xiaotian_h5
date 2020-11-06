@@ -1,5 +1,5 @@
 <template>
-  <div id="componentBody">
+  <div id="componentBody" :style="{'height': swipeHeight + 'px'}">
     <div class="drawerBody">
       <van-sticky class="top">
         <img class="top-img" src="@/assets/images/robot_top.png">
@@ -115,10 +115,10 @@
 }
 #componentBody {
   width: 100%;
-  height: 100vh;
   background-color: #DFE7EE;
   -webkit-overflow-scrolling: touch;
   -webkit-transform: translateZ(0px);
+  overflow: hidden;
 }
 .drawerBody {
   overflow: hidden;
@@ -152,7 +152,7 @@
   // background-color: #ffffff;
   color: #fff;
   height: 135px;
-  position: fixed;
+  position: absolute;
   bottom:0;
   .common-question {
     white-space: nowrap;
@@ -183,7 +183,7 @@
 .bodyInput {
   position: relative;
   width: 100%;
-  height: 77px;
+  height: 67px;
   margin: 0 auto;
   .footer-icon {
     display: inline-block;
@@ -294,6 +294,7 @@ export default {
       timer: null,
       getRecorderTimer: null,
       setTalkTimer: null,
+      swipeHeight: 730,
       firekeys: ['1','2','3','4']
       // questionStyle: ''
     }
@@ -303,6 +304,10 @@ export default {
       this.userId = localStorage.setItem('userId', get_UserName(32))
     }
     this.getuploadImgResults()
+    this.$nextTick(() => {
+      this.swipeHeight = window.innerHeight
+      console.log(this.swipeHeight)
+    })
   },
   beforeDestroy() {
     this.endPoll()
