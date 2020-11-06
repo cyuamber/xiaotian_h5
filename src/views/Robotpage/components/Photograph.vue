@@ -85,6 +85,10 @@ export default {
         updateold: false
       }
       this.msgLists.push(userMsg)
+      const step1_add_userMsg = {
+        msgLists: this.msgLists,
+        step1: true
+      }
       this.$emit('photoMsg', this.msgLists)
       robotMsg = {
         idx: this.msgList.length - 1,
@@ -106,9 +110,9 @@ export default {
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
+           this.msgLists.push(robotMsg)
+          this.$emit('photoMsg', this.msgLists)
           this.$nextTick(() => {
-            this.msgLists.push(robotMsg)
-            this.$emit('photoMsg', this.msgLists)
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')
               div[0].scrollTop = div[0].scrollHeight
