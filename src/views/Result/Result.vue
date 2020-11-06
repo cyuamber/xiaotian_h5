@@ -69,7 +69,7 @@ import ResultForm from "./components/ResultForm";
 import { axiosGet } from "../../utils/http.js";
 import API from "../../utils/api";
 import { parseTime } from "../../utils/index";
-
+import { Notify } from 'vant'
 // const ResultForm = () => import('./components/ResultForm')
 export default {
   name: "Result",
@@ -116,8 +116,11 @@ export default {
             console.log(res.msg); // 报错
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
+          if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
+            Notify('网络超时');
+          }
           // 错误处理
         });
     },

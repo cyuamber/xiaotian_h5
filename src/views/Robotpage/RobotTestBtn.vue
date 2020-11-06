@@ -306,7 +306,6 @@ export default {
     this.getuploadImgResults()
     this.$nextTick(() => {
       this.swipeHeight = window.innerHeight
-      console.log(this.swipeHeight)
     })
   },
   beforeDestroy() {
@@ -402,7 +401,6 @@ export default {
             }, 0)
           })
       } else {
-        console.log(data, '----data')
         this.msgList = [...data]
         const photocheck = true
         this.getuploadImgResults(photocheck)
@@ -442,7 +440,7 @@ export default {
           {
             type: 'text',
             content:
-              '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上次吧～'
+              '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上传吧～'
           }
         ]
       }
@@ -523,8 +521,11 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-        .catch((err) => {
-          console.log(err, '=====err')
+        .catch((error) => {
+          console.log(error, '=====err')
+          if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
+            Notify('网络超时');
+          }
           this.$store.commit('setLoadingShow', false)
         })
     },

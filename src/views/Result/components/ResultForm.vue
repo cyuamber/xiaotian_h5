@@ -89,6 +89,7 @@ import Loading from '../../../components/Loading'
 import { ImagePreview } from 'vant'
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
+import { Notify } from 'vant'
 const Photograph = () => import('../../Robotpage/components/Photograph')
 export default {
   name: 'ResultForm',
@@ -143,7 +144,10 @@ export default {
             this.$store.commit('setLoadingShow', false)
           })
         })
-        .catch(() => {
+        .catch((error) => {
+          if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
+            Notify('网络超时');
+          }
           this.formInputs.map(item => {
             item.value = null
           })
@@ -195,7 +199,10 @@ export default {
               this.$store.commit('setLoadingShow', false)
             })
           })
-          .catch(() => {
+          .catch((error) => {
+            if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
+              Notify('网络超时');
+            }
             this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })

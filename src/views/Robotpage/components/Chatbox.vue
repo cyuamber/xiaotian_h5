@@ -98,10 +98,7 @@ export default {
       e.preventDefault()
     },
     showImage(img) {
-      // this.showPic = true
-      // this.picLink = img
       ImagePreview([img])
-      console.log(img)
     },
     photoMsg(data) {
       this.msgList = [...this.msgList]

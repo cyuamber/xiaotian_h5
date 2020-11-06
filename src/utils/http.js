@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Qs from 'qs'
+import { Notify } from 'vant'
 const defaultHeaders = () => ({
   'Content-Type': 'application/json'
   // "Access-Control-Allow-Origin": "*",
@@ -13,6 +14,14 @@ const http = axios.create({
   crossDomain: true,
   timeout: 3000
   // test code
+})
+
+http.interceptors.response.use(function (response) {
+  // 对返回的数据进行一些处理
+  return response
+}, function (error) {
+  // 对返回的错误进行一些处理
+  return Promise.reject(error)
 })
 
 axios.defaults.transformRequest = [function(data, config) {
