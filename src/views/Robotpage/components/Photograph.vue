@@ -119,11 +119,11 @@ export default {
             }, 0)
           })
           this.$store.commit('setLoadingShow', false)
-          this.$store.commit('setToppPointmodelShow', false)
+          // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
-          this.$store.commit('setToppPointmodelShow', false)
+          // this.$store.commit('setToppPointmodelShow', false)
           console.log(err)
         })
     }
