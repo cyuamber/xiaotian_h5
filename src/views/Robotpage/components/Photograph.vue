@@ -1,5 +1,8 @@
 <template>
- <input ref="photoref" type="file" accept="image/*" @change="Photograph()" capture="camera"/>
+ <div>
+   <input ref="photoref" type="file" accept="image/*" @change="Photograph()" capture="camera"/>
+  <canvas id="canvas" width="400" height="0" style="display:none"></canvas>
+ </div>
 </template>
 <style lang="less" scoped>
   input[type="file"] {
@@ -15,6 +18,7 @@
 <script>
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
+import { Notify } from 'vant'
 export default {
   name: 'Photograph',
   data() {
@@ -39,10 +43,31 @@ export default {
      * 获取用户拍照的图片信息
      */
     async Photograph() {
+      let binaryData = null;
       const imgFile = this.$refs.photoref.files[0]
       this.base64ImgData = await this.FileReader(imgFile)
+      const image = new Image(),
+          canvas = document.getElementById("canvas"),
+          ctx = canvas.getContext('2d');
+      let data = null;
+      image.src = this.base64ImgData;
+      let w = image.naturalWidth,
+          h = image.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(image, 0, 0, w, h, 0, 0, w, h);
+      data = canvas.toDataURL("image/jpeg",0.5);
+      data = data.split(',')[1];
+      data = window.atob(data)
+      let ia = new Uint8Array(data.length);
+      for (var i = 0; i < data.length; i++) {
+        ia[i] = data.charCodeAt(i); 
+      };
+      let blob = new Blob([ia], {
+        type: "image/jpeg"
+      }); 
       const formData = new FormData()
-      formData.append('image', imgFile)
+      formData.append('image', blob)
       const headers = {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
@@ -125,6 +150,7 @@ export default {
           this.$store.commit('setLoadingShow', false)
           // this.$store.commit('setToppPointmodelShow', false)
           console.log(err)
+          Notify('图片打卡数据返回失败');
         })
     }
   },
