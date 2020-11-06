@@ -376,6 +376,7 @@ export default {
       axiosGet(url, params)
         .then((res) => {
           this.$store.commit('setLoadingShow', false)
+          this.$store.commit('setToppPointmodelShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
             this.getCheckIconStatus = res.data
             this.filterCheckIconStatus(this.getCheckIconStatus)
@@ -387,6 +388,7 @@ export default {
         .catch((err) => {
           console.log(err)
           Notify('打卡数据返回失败');
+          this.$store.commit('setToppPointmodelShow', false)
           this.$store.commit('setLoadingShow', false)
         })
     },
