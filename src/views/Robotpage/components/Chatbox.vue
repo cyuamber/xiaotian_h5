@@ -1,6 +1,6 @@
 <template>
   <div class="chatbox">
-    <div v-for="(msg, index) in msgList" :key="index">
+    <div class="msg-box-wrap" v-for="(msg, index) in msgList" :key="index">
       <div v-if="msg.owner === 'robot'" class="msg-box">
         <div class="robot-img">
           <img src="@/assets/images/robotavator.png" alt="小天机器人" />
@@ -117,13 +117,18 @@ export default {
 <style lang="less" scoped>
 .chatbox {
   margin-top: 20px;
+  cursor: pointer;
   .picHolder {
     width: 80%;
     display: flex;
     align-items: center;
   }
+  .msg-box-wrap:first-child {
+    margin-top: 20px;
+  }
   .msg-box {
     display: flex;
+    cursor: pointer;
     .robot-img {
       width: 40px;
       height: 40px;
@@ -144,6 +149,7 @@ export default {
       color: 	#10164e;
       line-height: 24px;
       margin-bottom: 16px;
+      cursor: pointer;
       .hot-issue {
         color: #097de9;
         display: inline-block;
@@ -181,6 +187,7 @@ export default {
       line-height: 24px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
     }
     .userMsg_width{
       width: 30%;
@@ -194,6 +201,7 @@ export default {
   }
   .users-box {
     flex-direction: row-reverse;
+    cursor: pointer;
   }
 }
 </style>

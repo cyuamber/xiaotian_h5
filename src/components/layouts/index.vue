@@ -18,24 +18,21 @@ export default {
   methods: {}
 }
 </script>
-<style>
+<style >
 *{
-   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 .app-container {
-  background-color: #063399;
   padding: 0 !important;
-  position: fixed;
-  top: 0;
-  bottom: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
   /* background: url('../../assets/images/dashboard.jpg') no-repeat center;
   background-size: cover; */
 }
+
 </style>
