@@ -154,9 +154,9 @@ export default {
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
-          Notify('获取打卡回复失败')
           console.log(err)
           Notify('网络超时，图片打卡数据返回失败');
+          this.$store.commit('setToppPointmodelShow', false)
         })
     }
   },
