@@ -38,7 +38,7 @@
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
             contenteditable="true"
-            style="-webkit-user-select: auto; font-size:"
+            style="-webkit-user-select: auto;"
           />
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
