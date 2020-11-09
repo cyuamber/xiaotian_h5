@@ -225,13 +225,14 @@
 }
 .inputArea{
   resize: none;
-  width: 225px;
+  width: 240px;
   overflow: auto;
   background-color: #ffffff;
   border-style: none;
   font-size: 17px;
   font-weight: 400;
   color: #10164e;
+  padding: 0;
   border-style: none;
   box-shadow: none;
   margin: 0 0 0 16px;
@@ -239,7 +240,6 @@
   line-height: 44px;
   border-radius: 25px;
   text-indent: 0.5rem;
-  padding-right: 15px;
 }
 </style>
 
