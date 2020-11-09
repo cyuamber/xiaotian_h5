@@ -11,7 +11,7 @@
           <img
             class="top-point"
             @click="() => getInformation(item, index)"
-            :src="item.src"
+            :src="item.isCheck && item.zIndex ? item.swipeShowChecked : item.src"
             alt=""
           />
         </div>
@@ -446,7 +446,7 @@ export default {
           {
             type: 'text',
             content:
-              '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览不大会吧～见到我的人行立牌就赶快拍照上次吧～'
+              '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览大会吧～见到我的人行立牌就赶快拍照上传吧～'
           }
         ]
       }
@@ -528,9 +528,11 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
         })
-        .catch((err) => {
-          console.log(err, '=====err')
-          Notify('获取文字回复失败')
+        .catch((error) => {
+          console.log(error, '=====err')
+          if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
+            Notify('网络超时');
+          }
           this.$store.commit('setLoadingShow', false)
         })
     },
