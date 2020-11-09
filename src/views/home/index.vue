@@ -56,6 +56,7 @@ export default {
     justify-content:center;
     background: url('../../assets/images/home-background.png') no-repeat;
     background-size: 375px 720px;
+    cursor: pointer;
     .index-content {
         position: absolute;
         top: 467px;

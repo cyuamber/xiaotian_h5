@@ -4,7 +4,7 @@
       <van-sticky class="top">
         <img class="top-img" src="@/assets/images/robot_top.png">
         <div class="top-block" v-for="(item, index) in imgIcon" :key="index" :class="{ 'z-index': item.zIndex }">
-          <div>
+          <div class="top-number">
             <img class="number-img" :src="item.fireImgSrc">
             <span class="number-text">{{item.number}}</span>
           </div>
@@ -16,8 +16,10 @@
           />
         </div>
       </van-sticky>
-      <div class="bodyDialog divScroll">
-        <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" />
+      <div class="dialog-wrap" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
+        <div class="bodyDialog divScroll" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
+          <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" />
+        </div>
       </div>
       <div class="footer">
         <div class="common-question">
@@ -60,8 +62,9 @@
 .top {
   width: 100%;
   height: 100px;
-  text-align: center;
-  position: relative;
+  position: fixed;
+  top: 0;
+  z-index: 100;
   .top-img {
     width: 100%;
     height: 116px;
@@ -77,6 +80,9 @@
     position: relative;
     align-items: center;
     z-index: 3;
+    .top-number {
+      text-align: center;
+    }
     .number-img {
       height: 12.5px;
       width: 10px;
@@ -132,27 +138,30 @@
 }
 .divScroll::-webkit-scrollbar-thumb {
   border-radius: 3px;
-  background: #d9d9d9;
   opacity: 0.2;
 }
 .divScroll::-webkit-scrollbar-track {
   background: transparent;
 }
+.dialog-wrap {
+  width: 365px;
+  margin: 100px 20px 135px 0;
+  overflow: hidden;
+}
 .bodyDialog {
-  width: 100%;
-  height: calc(100% - 251px);
-  padding: 20px 20px 0px 0;
+  width: 375px;
   display: flex;
   flex-flow: column;
   overflow: auto;
-  overflow-x:hidden;
+  -webkit-overflow-scrolling: touch;
 }
 .footer {
   width: 100%;
   // background-color: #ffffff;
+  // transform: translate3d(0, 0, 0);
   color: #fff;
   height: 135px;
-  position: absolute;
+  position: fixed;
   bottom:0;
   .common-question {
     white-space: nowrap;
@@ -185,6 +194,7 @@
   width: 100%;
   height: 67px;
   margin: 0 auto;
+  overflow: hidden;
   .footer-icon {
     display: inline-block;
     width: 18px;
