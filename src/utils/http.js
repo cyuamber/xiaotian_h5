@@ -4,7 +4,7 @@ import { Notify } from "vant";
 import config from "../config";
 
 const hostname = window.location.hostname || "39.107.245.157";
-const hostport = window.location.port || "8081";
+const hostport = "8081";
 const baseUrl =
   config.baseApi === "/api"
     ? config.baseApi
@@ -17,7 +17,7 @@ const defaultHeaders = () => ({
 // create axios instance
 const http = axios.create({
   baseURL: baseUrl,
-  withCredentials: true, // set cross-origin
+  // withCredentials: true, // set cross-origin
   crossDomain: true,
   timeout: 5000
 });
