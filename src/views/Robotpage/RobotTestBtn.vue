@@ -334,6 +334,7 @@ export default {
       axiosGet(url)
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
+            console.log('获取打卡人数',res.data)
             const info = res.data
             let fireNumbers = []
             this.firekeys.map(item => {
@@ -380,10 +381,10 @@ export default {
       const params = {
         userId: this.userId
       }
-      console.log(this.userId, 'userId')
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
+          console.log('获取result')
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
@@ -402,20 +403,19 @@ export default {
         })
     },
     photoMsg(data) {
-      if(data.step1 !== undefined && data.step1){
-        this.msgList = [...data.msgLists]
-        this.$nextTick(() => {
-            setTimeout(function() {
-              const div = document.getElementsByClassName('divScroll')
-              div[0].scrollTop = div[0].scrollHeight
-            }, 0)
-          })
-      } else {
-        console.log(data, '----data')
-        this.msgList = [...data]
-        const photocheck = true
+      console.log(data, '触发成功')
+      // if(data.step1 !== undefined && data.step1){
+      //   this.msgList = [...data.msgLists]
+      //   this.$nextTick(() => {
+      //       setTimeout(function() {
+      //         const div = document.getElementsByClassName('divScroll')
+      //         div[0].scrollTop = div[0].scrollHeight
+      //       }, 0)
+      //     })
+      // } else {
+        const photocheck = true  
         this.getuploadImgResults(photocheck)
-      }
+      // }
     },
     swipeLoop(data) {
       this.imgIcon = [...data]
@@ -483,6 +483,7 @@ export default {
       }
       const url = API.port8085.sendTextUrl
       this.msgList.push(questions)
+      console.log(this.msgList)
       this.$nextTick(() => {
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')

@@ -15,6 +15,7 @@
 <script>
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
+import { Notify } from 'vant'
 export default {
   name: 'Photograph',
   data() {
@@ -54,10 +55,10 @@ export default {
       const userMsg = {}
       const robotMsg = {}
       if (this.msgList !== undefined) {
-        this.$store.commit('setLoadingShow', true)
         url = API.port8085.uploadImgUrl
         this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
       } else {
+        console.log('???')
         url = API.port8085.saveUserInfo
         this.msgSrcs = this.base64ImgData
         this.uploadUserInfo = {
@@ -85,7 +86,6 @@ export default {
         updateold: false
       }
       this.msgLists.push(userMsg)
-      this.$emit('photoMsg', this.msgLists)
       robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
@@ -97,6 +97,7 @@ export default {
           }
         ]
       }
+      this.$store.commit('setLoadingShow', true)
       axiosPost(url, params, formData, headers)
         .then((res) => {
           if (res && res.msg.length>0 ) {
@@ -108,7 +109,8 @@ export default {
           }
           this.$nextTick(() => {
             this.msgLists.push(robotMsg)
-            this.$emit('photoMsg', this.msgLists)
+            console.log(this.msgLists, '上传图片pic，随后出发photoMsg')
+            this.$emit('photoMsg', this.msgLists) // 调起result和count的获取
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')
               div[0].scrollTop = div[0].scrollHeight
@@ -119,8 +121,8 @@ export default {
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
+          Notify('获取打卡结果失败')
           // this.$store.commit('setToppPointmodelShow', false)
-          console.log(err)
         })
     }
   },
