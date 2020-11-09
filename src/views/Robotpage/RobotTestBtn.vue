@@ -62,7 +62,7 @@
 .top {
   width: 100%;
   height: 100px;
-  position: fixed;
+  position: absolute;
   top: 0;
   z-index: 100;
   .top-img {
@@ -123,7 +123,6 @@
   width: 100%;
   background-color: #DFE7EE;
   -webkit-overflow-scrolling: touch;
-  -webkit-transform: translateZ(0px);
   overflow: hidden;
 }
 .drawerBody {
@@ -161,7 +160,7 @@
   // transform: translate3d(0, 0, 0);
   color: #fff;
   height: 135px;
-  position: fixed;
+  position: absolute;
   bottom:0;
   .common-question {
     white-space: nowrap;
