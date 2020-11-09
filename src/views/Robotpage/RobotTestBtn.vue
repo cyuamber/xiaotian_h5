@@ -18,7 +18,7 @@
       </van-sticky>
       <div class="dialog-wrap" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
         <div class="bodyDialog divScroll" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
-          <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" />
+          <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" @photoMsgClose="photoMsg"/>
         </div>
       </div>
       <div class="footer">
@@ -38,7 +38,7 @@
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
             contenteditable="true"
-            style="-webkit-user-select: auto;"
+            style="-webkit-user-select: auto; font-size:"
           />
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
@@ -62,8 +62,6 @@
 .top {
   width: 100%;
   height: 100px;
-  position: fixed;
-  top: 0;
   z-index: 100;
   .top-img {
     width: 100%;
@@ -123,7 +121,6 @@
   width: 100%;
   background-color: #DFE7EE;
   -webkit-overflow-scrolling: touch;
-  -webkit-transform: translateZ(0px);
   overflow: hidden;
 }
 .drawerBody {
@@ -145,7 +142,7 @@
 }
 .dialog-wrap {
   width: 365px;
-  margin: 100px 20px 135px 0;
+  margin: 0 20px 0 0;
   overflow: hidden;
 }
 .bodyDialog {
@@ -157,12 +154,9 @@
 }
 .footer {
   width: 100%;
-  // background-color: #ffffff;
-  // transform: translate3d(0, 0, 0);
+  background-color: #DFE7EE;
   color: #fff;
   height: 135px;
-  position: fixed;
-  bottom:0;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;
@@ -334,6 +328,7 @@ export default {
       axiosGet(url)
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
+            console.log('获取打卡人数',res.data)
             const info = res.data
             let fireNumbers = []
             this.firekeys.map(item => {
@@ -380,10 +375,10 @@ export default {
       const params = {
         userId: this.userId
       }
-      console.log(this.userId, 'userId')
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
+          console.log('获取result')
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
@@ -402,19 +397,24 @@ export default {
         })
     },
     photoMsg(data) {
-      if(data.step1 !== undefined && data.step1){
-        this.msgList = [...data.msgLists]
-        this.$nextTick(() => {
-            setTimeout(function() {
-              const div = document.getElementsByClassName('divScroll')
-              div[0].scrollTop = div[0].scrollHeight
-            }, 0)
-          })
-      } else {
-        this.msgList = [...data]
+      console.log('触发成功')
+      // if(data.step1 !== undefined && data.step1){
+      //   console.log('step1')
+      //   this.msgList = [...data.msgLists]
+      //   this.$nextTick(() => {
+      //       setTimeout(function() {
+      //         const div = document.getElementsByClassName('divScroll')
+      //         div[0].scrollTop = div[0].scrollHeight
+      //       }, 0)
+      //     })
+      // } else {
+        // console.log('other')
+        // console.log(this.msgList, 'older')
+        // console.log(data, 'new')
+        // this.msgList = [...data]
         const photocheck = true
         this.getuploadImgResults(photocheck)
-      }
+      // }
     },
     swipeLoop(data) {
       this.imgIcon = [...data]
@@ -482,6 +482,7 @@ export default {
       }
       const url = API.port8085.sendTextUrl
       this.msgList.push(questions)
+      console.log(this.msgList)
       this.$nextTick(() => {
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')

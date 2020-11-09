@@ -79,10 +79,10 @@ export default {
       const userMsg = {}
       const robotMsg = {}
       if (this.msgList !== undefined) {
-        this.$store.commit('setLoadingShow', true)
         url = API.port8085.uploadImgUrl
         this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
       } else {
+        console.log('???')
         url = API.port8085.saveUserInfo
         this.msgSrcs = this.base64ImgData
         this.uploadUserInfo = {
@@ -110,11 +110,11 @@ export default {
         updateold: false
       }
       this.msgLists.push(userMsg)
-      const step1_add_userMsg = {
-        msgLists: this.msgLists,
-        step1: true
-      }
-      this.$emit('photoMsg', step1_add_userMsg)
+      // const step1_add_userMsg = {
+      //   msgLists: this.msgLists,
+      //   step1: true
+      // }
+      // this.$emit('photoMsg', step1_add_userMsg)
       robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
@@ -126,6 +126,8 @@ export default {
           }
         ]
       }
+      this.$store.commit('setLoadingShow', true)
+      console.log('pic接口')
       axiosPost(url, params, formData, headers)
         .then((res) => {
           if (res && res.msg.length>0 ) {
@@ -135,9 +137,13 @@ export default {
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
-           this.msgLists.push(robotMsg)
-          this.$emit('photoMsg', this.msgLists)
+          // this.msgLists.push(robotMsg)
+          // this.$emit('photoMsg', this.msgLists)
           this.$nextTick(() => {
+            console.log('photo')
+            this.msgLists.push(robotMsg)
+            console.log('chufa', this.msgLists)
+            this.$emit('photoMsg', this.msgLists) // 调起result和count的获取
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')
               div[0].scrollTop = div[0].scrollHeight
@@ -148,7 +154,7 @@ export default {
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
-          // this.$store.commit('setToppPointmodelShow', false)
+          Notify('获取打卡回复失败')
           console.log(err)
           Notify('网络超时，图片打卡数据返回失败');
         })

@@ -14,14 +14,14 @@
                 class="hot-issue reclock-button"
                 >
                   重新打卡
-                  <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
+                  <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
                 <span
                 v-if="Number(dialogue.code) === 200 && !allPhotoIscheck"
                 class="hot-issue reclock-button"
                 >
                   继续打卡
-                  <Photograph :msgList="msgList" @photoMsgClose='photoMsg' />
+                  <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
                 <span
                 v-if="Number(dialogue.code) === 200 && allPhotoIscheck"
@@ -101,7 +101,7 @@ export default {
       ImagePreview([img])
     },
     photoMsg(data) {
-      this.msgList = [...this.msgList]
+      // this.msgList = [...this.msgList]
       this.$emit('photoMsgClose', this.msgList)
     },
     hrefRobotTestBtn() {
@@ -172,7 +172,7 @@ export default {
     .userMsg {
       float: right;
       width: fit-content;
-      max-width: 344px;
+      max-width: 213px;
       background-image: linear-gradient(-74deg, #2c47bf 0%, #2e5acf 26%, #307eef 76%, #318fff 100%), linear-gradient(#1d1588, #1d1588);
       border-radius: 20px 0px 20px 20px;
       padding: 13px 19px 13px 19px;
