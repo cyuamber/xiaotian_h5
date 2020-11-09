@@ -38,7 +38,7 @@
             @keydown.enter="pressEnter"
             v-show="!textSwitch"
             contenteditable="true"
-            style="-webkit-user-select: auto;"
+            style="-webkit-user-select: auto; font-size:"
           />
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
@@ -62,8 +62,6 @@
 .top {
   width: 100%;
   height: 100px;
-  position: absolute;
-  top: 0;
   z-index: 100;
   .top-img {
     width: 100%;
@@ -144,7 +142,7 @@
 }
 .dialog-wrap {
   width: 365px;
-  margin: 100px 20px 135px 0;
+  margin: 0 20px 0 0;
   overflow: hidden;
 }
 .bodyDialog {
@@ -156,12 +154,9 @@
 }
 .footer {
   width: 100%;
-  // background-color: #ffffff;
-  // transform: translate3d(0, 0, 0);
+  background-color: #DFE7EE;
   color: #fff;
   height: 135px;
-  position: absolute;
-  bottom:0;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;
@@ -230,14 +225,13 @@
 }
 .inputArea{
   resize: none;
-  width: 240px;
+  width: 225px;
   overflow: auto;
   background-color: #ffffff;
   border-style: none;
   font-size: 17px;
   font-weight: 400;
   color: #10164e;
-  padding: 0;
   border-style: none;
   box-shadow: none;
   margin: 0 0 0 16px;
@@ -245,6 +239,7 @@
   line-height: 44px;
   border-radius: 25px;
   text-indent: 0.5rem;
+  padding-right: 15px;
 }
 </style>
 
@@ -535,6 +530,7 @@ export default {
         })
         .catch((err) => {
           console.log(err, '=====err')
+          Notify('获取文字回复失败')
           this.$store.commit('setLoadingShow', false)
         })
     },

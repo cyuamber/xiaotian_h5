@@ -121,7 +121,8 @@ export default {
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
-          Notify('获取打卡结果失败')
+          Notify('获取打卡回复失败')
+          console.log(err)
           // this.$store.commit('setToppPointmodelShow', false)
         })
     }
