@@ -328,7 +328,6 @@ export default {
       axiosGet(url)
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
-            console.log('获取打卡人数',res.data)
             const info = res.data
             let fireNumbers = []
             this.firekeys.map(item => {
@@ -351,6 +350,11 @@ export default {
             })
             fireNumbers.map((item, index) => {
               item.src = FIREIMG[index]
+            })
+            fireNumbers.map((item, index) => {
+              if (fireNumbers[index+1] !== undefined && fireNumbers[index+1].num === fireNumbers[0].num) {
+                fireNumbers[index+1].src = fireNumbers[index].src
+              }
             })
             this.imgIcon.map((item, index) => {
               fireNumbers.map(items => {
@@ -378,7 +382,6 @@ export default {
       this.$store.commit('setLoadingShow', true)
       axiosGet(url, params)
         .then((res) => {
-          console.log('获取result')
           this.$store.commit('setLoadingShow', false)
           this.$store.commit('setToppPointmodelShow', false)
           if (res && res.data.length > 0 && typeof res.data[0] === 'object') {
