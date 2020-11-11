@@ -195,15 +195,14 @@ export default {
               this.clearUploadData()
             }
             this.$nextTick(() => {
-              this.$store.commit('setBeforSubmit', false)
               this.$store.commit('setLoadingShow', false)
+              this.$store.commit('setBeforSubmit', false)
             })
           })
           .catch((error) => {
             if(error.code === 'ECONNABORTED' || error.message === 'Network Error' || error.message.includes('timeout')){
               Notify('网络超时');
             }
-            this.$store.commit('setBeforSubmit', false)
             this.$store.commit('setLoadingShow', false)
           })
       } else {
