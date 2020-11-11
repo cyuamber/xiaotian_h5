@@ -1,7 +1,6 @@
 <template>
  <div>
    <input ref="photoref" type="file" accept="image/*" @change="Photograph()" capture="camera"/>
-  <canvas id="canvas" width="400" height="0" style="display:none"></canvas>
  </div>
 </template>
 <style lang="less" scoped>
@@ -30,42 +29,13 @@ export default {
     }
   },
   props: ['msgList', 'msgSrc'],
-  computed: {
-    robotId() {
-      return this.$store.state.robotInfo.robotId
-    },
-    isAdd() {
-      return !(this.newform.question && this.newform.answer && this.newform.source)
-    }
-  },
   methods: {
     /**
      * 获取用户拍照的图片信息
      */
     async Photograph() {
-      let binaryData = null;
       const imgFile = this.$refs.photoref.files[0]
       this.base64ImgData = await this.FileReader(imgFile)
-      // const image = new Image(),
-      //     canvas = document.getElementById("canvas"),
-      //     ctx = canvas.getContext('2d');
-      // let data = null;
-      // image.src = this.base64ImgData;
-      // let w = image.naturalWidth,
-      //     h = image.naturalHeight;
-      // canvas.width = w;
-      // canvas.height = h;
-      // ctx.drawImage(image, 0, 0, w, h, 0, 0, w, h);
-      // data = canvas.toDataURL("image/jpeg",0.7);
-      // data = data.split(',')[1];
-      // data = window.atob(data)
-      // let ia = new Uint8Array(data.length);
-      // for (var i = 0; i < data.length; i++) {
-      //   ia[i] = data.charCodeAt(i); 
-      // };
-      // let blob = new Blob([ia], {
-      //   type: "image/jpeg"
-      // }); 
       const formData = new FormData()
       formData.append('image', imgFile)
       const headers = {
@@ -78,6 +48,7 @@ export default {
       }
       const userMsg = {}
       const robotMsg = {}
+      console.log(this.msgList, '----this.msgList')
       if (this.msgList !== undefined) {
         url = API.port8085.uploadImgUrl
         this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
@@ -150,6 +121,7 @@ export default {
             }, 0)
           })
           this.$store.commit('setLoadingShow', false)
+          this.$refs.photoref.value = ''
           // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
