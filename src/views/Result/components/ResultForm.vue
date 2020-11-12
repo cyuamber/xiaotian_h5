@@ -246,7 +246,7 @@ export default {
   }
   .popup {
     top: 78px;
-    width: 330px;
+    width: 300px;
     height: 510px;
     background: transparent;
     .van-icon{
@@ -261,7 +261,7 @@ export default {
       color: transparent;
     }
   .wrap {
-    width: 330px;
+    width: 300px;
     height: 448px;
     border-radius: 15px;
     background-image: linear-gradient(rgba(49,141,253,0.9), rgba(45,91,209,1));
@@ -278,7 +278,7 @@ export default {
   }
   .content {
     color: #fff;
-    width: 287px;
+    width: 257px;
     margin: 0 auto;
     p.title {
       width: 100%;
@@ -327,7 +327,7 @@ export default {
           .van-submit-button{
             background: url('../../../assets/images/formSubmit.png') no-repeat;
             background-size: cover;
-            width: 315px;
+            width: 280px;
             height: 55px;
             border:none;
             margin-left: -15px;
