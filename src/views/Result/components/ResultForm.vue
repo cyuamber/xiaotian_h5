@@ -64,7 +64,10 @@
                   <Photograph :msgSrc="msgSrc" @photoMsg="photoMsg" />
                 </div>
               <div class="uploadphoto">
-                <img src="@/assets/images/upload-button.png" alt="上传" @click="afterRead()">
+                <img
+                :src="this.uploadUserInfo !== null ? require('../../../assets/images/upload-button.png') : require('../../../assets/images/upload_disabled.png')" 
+                alt="上传"
+                @click="afterRead()">
               </div>
               </div>
             </van-tab>
