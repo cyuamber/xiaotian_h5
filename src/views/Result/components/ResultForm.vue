@@ -10,7 +10,7 @@
       :class="{'popup':true, 'van-popup-background':!beforSubmit}"
       position="top"
       :style="{
-        'position': 'absolute', 'left': '50%', 'transform': 'translate(-50%)'
+        'position': 'fixed', 'left': '50%', 'transform': 'translate(-50%)'
       }"
     >
       <div :class="{'wrap':true, 'wrap-submit':!beforSubmit}">
@@ -310,6 +310,13 @@ export default {
             position: relative;
             color: #ffffff!important;
             z-index: 1;
+          }
+          .van-field__value{
+            .van-field__body{
+              input{
+                letter-spacing:2px!important;
+              }
+            }
           }
           .van-field__error-message{
             position: absolute;

@@ -62,6 +62,7 @@
 .top {
   width: 100%;
   height: 100px;
+  text-align: center;
   .top-img {
     width: 100%;
     height: 116px;
@@ -73,9 +74,12 @@
   .top-block {
     position:relative;
     display: inline-block;
-    margin: 18px 15px 0 15px;
+    // margin: 18px 15px 0 15px;
+    width: 22%;
+    margin: 10px 1%;
     position: relative;
     align-items: center;
+    text-align: center;
     z-index: 3;
     .top-number {
       text-align: center;
@@ -210,6 +214,7 @@
     img {   
       width: 138px;
       height: auto;
+      margin-top: 2px;
     }
     input[type="file"] {
       position: absolute;
