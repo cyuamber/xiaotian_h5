@@ -59,7 +59,7 @@ export default {
     cursor: pointer;
     .index-content {
         position: absolute;
-        top: 510px;
+        top: 485px;
         z-index: 2;
         .index-rules {
           font-size: 14px;
