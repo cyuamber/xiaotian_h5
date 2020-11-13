@@ -38,6 +38,7 @@ export default {
       this.base64ImgData = await this.FileReader(imgFile)
       const formData = new FormData()
       formData.append('image', imgFile)
+      this.$refs.photoref.value = ''
       const headers = {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
@@ -127,7 +128,7 @@ export default {
             }, 0)
           })
           this.$store.commit('setLoadingShow', false)
-          this.$refs.photoref.value = ''
+          
           // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
