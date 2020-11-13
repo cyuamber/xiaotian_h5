@@ -160,7 +160,7 @@ export default {
   background-color: #063399;
   .result-wrap {
     background: url('../../assets/images/result-background.png') no-repeat;
-    background-size: 375px 728px;
+    background-size: 100% auto;
   }
   .toolbars {
     position: fixed;
