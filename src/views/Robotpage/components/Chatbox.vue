@@ -8,11 +8,13 @@
         <div class="robotMsg" :class="{'singleImg': msg.msg.length ===1 && msg.msg[0].type === 'image'}">
           <div v-for="(dialogue, i) in msg.msg" :key="i">
             <div v-if="dialogue.type === 'text'">
-                {{ dialogue.content }}<br>
+                <!-- {{ dialogue.content }}<br> -->
+                <div v-html="dialogue.content"></div>
                 <span
                 v-if="Number(dialogue.code) === 402 || Number(dialogue.code) === 405"
                 class="hot-issue reclock-button"
                 >
+                  <br>
                   重新打卡
                   <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
@@ -20,6 +22,7 @@
                 v-if="Number(dialogue.code) === 200 && !allPhotoIscheck"
                 class="hot-issue reclock-button"
                 >
+                  <br>
                   继续打卡
                   <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
@@ -27,6 +30,7 @@
                 v-if="Number(dialogue.code) === 200 && allPhotoIscheck"
                 class="hot-issue reclock-button"
                 @click="hrefRobotTestBtn()">
+                  <br>
                   立即查看「记忆界面」
                 </span>
               </div>
@@ -38,7 +42,7 @@
             />
           </div>
           <div v-if="msg.init">
-            <span class="hot-issue" @click="quickClick()">如何打卡?</span>
+            <span class="hot-issue" @click="quickClick()">如何打卡</span>
             <span class="hot-issue" @click="quickClick()">打卡地图</span>
           </div>
         </div>

@@ -9,6 +9,7 @@
           closeable
         >
           <van-swipe
+            v-if="toppPointmodelShow"
             class="my-swipe"
             indicator-color="#ffffff"
             style="background: transparent"
@@ -50,7 +51,7 @@
 <style lang="less">
   .popup {
     top: 116px;
-    height: 404px;
+    height: 432px;
     .van-icon{
       left: 45%;
       bottom: 1%;
@@ -62,7 +63,7 @@
       color: transparent;
     }
     .my-swipe {
-      height: 342px;
+      height: 370px;
       border-radius: 15px;
     }
     .info{
@@ -113,7 +114,7 @@
         width: 273px;
         height: 50px;
         position: absolute;
-        bottom: 52px;
+        bottom: 40px;
         left: 50%;
         transform: translate(-50%);
         img{

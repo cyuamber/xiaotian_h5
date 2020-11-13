@@ -4,7 +4,9 @@ const state = {
   toppPointmodelShow: false,
   LoadingShow: false,
   formModelShow: false,
-  beforSubmit: true
+  beforSubmit: true,
+  swipeToNum: 0,
+  swipeToShow: true
 }
 const mutations = {
   SET_USER_NAME(state, name) {
@@ -27,7 +29,13 @@ const mutations = {
   },
   setBeforSubmit(state, beforSubmit) {
     state.beforSubmit = beforSubmit
-  }
+  },
+  changeSwipeToNum(state, swipeToNum) {
+    state.swipeToNum = swipeToNum
+  },
+  changeSwipeToShow(state, swipeToShow) {
+    state.swipeToShow = swipeToShow
+  },
 }
 const actions = {
   // 设置name

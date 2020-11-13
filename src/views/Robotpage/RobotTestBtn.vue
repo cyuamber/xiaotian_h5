@@ -51,9 +51,9 @@
     <Popupinfo
       :msgList="msgList"
       @photoMsg="photoMsg"
-      :swipeToNum="swipeToNum"
       :allPhotoIscheck="allPhotoIscheck"
       :imgIcon="imgIcon"
+      :swipeToNum='swipeToNum'
       @swipeLoop='swipeLoop'
     />
   </div>
@@ -457,7 +457,7 @@ export default {
           {
             type: 'text',
             content:
-              '您好，欢迎来到中国移动合作伙伴大会，我是智能机器人小天。快来跟我一起游览大会吧～见到我的人行立牌就赶快拍照上传吧～'
+              '欢迎来到2020年中国移动全球合作伙伴大会，我是智能导览员小天，快来跟随我一起去探索大会～找到小天形象的立牌就赶快拍照上传赢取盲盒吧~'
           }
         ]
       }
@@ -489,7 +489,6 @@ export default {
       }
       const url = API.port8085.sendTextUrl
       this.msgList.push(questions)
-      console.log(this.msgList)
       this.$nextTick(() => {
             setTimeout(function() {
               const div = document.getElementsByClassName('divScroll')

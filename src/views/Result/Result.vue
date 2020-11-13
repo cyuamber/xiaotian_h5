@@ -155,7 +155,7 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
-  // height: 100vh;
+  height: 100vh;
   width: 100%;
   background-color: #063399;
   .result-wrap {
@@ -172,7 +172,7 @@ export default {
     z-index: 3;
     margin-top: -25px;
     img {
-      width: 75px;
+      width: 65px;
       height: auto;
       position: absolute;
       top: 0;
