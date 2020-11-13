@@ -381,6 +381,7 @@ export default {
         })
     },
     getuploadImgResults(photocheck) {
+      console.log('result')
       const url = API.port8085.getuploadImgResult
       this.userId = this.userId === null || this.userId === undefined ? localStorage.getItem('userId') : this.userId
       const params = {
