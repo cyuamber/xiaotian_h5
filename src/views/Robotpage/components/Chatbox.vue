@@ -14,7 +14,6 @@
                 v-if="Number(dialogue.code) === 402 || Number(dialogue.code) === 405"
                 class="hot-issue reclock-button"
                 >
-                  <br>
                   重新打卡
                   <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
@@ -22,7 +21,6 @@
                 v-if="Number(dialogue.code) === 200 && !allPhotoIscheck"
                 class="hot-issue reclock-button"
                 >
-                  <br>
                   继续打卡
                   <Photograph :msgList="msgList" @photoMsg='photoMsg' />
                 </span>
@@ -30,7 +28,6 @@
                 v-if="Number(dialogue.code) === 200 && allPhotoIscheck"
                 class="hot-issue reclock-button"
                 @click="hrefRobotTestBtn()">
-                  <br>
                   立即查看「记忆界面」
                 </span>
               </div>
