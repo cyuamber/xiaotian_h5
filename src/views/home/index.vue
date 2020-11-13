@@ -55,11 +55,11 @@ export default {
     align-items:center;
     justify-content:center;
     background: url('../../assets/images/home-background.png') no-repeat;
-    background-size: 375px 720px;
+    background-size: 100% auto;
     cursor: pointer;
     .index-content {
         position: absolute;
-        top: 510px;
+        top: 485px;
         z-index: 2;
         .index-rules {
           font-size: 14px;

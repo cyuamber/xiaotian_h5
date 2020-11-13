@@ -19,6 +19,7 @@ import "lib-flexible/flexible.js";
 // import FastClick from '@/utils/fastclick.js'
 // filters
 import "./filters";
+import "./utils/font.js";
 
 // 引入audio
 // import audio from 'vue-mobile-audio'

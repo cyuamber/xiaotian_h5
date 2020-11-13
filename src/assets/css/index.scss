@@ -10,6 +10,13 @@ body .app {
   font-size: 17px;
   touch-action: none;
 }
+
+ body{
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+ }
+
 .app-container {
   padding-bottom: 50px;
 }

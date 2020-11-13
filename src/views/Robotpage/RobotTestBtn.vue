@@ -42,7 +42,7 @@
           />
           <div class="checkphotos">
             <img src="@/assets/images/checkPhotos.png" alt="拍照打卡" />
-            <Photograph :msgList="msgList" @photoMsg="photoMsg" />
+            <Photograph class="check-button" :msgList="msgList" @photoMsg="photoMsg" />
           </div>
         </div>
       </div>
@@ -144,12 +144,12 @@
   background: transparent;
 }
 .dialog-wrap {
-  width: 365px;
+  width: 99%;
   margin: 0 20px 0 0;
   overflow: hidden;
 }
 .bodyDialog {
-  width: 375px;
+  width: 102%;
   display: flex;
   flex-flow: column;
   overflow: auto;
@@ -165,6 +165,7 @@
     overflow-x: scroll;
     overflow-y: hidden;
     margin: 13px 0 13px 0;
+    z-index: 1000;
     a {
       display: inline-block;
       padding: 9px;
@@ -191,6 +192,7 @@
   width: 100%;
   height: 67px;
   margin: 0 auto;
+  display: flex;
   overflow: hidden;
   .footer-icon {
     display: inline-block;
@@ -207,21 +209,22 @@
   }
   .checkphotos {
     display: inline-block;
-    margin-top: -28px;
-    position: absolute;
-    right: 0;
-    top: -12px;
+    margin-top: -10%;
+    width: 36%;
+    position: relative;
+    .check-button {
+      position: absolute;
+      width: 70%;
+      top: 40%;
+      height: 40%;
+      left: 20%;
+    }
     img {   
-      width: 138px;
+      width: 100%;
       height: auto;
       margin-top: 2px;
     }
     input[type="file"] {
-      position: absolute;
-      left: 28px;
-      top: 40px;
-      width: 95px;
-      height: 44px;
       z-index: 9;
       opacity: 0;
     }
@@ -229,7 +232,7 @@
 }
 .inputArea{
   resize: none;
-  width: 240px;
+  width: 60%;
   overflow: auto;
   background-color: #ffffff;
   border-style: none;
@@ -239,7 +242,7 @@
   padding: 0;
   border-style: none;
   box-shadow: none;
-  margin: 0 0 0 16px;
+  margin: 0 0 0 4%;
   height: 44px;
   line-height: 44px;
   border-radius: 25px;
