@@ -155,11 +155,9 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
-  height: 100vh;
+  // height: 100vh;
   width: 100%;
   background-color: #063399;
-  // background: url('../../assets/images/result-background.png') no-repeat;
-  // background-size: contain;
   .result-wrap {
     background: url('../../assets/images/result-background.png') no-repeat;
     background-size: 375px 728px;
