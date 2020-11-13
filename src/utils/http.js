@@ -19,7 +19,7 @@ const http = axios.create({
   baseURL: baseUrl,
   // withCredentials: true, // set cross-origin
   crossDomain: true,
-  timeout: 5000
+  timeout: 20000
 });
 
 http.interceptors.response.use(

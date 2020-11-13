@@ -19,10 +19,10 @@ export const POINTINFO = [
 
 export const COMMONQUESTION = [
   '如何打卡',
-  '如何获取打卡地图',
-  '中国移动合作伙伴大会历史',
-  '大会规则',
-  '大会简介'
+  '打卡指引地图',
+  '中国移动CHBN的含义',
+  '能介绍下中移九天人工智能平台吗',
+  '2020中国移动全球合作伙伴大会简介'
 ]
 
 export const GETANSWERRES = [
