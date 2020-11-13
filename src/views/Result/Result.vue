@@ -155,7 +155,7 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
-  // height: 100vh;
+  height: 100vh;
   width: 100%;
   background-color: #063399;
   .result-wrap {
