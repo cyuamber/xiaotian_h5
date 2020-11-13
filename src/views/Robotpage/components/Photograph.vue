@@ -50,7 +50,7 @@ export default {
       const robotMsg = {}
       if (this.msgList !== undefined) {
         url = API.port8085.uploadImgUrl
-        this.$emit('photoMsg', this.msgLists)
+        // this.$emit('photoMsg', this.msgLists)
         this.checkPhoto(url, params, formData, headers, userMsg, robotMsg)
       } else {
         console.log('???')
@@ -61,7 +61,7 @@ export default {
           imgFile: imgFile,
           takePhoto: true
         }
-        this.$emit('photoMsg', this.uploadUserInfo)
+        // this.$emit('photoMsg', this.uploadUserInfo)
       }
     },
     /**
@@ -75,12 +75,18 @@ export default {
       return new Promise(resolve => reader.onloadend = () => resolve(reader.result))
     },
      checkPhoto(url, params, formData, headers, userMsg, robotMsg ) {
+       console.log('push')
       userMsg = {
         type: 'user',
         imgUrl: this.base64ImgData,
         updateold: false
       }
       this.msgLists.push(userMsg)
+      setTimeout(function() {
+        const div = document.getElementsByClassName('divScroll')
+        div[0].scrollTop = div[0].scrollHeight
+      }, 0)
+      
       // const step1_add_userMsg = {
       //   msgLists: this.msgLists,
       //   step1: true
@@ -125,7 +131,7 @@ export default {
           // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
-          // this.$store.commit('setLoadingShow', false)
+          this.$store.commit('setLoadingShow', false)
           console.log(err)
           Notify('网络超时，图片打卡数据返回失败');
           this.$store.commit('setToppPointmodelShow', false)
