@@ -125,7 +125,7 @@ export default {
           // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
-          this.$store.commit('setLoadingShow', false)
+          // this.$store.commit('setLoadingShow', false)
           console.log(err)
           Notify('网络超时，图片打卡数据返回失败');
           this.$store.commit('setToppPointmodelShow', false)
