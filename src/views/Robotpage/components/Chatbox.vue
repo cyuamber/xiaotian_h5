@@ -9,7 +9,7 @@
           <div v-for="(dialogue, i) in msg.msg" :key="i">
             <div v-if="dialogue.type === 'text'">
                 <!-- {{ dialogue.content }}<br> -->
-                <div v-html="dialogue.content"></div>
+                <div v-html="dialogue.content" style="word-break: break-word"></div>
                 <span
                 v-if="Number(dialogue.code) === 402 || Number(dialogue.code) === 405"
                 class="hot-issue reclock-button"
