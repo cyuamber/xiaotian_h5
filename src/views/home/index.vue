@@ -2,6 +2,7 @@
 <template>
   <div class="index-container">
     <div class="warpper">
+      <img class="index-bg" src="../../assets/images/home-background.png" />
       <div class="index-content">
         <div class="index-rules">
           <div class="rule-item" v-for="(item, index) in checkRules" :key=index>
@@ -48,18 +49,16 @@ export default {
   background-color: #2457CA;
   .warpper {
     width: 100%;
-    height: 100%;
     position: relative;
-    text-align: center;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: url('../../assets/images/home-background.png') no-repeat;
-    background-size: 100% auto;
     cursor: pointer;
+    .index-bg {
+      width: 100%;
+      height: auto;
+      pointer-events:none;
+    }
     .index-content {
         position: absolute;
-        top: 485px;
+        top: 68%;
         z-index: 2;
         .index-rules {
           font-size: 14px;
