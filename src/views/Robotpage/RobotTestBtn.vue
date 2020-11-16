@@ -159,11 +159,13 @@
   width: 100%;
   background-color: #DFE7EE;
   color: #fff;
+  height: 135px;
   .common-question {
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
     margin: 13px 0 13px 0;
+    z-index: 1000;
     a {
       display: inline-block;
       padding: 9px;
@@ -188,6 +190,7 @@
 .bodyInput {
   position: relative;
   width: 100%;
+  height: 67px;
   margin: 0 auto;
   display: flex;
   overflow: hidden;
