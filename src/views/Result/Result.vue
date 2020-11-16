@@ -19,9 +19,9 @@
             </div>
           </div>
         </div>
-        <div class="result-background_footer">
+      </div>
+      <div class="result-background_footer">
           <img src="@/assets/images/result-background_footer.png" alt="探索完成">
-        </div>
       </div>
       <!-- <div class="result-complete">
               <img class="complete-title" src="@/assets/images/complete.png">
@@ -155,7 +155,7 @@ export default {
 <style lang="less" scoped>
 .result-container {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   background-color: #063399;
   .result-wrap {
@@ -204,7 +204,6 @@ export default {
   .result-background_footer{
     width: 100%;
     margin-top: 20px;
-    margin-left: -16px;
     text-align: center;
     img{
       width: 80%;
@@ -224,6 +223,7 @@ export default {
   .result-greet {
     margin-left: 34px;
     padding-top: 51px;
+    width: 90%;
     .greet-text {
       color: #d0e1fa;
       font-size: 15px;
@@ -235,6 +235,7 @@ export default {
   .result-visit {
     margin-top: 35px;
     margin-left: 34px;
+    width: 72%;
     // margin-bottom: 15px;
     .visit-title {
       margin-bottom: 3px;

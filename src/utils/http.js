@@ -4,7 +4,7 @@ import { Notify } from "vant";
 import config from "../config";
 
 const hostname = window.location.hostname || "39.107.245.157";
-const hostport = "8081";  
+const hostport = "8082";  
 const baseUrl =
   config.baseApi === "/api"
     ? config.baseApi
