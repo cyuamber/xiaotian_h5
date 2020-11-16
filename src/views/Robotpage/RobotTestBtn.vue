@@ -519,6 +519,9 @@ export default {
             res.data.length === 1
           ) {
             robotMsg.owner = 'robot'
+            if(res.data[0].type === 'image'){
+              robotMsg.msg[0].type === 'image'
+            } 
             robotMsg.msg[0].content = res.data[0].content
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
