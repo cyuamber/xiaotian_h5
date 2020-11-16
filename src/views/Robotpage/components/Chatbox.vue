@@ -40,7 +40,7 @@
           </div>
           <div v-if="msg.init">
             <span class="hot-issue" @click="quickClick()">如何打卡</span>
-            <span class="hot-issue" @click="quickClick()">打卡地图</span>
+            <span class="hot-issue" @click="quickClick()">打卡指引地图</span>
           </div>
         </div>
       </div>

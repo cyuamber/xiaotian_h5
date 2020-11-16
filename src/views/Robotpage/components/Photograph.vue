@@ -62,7 +62,7 @@ export default {
           imgFile: imgFile,
           takePhoto: true
         }
-        // this.$emit('photoMsg', this.uploadUserInfo)
+        this.$emit('photoMsg', this.uploadUserInfo)
       }
     },
     /**
