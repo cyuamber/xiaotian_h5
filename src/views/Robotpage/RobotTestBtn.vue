@@ -1,5 +1,5 @@
 <template>
-  <div id="componentBody" :style="{'height': swipeHeight + 'px'}">
+  <div id="componentBody">
     <div class="drawerBody">
       <van-sticky class="top">
         <img class="top-img" src="@/assets/images/robot_top.png">
@@ -16,8 +16,8 @@
           />
         </div>
       </van-sticky>
-      <div class="dialog-wrap" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
-        <div class="bodyDialog divScroll" :style="{'height': swipeHeight - 100 - 135 + 'px'}">
+      <div class="dialog-wrap">
+        <div class="bodyDialog divScroll">
           <Chatbox :msgList="msgList" :allPhotoIscheck="allPhotoIscheck" @photoMsgClose="photoMsg"/>
         </div>
       </div>
@@ -125,6 +125,7 @@
   background-color: #DFE7EE;
   -webkit-overflow-scrolling: touch;
   overflow: hidden;
+  height: 100vh;
 }
 .drawerBody {
   overflow: hidden;
@@ -147,6 +148,7 @@
   width: 99%;
   margin: 0 20px 0 0;
   overflow: hidden;
+  height: calc(100vh - 100px - 135px);
 }
 .bodyDialog {
   width: 102%;
@@ -154,6 +156,7 @@
   flex-flow: column;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  height: calc(100vh - 100px - 135px);
 }
 .footer {
   width: 100%;
@@ -165,7 +168,6 @@
     overflow-x: scroll;
     overflow-y: hidden;
     margin: 13px 0 13px 0;
-    z-index: 1000;
     a {
       display: inline-block;
       padding: 9px;
@@ -305,7 +307,6 @@ export default {
       timer: null,
       getRecorderTimer: null,
       setTalkTimer: null,
-      swipeHeight: 730,
       firekeys: ['1','2','3','4']
       // questionStyle: ''
     }
@@ -315,9 +316,6 @@ export default {
       this.userId = localStorage.setItem('userId', get_UserName(32))
     }
     this.getuploadImgResults()
-    this.$nextTick(() => {
-      this.swipeHeight = window.innerHeight
-    })
   },
   beforeDestroy() {
     this.endPoll()
