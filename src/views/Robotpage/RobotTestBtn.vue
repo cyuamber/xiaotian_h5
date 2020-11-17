@@ -86,7 +86,7 @@
     }
     .number-img {
       height: 12.5px;
-      width: 10px;
+      width: 11.5px;
       display: inline-block;
       margin-right: 3px;
     }
@@ -339,32 +339,32 @@ export default {
               if (Object.keys(info).indexOf(item) > -1) {
                 fireNumbers.push({
                   num: info[item],
-                  src: '',
+                  // src: '',
                   key: item
                 })
               } else {
                 fireNumbers.push({
                   num: 0,
-                  src: '',
+                  // src: '',
                   key: item
                 })
               }
             })
-            fireNumbers = fireNumbers.sort(function(a,b){
-              return Number(a.num)-Number(b.num)
-            })
-            fireNumbers.map((item, index) => {
-              item.src = FIREIMG[index]
-            })
-            fireNumbers.map((item, index) => {
-              if (fireNumbers[index+1] !== undefined && fireNumbers[index+1].num === fireNumbers[index].num) {
-                fireNumbers[index+1].src = fireNumbers[index].src
-              }
-            })
+            // fireNumbers = fireNumbers.sort(function(a,b){
+            //   return Number(a.num)-Number(b.num)
+            // })
+            // fireNumbers.map((item, index) => {
+            //   item.src = FIREIMG[index]
+            // })
+            // fireNumbers.map((item, index) => {
+            //   if (fireNumbers[index+1] !== undefined && fireNumbers[index+1].num === fireNumbers[index].num) {
+            //     fireNumbers[index+1].src = fireNumbers[index].src
+            //   }
+            // })
             this.imgIcon.map((item, index) => {
               fireNumbers.map(items => {
                 if(item.key === items.key){
-                  item.fireImgSrc = items.src,
+                  // item.fireImgSrc = items.src,
                   item.number = items.num
                 }
               })
