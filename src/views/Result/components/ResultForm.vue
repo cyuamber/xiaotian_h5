@@ -15,7 +15,7 @@
     >
       <div :class="{'wrap':true, 'wrap-submit':!beforSubmit}">
         <div class="content" v-if="beforSubmit">
-          <p class="title">标题</p>
+          <p class="title">共创AI未来</p>
           <van-tabs
             class="vans-tabs"
             background="transparent"
