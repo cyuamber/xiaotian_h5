@@ -37,15 +37,14 @@ export default {
   methods: {
     hrefRobotTestBtn() {
       this.$router.replace({ path: '/robotpage' })
-    }
+    },
   }
 }
 </script>
 <style lang="scss" scoped>
 .index-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  overflow: auto;
   background-color: #2457CA;
   .warpper {
     width: 100%;
@@ -55,10 +54,11 @@ export default {
       width: 100%;
       height: auto;
       pointer-events:none;
+      padding-bottom: 10%;
     }
     .index-content {
         position: absolute;
-        top: 68%;
+        top: 64%;
         z-index: 2;
         .index-rules {
           font-size: 14px;
