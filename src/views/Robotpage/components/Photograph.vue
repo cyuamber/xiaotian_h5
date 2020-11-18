@@ -18,6 +18,8 @@
 import API from '../../../utils/api'
 import { axiosPost } from '../../../utils/http.js'
 import { Notify } from 'vant'
+import Compressor from 'compressorjs';
+
 export default {
   name: 'Photograph',
   data() {
@@ -36,9 +38,10 @@ export default {
     async Photograph() {
       const imgFile = this.$refs.photoref.files[0]
       this.base64ImgData = await this.FileReader(imgFile)
-      const formData = new FormData()
-      formData.append('image', imgFile)
-      this.$refs.photoref.value = ''
+      let compreeBolb = await this.imageCompress(imgFile);
+      const formData = new FormData();
+      formData.append('image', compreeBolb, compreeBolb.name);//压缩后的文件会自动转换成二进制文件流类型
+      this.$refs.photoref.value = '' // :todo
       const headers = {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
@@ -65,6 +68,20 @@ export default {
         this.$emit('photoMsg', this.uploadUserInfo)
       }
     },
+    imageCompress(file) {
+      return new Promise((resolve, reject) => {
+        new Compressor(file, {
+          quality: 0.6,
+          success(result) {
+            console.log('ok')
+            resolve(result)
+          },
+          error(err) {
+            console.log(err.message);
+          },
+        });
+      })
+    },
     /**
      * 返回用户拍照图片的base64
      */
@@ -87,12 +104,6 @@ export default {
         const div = document.getElementsByClassName('divScroll')
         div[0].scrollTop = div[0].scrollHeight
       }, 0)
-      
-      // const step1_add_userMsg = {
-      //   msgLists: this.msgLists,
-      //   step1: true
-      // }
-      // this.$emit('photoMsg', step1_add_userMsg)
       robotMsg = {
         idx: this.msgList.length - 1,
         owner: 'robot',
@@ -115,8 +126,6 @@ export default {
               .replace(/\n\r/g, '<br/>')
               .replace(/\n/g, '<br/>')
           }
-          // this.msgLists.push(robotMsg)
-          // this.$emit('photoMsg', this.msgLists)
           this.$nextTick(() => {
             console.log('photo')
             this.msgLists.push(robotMsg)
@@ -129,15 +138,12 @@ export default {
           })
           this.$store.commit('setLoadingShow', false)
           
-          // this.$store.commit('setToppPointmodelShow', false)
         })
         .catch((err) => {
           this.$store.commit('setLoadingShow', false)
           console.log(err)
           Notify('网络超时，图片打卡数据返回失败');
           this.$store.commit('setToppPointmodelShow', false)
-          // this.$emit('photoMsg', this.msgLists)
-          // setTimeout(function(){location.reload()},1000);
         })
     }
   },
