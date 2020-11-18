@@ -333,7 +333,7 @@ export default {
       axiosGet(url)
         .then((res) => {
           if (res.code === 200 && res.data !== undefined) {
-            const info = {"1":104,"2":101,"3":101,"4":95}
+            const info = res.data
             let fireNumbers = []
             this.firekeys.map(item => {
               if (Object.keys(info).indexOf(item) > -1) {
