@@ -27,7 +27,7 @@ module.exports = {
     proxy: {
       // 代理配置
       "/api": {
-        target: "http://xiaotian.cmri.cn/",
+        target: "http://aiaas.cmri.cn:8080/",
         changOrigin: true,
         pathRewrite: {
           "^/api": "/"
