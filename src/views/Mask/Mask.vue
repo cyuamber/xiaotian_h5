@@ -4,7 +4,7 @@
         <img class="mask-top" src="@/assets/images/mask.jpg">
         <div class="upload-button">
             <van-uploader :after-read="afterRead" :before-read="beforeRead">
-                <van-button icon="plus" type="info" round>上传图片</van-button>
+                <van-button icon="plus" type="info" round style="width:250px">上传图片</van-button>
             </van-uploader>
         </div>
         <div class="mask-preview" :style="{'width':preWidth + 'px', 'height':preWidth + 'px'}">
@@ -229,7 +229,8 @@ export default {
         -moz-box-sizing:border-box; /* Firefox /
         -webkit-box-sizing:border-box; / Safari */
         padding: 10px 20px;
-        background-color: #f2f2f2;
+        background-color: #F2F2F2;
+        min-height: 30vh;
         width: 100%;
         font: 14px Verdana,Helvetica,Arial,sans-serif;
         .response-title {
