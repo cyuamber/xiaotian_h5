@@ -29,6 +29,12 @@ export const constantRouterMap = [
         name: 'Result',
         component: () => import('@/views/Result/Result'),
         meta: { keepAlive: false }
+      },
+      {
+        path: '/mask',
+        name: 'Mask',
+        component: () => import("@/views/Mask/Mask"),
+        meta: { keepAlive: false }
       }
     ]
   }
