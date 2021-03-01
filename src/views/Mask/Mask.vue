@@ -33,6 +33,7 @@
 import API from "../../utils/api";
 import { axiosPost } from '../../utils/http';
 import Loading from '../../components/Loading'
+import Compressor from 'compressorjs';
 export default {
     name: "Result",
     components: {
@@ -71,19 +72,32 @@ export default {
             return true
         },
 
-        afterRead(file) {
+        async afterRead(file) {
             // 处理为base64
             console.log(file)
+
             let img64 = file.content.split(',')[1]
-            this.showPre(file.content)
-            this.getResult(img64)
+            // this.showPre(file.content)
+            let compreeBolb = await this.imageCompress(file.file);
+            const formData = new FormData();
+            formData.append('image', compreeBolb, compreeBolb.name);//压缩后的文件会自动转换成二进制文件流类型
+            // this.getResult(img64)
         },
 
+        blobToDataURL(blob, callback) {
+            let a = new FileReader();
+            a.onload = function (e) { callback(e.target.result); }
+            a.readAsDataURL(blob);
+         },
+         
         showPre (base64ImgData) {
             this.imgSrc = base64ImgData
         },
 
         getResult(file) {
+            console.log(file)
+            this.showPre(file)
+            file = file.split(',')[1]
             this.LoadingShow = true
             const url = API.port8080.getMaskRes;
             const params = {
@@ -117,6 +131,22 @@ export default {
             return dataURL;
         },
 
+        imageCompress(file) {
+            let _this = this
+            return new Promise((resolve, reject) => {
+                new Compressor(file, {
+                    quality: 0.3,
+                    success(result) {
+                    console.log('ok')
+                    _this.blobToDataURL(result, _this.getResult)
+                    resolve(result)
+            },
+            error(err) {
+                console.log(err.message);
+            },
+            });
+        })
+        },
         getPicZoom() {
             var zoom = {};
             var img = new Image();
