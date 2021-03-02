@@ -34,6 +34,7 @@ import API from "../../utils/api";
 import { axiosPost } from '../../utils/http';
 import Loading from '../../components/Loading'
 import Compressor from 'compressorjs';
+import { Toast } from 'vant';
 export default {
     name: "Result",
     components: {
@@ -60,13 +61,13 @@ export default {
         this.preWidth = window.innerWidth
     },
     methods: {
-        beforeRead(file) { // 前置处理
+        beforeRead(file) { // 前置处理，限制大小和类型
             if (file.type != "image/jpg" && file.type != "image/png" && file.type != "image/jpeg") {
                 Toast("图片格式必须为jpg、png、jpeg中的一种");
                 return false;
             }
             if (file.size / 1024 / 1024 > 10) {
-                alert("图片不能超过10M");
+                Toast("图片不能超过10M");
                 return false;
             }
             return true
@@ -74,14 +75,15 @@ export default {
 
         async afterRead(file) {
             // 处理为base64
-            console.log(file)
-
-            let img64 = file.content.split(',')[1]
-            // this.showPre(file.content)
-            let compreeBolb = await this.imageCompress(file.file);
-            const formData = new FormData();
-            formData.append('image', compreeBolb, compreeBolb.name);//压缩后的文件会自动转换成二进制文件流类型
-            // this.getResult(img64)
+            let img64 = file.content
+            // 小于400k的图片不压缩
+            if (file.file.size / 1024 < 400) {
+                this.getResult(img64)
+            } else {
+                let compreeBolb = await this.imageCompress(file.file); // file压缩
+                const formData = new FormData();
+                formData.append('image', compreeBolb, compreeBolb.name);//压缩后的文件会自动转换成二进制文件流类型
+            }
         },
 
         blobToDataURL(blob, callback) {
@@ -94,9 +96,8 @@ export default {
             this.imgSrc = base64ImgData
         },
 
-        getResult(file) {
-            console.log(file)
-            this.showPre(file)
+        getResult(file) { // 上传图片的base64获得结果
+            this.showPre(file) // 更新预览图为压缩后的图片
             file = file.split(',')[1]
             this.LoadingShow = true
             const url = API.port8080.getMaskRes;
@@ -108,7 +109,6 @@ export default {
             fd.append('name', 'ad')
             this.showMask = false
             axiosPost(url, params, fd).then((res) => {
-                console.log(res)
                 this.LoadingShow = false
                 this.maskRes = res
                 this.maskData = this.maskRes.data
@@ -120,25 +120,14 @@ export default {
                 }
             })
         },
-        getImageBase(img) {
-            let canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            let ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            let ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-            let dataURL = canvas.toDataURL("image/" + ext);
-            return dataURL;
-        },
 
-        imageCompress(file) {
+        imageCompress(file) { //异步
             let _this = this
             return new Promise((resolve, reject) => {
                 new Compressor(file, {
                     quality: 0.3,
                     success(result) {
-                    console.log('ok')
-                    _this.blobToDataURL(result, _this.getResult)
+                    _this.blobToDataURL(result, _this.getResult) // bolb转base64后执行请求
                     resolve(result)
             },
             error(err) {
@@ -155,9 +144,6 @@ export default {
             var rh = myimage.naturalHeight;
             zoom.w = this.preWidth / rw
             zoom.h = this.preWidth / rh
-            console.log(rw) // 图片原始宽度
-            console.log(rh)
-            console.log(zoom)
             return zoom;
         },
 
@@ -165,7 +151,6 @@ export default {
         getData(data) {
             this.maskShowData = []
         // 得到数据有几个框
-            console.log(data);
             // 一维数组转二维数组
             let len = data.length;
             let n = 5; //假设每行显示5个
@@ -217,7 +202,6 @@ export default {
                    }
                 }
             )
-            console.log(this.maskShowData)
         }
     }
 }
