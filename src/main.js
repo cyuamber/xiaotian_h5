@@ -59,7 +59,6 @@ Vue.use(Icon);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  // to来自  from  去哪
   if (to.meta.title) {
     document.title = to.meta.title;
   }
