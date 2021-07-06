@@ -35,7 +35,7 @@ export const constantRouterMap = [
         name: "Mask",
         component: () => import("@/views/Mask/Mask"),
         meta: { title: "口罩识别", keepAlive: false }
-      }
+      } 
     ]
   }
 ];
