@@ -7,5 +7,8 @@ export default {
     getCount: "/dp_xiaotian/inference/getCount",
     getGift: "/dp_xiaotian/inference/getGift", //获取打卡结果
     saveUserInfo: "/dp_xiaotian/inference/saveUserInfo" // result页 用户信息录入
+  },
+  port8080: {
+    getMaskRes: "http://aiaas.cmri.cn:8080/ivr/v1/mask", // 获得口罩识别结果接口
   }
 };

@@ -41,7 +41,7 @@ export default {
       let compreeBolb = await this.imageCompress(imgFile);
       const formData = new FormData();
       formData.append('image', compreeBolb, compreeBolb.name);//压缩后的文件会自动转换成二进制文件流类型
-      this.$refs.photoref.value = '' // :todo
+      this.$refs.photoref.value = ''
       const headers = {
         'Content-Type': 'multipart/formdata;charset=utf-8',
         'X-CSRF-Token': window.localStorage.getItem('token')
