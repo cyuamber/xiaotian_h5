@@ -39,7 +39,8 @@ import {
   Tab,
   Tabs,
   Uploader,
-  Notify
+  Notify,
+  Dialog
 } from "vant";
 Vue.use(Loading);
 Vue.use(Popup);
@@ -55,7 +56,7 @@ Vue.use(Tab);
 Vue.use(Tabs);
 Vue.use(Uploader);
 Vue.use(Notify);
-Vue.use(Icon);
+Vue.use(Dialog);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
