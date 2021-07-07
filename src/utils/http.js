@@ -7,7 +7,7 @@ const hostname = window.location.hostname || "39.107.245.157";
 const baseUrl =
   config.baseApi === "/api"
     ? config.baseApi
-    : `http://${hostname}/`;
+    : `http://${hostname}:${window.location.port}/`;
 
 const defaultHeaders = () => ({
   "Content-Type": "application/json"

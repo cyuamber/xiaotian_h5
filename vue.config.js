@@ -6,7 +6,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 
 const resolve = dir => path.join(__dirname, dir);
 // page title
-const name = defaultSettings.title || "vue mobile template";
+const name = defaultSettings.title || "小天带你嗨";
 // 生产环境，测试和正式
 const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
 
@@ -27,7 +27,7 @@ module.exports = {
     proxy: {
       // 代理配置
       "/api": {
-        target: "http://36.134.120.219:8080",
+        target: "http://36.134.120.219:81",
         changOrigin: true,
         pathRewrite: {
           "^/api": "/"
