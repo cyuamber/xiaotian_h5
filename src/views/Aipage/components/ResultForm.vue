@@ -38,7 +38,12 @@
                 :rules="[
                   {
                     required: item.type === 'company' ? false : true,
-                    validator: item.type === 'digit' ? telPhoneValidator : null,
+                    validator:
+                      item.type === 'digit'
+                        ? telPhoneValidator
+                        : item.name === 'email'
+                        ? emailValidator
+                        : inputValidator,
                     message: item.message,
                   },
                 ]"
@@ -90,6 +95,10 @@ export default {
       uploadUserInfo: null,
       phoneValidator:
         /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/,
+      inputvalidator:
+        /[`~!@#$%^&*()_+<>?:"{},.\/;·！#￥（——）：；“”‘、，|《。》？、【】'[\]]/im,
+      emailvalidator:
+        /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
     };
   },
 
@@ -165,7 +174,35 @@ export default {
       if (!validatorResult) {
         this.formInputs.map((item) => {
           if (item.name === "phone") {
+            Notify("请输入正确的手机号");
             item.message = "请输入正确的手机号";
+            item.value = null;
+          }
+        });
+        return false;
+      }
+    },
+    inputValidator(val) {
+      const validatorResult = this.inputvalidator.test(val);
+      if (validatorResult) {
+        this.formInputs.map((item) => {
+          if (item.name === "username" || item.name === "company") {
+            Notify("输入字符串非法");
+            item.message = "请输入正确的字符";
+            item.value = null;
+          }
+        });
+        return false;
+      }
+    },
+    emailValidator(val) {
+      const validatorResult = this.emailvalidator.test(val);
+      console.log(val, validatorResult);
+      if (!validatorResult) {
+        this.formInputs.map((item) => {
+          if (item.name === "email") {
+            Notify("请输入正确的邮箱");
+            item.message = "请输入正确的邮箱";
             item.value = null;
           }
         });
@@ -255,7 +292,7 @@ export default {
               .van-field__value {
                 .van-field__body {
                   input {
-                    caret-color: #c3dcfe !important;
+                    // caret-color: #c3dcfe !important;
                     letter-spacing: 2px !important;
                   }
                 }
