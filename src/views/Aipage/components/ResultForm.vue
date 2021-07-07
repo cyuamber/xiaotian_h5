@@ -48,13 +48,9 @@
                   <div class="dividing-line"></div>
                 </template>
               </van-field>
-              <div class="submit">
-                <van-button
-                  type="info"
-                  native-type="submit"
-                  class="van-submit-button"
-                ></van-button>
-              </div>
+
+              <van-button class="van-submit-button" native-type="submit">
+              </van-button>
             </van-form>
           </div>
         </div>
@@ -70,6 +66,7 @@
       <div class="popup-icon" @click="closeNote()">
         <img src="@/assets/images/close.png" />
       </div>
+      <Loading v-if="LoadingShow" />
     </van-popup>
   </div>
 </template>
@@ -99,6 +96,7 @@ export default {
 
   computed: {
     ...mapState({
+      LoadingShow: (state) => state.aiforum.LoadingShow,
       beforSubmit: (state) => state.aiforum.beforSubmit,
       failToast: (state) => state.aiforum.failToast,
       successToast: (state) => state.aiforum.successToast,
@@ -118,10 +116,19 @@ export default {
     onSubmit(values) {
       const url = API.port8085.saveUserInfo;
       const params = Object.assign({}, values);
+      this.$store.commit("setLoadingShow", true);
+      // this.$store.commit("setBeforSubmit", false);
+      // this.clearUploadData();
+      // this.$store.commit("setToastStatus", {
+      //   success: true,
+      //   fail: false,
+      // });
+      // return;
       axiosPost(url, params, params)
         .then((res) => {
           if (res && res.code === 200) {
             this.$store.commit("setBeforSubmit", false);
+            this.$store.commit("setLoadingShow", false);
             this.clearUploadData();
             this.$store.commit("setToastStatus", {
               success: true,
@@ -129,6 +136,7 @@ export default {
             });
           } else {
             this.$store.commit("setBeforSubmit", false);
+            this.$store.commit("setLoadingShow", false);
             this.$store.commit("setToastStatus", {
               success: false,
               fail: true,
@@ -146,6 +154,7 @@ export default {
           this.formInputs.map((item) => {
             item.value = null;
           });
+          this.$store.commit("setLoadingShow", false);
           this.$store.commit("setToastStatus", {
             success: false,
             fail: true,
@@ -165,13 +174,11 @@ export default {
       }
     },
     closed() {
-      console.log("---close");
       this.$store.commit("setBeforSubmit", true);
       this.$store.commit("setToastStatus", { success: false, fail: false });
       this.clearUploadData();
     },
     closeNote() {
-      console.log("---closeNote");
       this.$store.commit("setFormModelShow", false);
     },
 
@@ -190,7 +197,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.8);
   }
   .popup {
-    width: 300px;
+    width: 330px;
     position: fixed;
     left: 50%;
     top: 49%;
@@ -210,7 +217,7 @@ export default {
 
       .content {
         color: #fff;
-        width: 257px;
+        width: 280px;
         margin: 0 auto;
         padding-top: 15px;
         p.title {
@@ -249,6 +256,7 @@ export default {
               .van-field__value {
                 .van-field__body {
                   input {
+                    caret-color: #c3dcfe;
                     letter-spacing: 2px !important;
                   }
                 }
@@ -264,24 +272,22 @@ export default {
                 height: 100%;
                 border-right: 1px solid #cfe3ff;
                 position: absolute;
-                left: -13%;
+                left: -10%;
                 top: 0;
               }
             }
-            .submit {
-              .van-submit-button {
-                background: url("../../../assets/images/aiforum-submit-button.png")
-                  no-repeat;
-                background-size: cover;
-                width: 280px;
-                height: 55px;
-                border: none;
-                margin-left: -15px;
-                margin-bottom: 20px;
-              }
-              .van-button::before {
-                background: transparent;
-              }
+            .van-button::before {
+              background: transparent;
+            }
+            .van-submit-button {
+              background: url("../../../assets/images/aiforum-submit-button.png")
+                no-repeat;
+              background-size: cover;
+              width: 310px;
+              height: 55px;
+              border: none;
+              margin-left: -14px;
+              margin-bottom: 20px;
             }
           }
         }
@@ -299,7 +305,6 @@ export default {
         color: #fff;
         position: absolute;
         left: 45%;
-
         z-index: 1000000;
         img {
           width: 30px;
@@ -310,7 +315,7 @@ export default {
       text-align: center;
       img {
         width: 35px;
-        margin-top: 10px;
+        margin-top: 20px;
       }
     }
   }
