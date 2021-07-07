@@ -142,12 +142,11 @@ export const AIFORMINPUTS = [
     message: "请输入姓名",
     value: null
   },
-
   {
-    type: "text",
-    lable: "邮箱",
-    name: "email",
-    message: "请输入邮箱",
+    type: "company",
+    lable: "公司",
+    name: "company",
+    message: "请输入公司",
     value: null
   },
   {
@@ -159,18 +158,19 @@ export const AIFORMINPUTS = [
   },
   {
     type: "text",
-    lable: "公司",
-    name: "company",
-    message: "请输入公司",
-    value: null
-  },
-  {
-    type: "interest",
-    lable: "兴趣爱好",
-    name: "interest",
-    message: "请输入兴趣",
+    lable: "邮箱",
+    name: "email",
+    message: "请输入邮箱",
     value: null
   }
+
+  // {
+  //   type: "interest",
+  //   lable: "兴趣爱好",
+  //   name: "interest",
+  //   message: "请输入兴趣",
+  //   value: null
+  // }
 ];
 export const FORMINPUTS = [
   {
