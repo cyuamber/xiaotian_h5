@@ -80,6 +80,7 @@ import { mapState } from "vuex";
 import { AIFORMINPUTS } from "../../../const/constant";
 import Loading from "../../../components/Loading";
 import API from "../../../utils/api";
+import { validator } from "../../../utils/validate";
 import { axiosPost } from "../../../utils/http.js";
 import { Notify } from "vant";
 export default {
@@ -93,12 +94,6 @@ export default {
       showFaild: false,
       formInputs: AIFORMINPUTS,
       uploadUserInfo: null,
-      phoneValidator:
-        /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/,
-      inputvalidator:
-        /[`~!@#$%^&*()_+<>?:"{},.\/;·！#￥（——）：；“”‘、，|《。》？、【】'[\]]/im,
-      emailvalidator:
-        /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
     };
   },
 
@@ -157,7 +152,7 @@ export default {
             error.message === "Network Error" ||
             error.message.includes("timeout")
           ) {
-            Notify("网络超时");
+            Notify("提交失败");
           }
           this.formInputs.map((item) => {
             item.value = null;
@@ -170,7 +165,7 @@ export default {
         });
     },
     telPhoneValidator(val) {
-      const validatorResult = this.phoneValidator.test(val);
+      const validatorResult = validator("phone", val);
       if (!validatorResult) {
         this.formInputs.map((item) => {
           if (item.name === "phone") {
@@ -183,7 +178,7 @@ export default {
       }
     },
     inputValidator(val) {
-      const validatorResult = this.inputvalidator.test(val);
+      const validatorResult = validator("input", val);
       if (validatorResult) {
         this.formInputs.map((item) => {
           if (item.name === "username" || item.name === "company") {
@@ -196,8 +191,7 @@ export default {
       }
     },
     emailValidator(val) {
-      const validatorResult = this.emailvalidator.test(val);
-      console.log(val, validatorResult);
+      const validatorResult = validator("email", val);
       if (!validatorResult) {
         this.formInputs.map((item) => {
           if (item.name === "email") {
