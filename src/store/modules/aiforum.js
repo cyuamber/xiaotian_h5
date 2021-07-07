@@ -12,8 +12,8 @@ const state = {
 };
 const mutations = {
   setToastStatus(state, status) {
-    state.successToast = status;
-    state.failToast = !status;
+    state.successToast = status.success;
+    state.failToast = status.fail;
   },
 
   setLoadingShow(state, LoadingShow) {

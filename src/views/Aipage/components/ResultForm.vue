@@ -7,7 +7,13 @@
       class="popup"
       position="top"
     >
-      <div class="popup-container">
+      <div
+        :class="{
+          'popup-container': true,
+          'sumbit-container': beforSubmit,
+          'note-container': !beforSubmit,
+        }"
+      >
         <div class="content" v-if="beforSubmit">
           <p class="title">提交信息</p>
           <p class="subtitle">领取特别礼包</p>
@@ -61,7 +67,7 @@
         </div>
       </div>
 
-      <div class="close-icon" @click="closed()">
+      <div class="popup-icon" @click="closeNote()">
         <img src="@/assets/images/close.png" />
       </div>
     </van-popup>
@@ -94,8 +100,8 @@ export default {
   computed: {
     ...mapState({
       beforSubmit: (state) => state.aiforum.beforSubmit,
-      successToast: (state) => state.aiforum.successToast,
       failToast: (state) => state.aiforum.failToast,
+      successToast: (state) => state.aiforum.successToast,
     }),
     formModelShow: {
       get() {
@@ -107,23 +113,26 @@ export default {
       },
     },
   },
-  mounted() {},
+
   methods: {
     onSubmit(values) {
       const url = API.port8085.saveUserInfo;
       const params = Object.assign({}, values);
-      this.$store.commit("setBeforSubmit", false);
-      this.$store.commit("setToastStatus", true);
-      return;
       axiosPost(url, params, params)
         .then((res) => {
-          this.$store.commit("setBeforSubmit", false);
           if (res && res.code === 200) {
+            this.$store.commit("setBeforSubmit", false);
             this.clearUploadData();
-            this.$store.commit("setToastStatus", true);
+            this.$store.commit("setToastStatus", {
+              success: true,
+              fail: false,
+            });
           } else {
-            this.$store.commit("setToastStatus", false);
-            Notify("网络错误");
+            this.$store.commit("setBeforSubmit", false);
+            this.$store.commit("setToastStatus", {
+              success: false,
+              fail: true,
+            });
           }
         })
         .catch((error) => {
@@ -137,7 +146,10 @@ export default {
           this.formInputs.map((item) => {
             item.value = null;
           });
-          this.$store.commit("setToastStatus", false);
+          this.$store.commit("setToastStatus", {
+            success: false,
+            fail: true,
+          });
         });
     },
     telPhoneValidator(val) {
@@ -153,8 +165,14 @@ export default {
       }
     },
     closed() {
-      this.$store.commit("setFormModelShow", false);
+      console.log("---close");
+      this.$store.commit("setBeforSubmit", true);
+      this.$store.commit("setToastStatus", { success: false, fail: false });
       this.clearUploadData();
+    },
+    closeNote() {
+      console.log("---closeNote");
+      this.$store.commit("setFormModelShow", false);
     },
 
     clearUploadData() {
@@ -178,20 +196,26 @@ export default {
     top: 49%;
     transform: translate(-50%, -50%);
     background: transparent;
-    .popup-container {
-      border-radius: 15px;
+    .note-container {
+      background: transparents;
+    }
+    .sumbit-container {
       background-image: linear-gradient(
         rgba(49, 141, 253, 0.9),
         rgba(45, 91, 209, 1)
       );
+    }
+    .popup-container {
+      border-radius: 15px;
+
       .content {
         color: #fff;
         width: 257px;
         margin: 0 auto;
+        padding-top: 15px;
         p.title {
           width: 100%;
           text-align: center;
-          margin-top: 25px;
           margin-bottom: 8px;
           font-size: 20px;
           font-weight: 700;
@@ -268,18 +292,25 @@ export default {
         text-align: center;
         margin: 0 auto;
         img {
-          width: 100%;
+          width: 90%;
+        }
+      }
+      .close-icon {
+        color: #fff;
+        position: absolute;
+        left: 45%;
+
+        z-index: 1000000;
+        img {
+          width: 30px;
         }
       }
     }
-    .close-icon {
-      color: #fff;
-      position: absolute;
-      left: 45%;
-
-      z-index: 1000000;
+    .popup-icon {
+      text-align: center;
       img {
-        width: 30px;
+        width: 35px;
+        margin-top: 10px;
       }
     }
   }
