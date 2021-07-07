@@ -34,7 +34,6 @@
                 :center="true"
                 :border="false"
                 label-width="3em"
-                label-class="lable"
                 maxlength="20"
                 :rules="[
                   {
@@ -256,7 +255,7 @@ export default {
               .van-field__value {
                 .van-field__body {
                   input {
-                    caret-color: #c3dcfe;
+                    caret-color: #c3dcfe !important;
                     letter-spacing: 2px !important;
                   }
                 }
