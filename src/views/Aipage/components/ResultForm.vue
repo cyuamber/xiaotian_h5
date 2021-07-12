@@ -33,18 +33,20 @@
                 :type="item.type"
                 :center="true"
                 :border="false"
+                :error-message="notifyText[item.name]"
                 label-width="3em"
-                maxlength="20"
+                @focus="handleFocusInput(item)"
+                @blur="handleBlurInput(item)"
                 :rules="[
                   {
                     required: item.type === 'company' ? false : true,
                     validator:
-                      item.type === 'digit'
+                      item.type === 'phone'
                         ? telPhoneValidator
                         : item.name === 'email'
                         ? emailValidator
                         : inputValidator,
-                    message: item.message,
+                    message: '',
                   },
                 ]"
               >
@@ -94,6 +96,13 @@ export default {
       showFaild: false,
       formInputs: AIFORMINPUTS,
       uploadUserInfo: null,
+      notifyText: {
+        phone: "",
+        username: "",
+        company: "",
+        email: "",
+      },
+      currentMsg: "",
     };
   },
 
@@ -114,19 +123,15 @@ export default {
       },
     },
   },
+  mounted() {
+    this.clearUploadData();
+  },
 
   methods: {
     onSubmit(values) {
       const url = API.port8085.saveUserInfo;
       const params = Object.assign({}, values);
       this.$store.commit("setLoadingShow", true);
-      // this.$store.commit("setBeforSubmit", false);
-      // this.clearUploadData();
-      // this.$store.commit("setToastStatus", {
-      //   success: true,
-      //   fail: false,
-      // });
-      // return;
       axiosPost(url, params, params)
         .then((res) => {
           if (res && res.code === 200) {
@@ -164,13 +169,29 @@ export default {
           });
         });
     },
+    handleFocusInput(val) {
+      this.formInputs.map((input) => {
+        if (val.name === input.name) {
+          this.$nextTick(() => {
+            this.notifyText[input.name] = "";
+          });
+        }
+      });
+    },
+    handleBlurInput(val) {
+      this.formInputs.map((input) => {
+        if (val.name === input.name && val.value === "") {
+          this.notifyText[input.name] = input.message;
+        }
+      });
+    },
     telPhoneValidator(val) {
       const validatorResult = validator("phone", val);
       if (!validatorResult) {
         this.formInputs.map((item) => {
           if (item.name === "phone") {
             Notify("请输入正确的手机号");
-            item.message = "请输入正确的手机号";
+            this.notifyText[item.name] = item.message;
             item.value = null;
           }
         });
@@ -183,7 +204,7 @@ export default {
         this.formInputs.map((item) => {
           if (item.name === "username" || item.name === "company") {
             Notify("输入字符串非法");
-            item.message = "请输入正确的字符";
+            this.notifyText[item.name] = item.message;
             item.value = null;
           }
         });
@@ -196,7 +217,7 @@ export default {
         this.formInputs.map((item) => {
           if (item.name === "email") {
             Notify("请输入正确的邮箱");
-            item.message = "请输入正确的邮箱";
+            this.notifyText[item.name] = item.message;
             item.value = null;
           }
         });
@@ -215,6 +236,7 @@ export default {
     clearUploadData() {
       this.formInputs.map((item) => {
         item.value = null;
+        this.notifyText[item.name] = item.message;
       });
     },
   },

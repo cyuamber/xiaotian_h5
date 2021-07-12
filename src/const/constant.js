@@ -136,7 +136,7 @@ export const GETPRESENT = [
 
 export const AIFORMINPUTS = [
   {
-    type: "text",
+    type: "username",
     lable: "姓名",
     name: "username",
     message: "请输入姓名",
@@ -150,14 +150,14 @@ export const AIFORMINPUTS = [
     value: null
   },
   {
-    type: "digit",
+    type: "phone",
     lable: "手机",
     name: "phone",
     message: "请输入手机号",
     value: null
   },
   {
-    type: "text",
+    type: "email",
     lable: "邮箱",
     name: "email",
     message: "请输入邮箱",

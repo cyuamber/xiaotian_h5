@@ -43,12 +43,6 @@ export const constantRouterMap = [
         name: "Home",
         component: () => import("@/views/Aipage/Aipage"),
         meta: { title: "“九天”大礼等你拿", keepAlive: false }
-      },
-      {
-        path: "/airesult",
-        name: "Result",
-        component: () => import("@/views/Aipage/Aipage"),
-        meta: { title: "“九天”大礼等你拿", keepAlive: false }
       }
     ]
   }
