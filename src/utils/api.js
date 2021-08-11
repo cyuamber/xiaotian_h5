@@ -9,6 +9,6 @@ export default {
     saveUserInfo: "/dp_xiaotian/inference/saveUserInfo" // result页 用户信息录入
   },
   port8080: {
-    getMaskRes: "http://aiaas.cmri.cn:8080/ivr/v1/mask" // 获得口罩识别结果接口
+    getMaskRes: "http://172.29.168.163/ivr/v1/mask" // 获得口罩识别结果接口
   }
 };
